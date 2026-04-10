@@ -143,13 +143,19 @@ const EditVendor = () => {
             const res = await apiFetch(`${API_ENDPOINTS.GET_VENDOR_DETAILS}?vendor_id=${vendorId}`);
             if (res.status && res.data) {
                 const d = res.data;
-                const paymentArray = d.primary?.mode_of_payment ? d.primary.mode_of_payment.split(",") : [];
+                const modeOfPaymentRaw = d.primary?.mode_of_payment;
+                const paymentArray = Array.isArray(modeOfPaymentRaw)
+                    ? modeOfPaymentRaw
+                    : typeof modeOfPaymentRaw === "string"
+                        ? modeOfPaymentRaw.split(",").map((m) => m.trim()).filter(Boolean)
+                        : [];
                 if (paymentArray.length > 0) setActivePaymentView(paymentArray[0]);
                 else setActivePaymentView("");
 
                 // ✅ FIX: Parse is_taxable as integer on load
                 const primaryData = {
                     ...d.primary,
+                    vendor_display_name: d.primary?.vendor_display_name || d.primary?.vendor_name || "",
                     mode_of_payment: paymentArray,
                     is_taxable: parseInt(d.primary?.is_taxable) || 0,
                 };
