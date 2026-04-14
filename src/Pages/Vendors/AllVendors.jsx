@@ -319,7 +319,7 @@ const AllVendors = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "600px",
+      // height: "600px",
       placeholder: "No records found",
       pagination: true,
       paginationMode: "remote",

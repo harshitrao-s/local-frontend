@@ -134,7 +134,7 @@ const POKanbanList = () => {
   if (!isConfigLoaded) return null;
 
   return (
-    <div className="p-0 bg-light min-vh-100">
+    <div className="p-0 bg-light ">
       <div className="p-0 d-flex justify-content-between align-items-center mb-3">
         <h3 className="mb-0 fw-bold">Purchase Order Kanban</h3>
         <div className="d-flex gap-2 align-items-center">
