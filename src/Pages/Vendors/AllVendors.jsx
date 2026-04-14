@@ -18,6 +18,8 @@ const ALL_COLUMNS = [
     field: "vendor_code",
     width: 160,
     fixed: true,
+    headerHozAlign: "center",
+    hozAlign: "left",
     formatter: (cell) => {
       const id = cell.getRow().getData().id;
       return `
@@ -29,7 +31,9 @@ const ALL_COLUMNS = [
   {
     title: "VENDOR NAME",
     field: "vendor_name",
-    minWidth: 270,
+    Width: 200,
+    headerHozAlign: "center",
+    hozAlign: "center",
     formatter: (cell) => {
       const id = cell.getRow().getData().id;
       return `
@@ -42,13 +46,17 @@ const ALL_COLUMNS = [
     title: "VENDOR TYPE",
     field: "vendor_model",
     headerSort: false,
-    width: 140,
+    width: 200,
+    headerHozAlign: "center",
+    hozAlign: "center",
   },
   {
     title: "Company Locality",
     field: "vendor_locality",
     headerSort: false,
     width: 170,
+    headerHozAlign: "center",
+    hozAlign: "center",
     formatter: (cell) => {
       const det = cell.getRow().getData().vendor_locality;
       if (det === "0") return "Local";
@@ -59,9 +67,11 @@ const ALL_COLUMNS = [
   {
     title: "CITY",
     field: "billing_city",
-    width: 140,
+    width: 170,
     fixed: true,
     headerSort: false,
+    headerHozAlign: "center",
+    hozAlign: "center",
   },
   {
     title: "COUNTRY",
@@ -69,24 +79,30 @@ const ALL_COLUMNS = [
     width: 140,
     fixed: true,
     headerSort: false,
+    headerHozAlign: "center",
+    hozAlign: "center",
   },
   {
     title: "CURRENCY",
     field: "currency",
     width: 120,
     headerSort: false,
+    headerHozAlign: "center",
+    hozAlign: "center",
   },
   {
     title: "TAX %",
     field: "tax_percent",
-    width: 98,
+    width: 150,
+    headerHozAlign: "center",
+    hozAlign: "center",
   },
   {
     title: "STATUS",
     field: "status",
-    width: 110,
-    hozAlign: "left",
-    headerHozAlign: "left",
+    width: 180,
+    headerHozAlign: "center",
+    hozAlign: "center",
     formatter: (cell) => {
       return getVendorStatusName(cell.getValue());
     },
@@ -281,12 +297,12 @@ const AllVendors = () => {
       fixed: true,
       hozAlign: "center",
       headerHozAlign: "center",
-      width: 100,
+      width: 150,
       headerSort: false,
       formatter: (cell) => {
         const id = cell.getRow().getData().id;
         return `
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-2 items-center justify-content-center">
             <a href="/vendor/editvendor/${id}" class="btn btn-outline-primary btn-sm" title="Edit">
               <i class="fas fa-pen"></i>
             </a>
@@ -319,7 +335,7 @@ const AllVendors = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      // height: "600px",
+      height: "auto-fit",
       placeholder: "No records found",
       pagination: true,
       paginationMode: "remote",

@@ -111,7 +111,7 @@ const ManufacturerManagement = () => {
   useEffect(() => {
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "500px",
+      height: "auto-fit",
       pagination: true,
       paginationMode: "remote",
       paginationSize: 15,
