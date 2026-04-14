@@ -34,38 +34,38 @@ const salesData = [
 ];
 
 const poStatusData = [
-  { name: "Placed",    value: 720, color: "#4e9af1" },
+  { name: "Placed", value: 720, color: "#4e9af1" },
   { name: "Receipted", value: 310, color: "#f5a623" },
   { name: "Completed", value: 185, color: "#4caf8a" },
-  { name: "Cancelled", value: 43,  color: "#e05c5c" },
+  { name: "Cancelled", value: 43, color: "#e05c5c" },
 ];
 
 const recentOrders = [
-  { id: "PO0319", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Partially Received", statusColor: "warning",  total: "7,260.00 AUD", poTotal: "12,750.00 AUD" },
-  { id: "PO0318", vendor: "HealthFirst Ltd.",   date: "16 Apr 2024", status: "Placed",             statusColor: "primary",  total: "7,220.00 AUD", poTotal: "8,400.00 AUD"  },
-  { id: "PO0317", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Completed",          statusColor: "success",  total: "1,250.00 AUD", poTotal: "9,200.00 AUD"  },
-  { id: "PO0316", vendor: "GreenLeaf Supplies", date: "15 Apr 2024", status: "Cancelled",          statusColor: "danger",   total: "2,220.00 AUD", poTotal: "2,200.00 AUD"  },
+  { id: "PO0319", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Partially Received", statusColor: "warning", total: "7,260.00 AUD", poTotal: "12,750.00 AUD" },
+  { id: "PO0318", vendor: "HealthFirst Ltd.", date: "16 Apr 2024", status: "Placed", statusColor: "primary", total: "7,220.00 AUD", poTotal: "8,400.00 AUD" },
+  { id: "PO0317", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Completed", statusColor: "success", total: "1,250.00 AUD", poTotal: "9,200.00 AUD" },
+  { id: "PO0316", vendor: "GreenLeaf Supplies", date: "15 Apr 2024", status: "Cancelled", statusColor: "danger", total: "2,220.00 AUD", poTotal: "2,200.00 AUD" },
 ];
 
 const topProducts = [
-  { name: "Vitamin C 500mg",       count: 1200 },
-  { name: "Organic Protein Power", count: 850  },
-  { name: "Herbal Sleep Aid",      count: 760  },
-  { name: "Fish Oil 1000mg",       count: 640  },
+  { name: "Vitamin C 500mg", count: 1200 },
+  { name: "Organic Protein Power", count: 850 },
+  { name: "Herbal Sleep Aid", count: 760 },
+  { name: "Fish Oil 1000mg", count: 640 },
 ];
 
 const topVendors = [
-  { name: "PharmaSource Inc.",    count: 354 },
-  { name: "GreenLeaf Supplies",   count: 287 },
-  { name: "HealthFirst Ltd.",     count: 243 },
+  { name: "PharmaSource Inc.", count: 354 },
+  { name: "GreenLeaf Supplies", count: 287 },
+  { name: "HealthFirst Ltd.", count: 243 },
   { name: "Wellness International", count: 198 },
 ];
 
 const invoiceStatusData = [
-  { name: "Paid",      value: 145, color: "#4caf8a" },
-  { name: "Unpaid",    value: 89,  color: "#e05c5c" },
-  { name: "Cancelled", value: 23,  color: "#9e9e9e" },
-  { name: "On Hold",   value: 34,  color: "#f5a623" },
+  { name: "Paid", value: 145, color: "#4caf8a" },
+  { name: "Unpaid", value: 89, color: "#e05c5c" },
+  { name: "Cancelled", value: 23, color: "#9e9e9e" },
+  { name: "On Hold", value: 34, color: "#f5a623" },
 ];
 
 // ── Stat Card ──────────────────────────────────────────────────────────────────
@@ -128,26 +128,26 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
   const handleAddNew = async (e) => {
-      if (e) e.preventDefault();
-      if (creating) return;
-      
-      try {
-        setCreating(true);
-        const res = await apiFetch(`${API_BASE}api/purchaseorder/api/create`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-        });
-  
-        if (res?.data?.po_id) {
-          navigate(`/purchaseorder/create/${res.data.po_id}/AddNew`);
-        }
-      } catch (err) {
-        console.error("Failed to create PO", err);
-      } finally {
-       // setCreating(false);
+    if (e) e.preventDefault();
+    if (creating) return;
+
+    try {
+      setCreating(true);
+      const res = await apiFetch(`${API_BASE}api/purchaseorder/api/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+      });
+
+      if (res?.data?.po_id) {
+        navigate(`/purchaseorder/create/${res.data.po_id}/AddNew`);
       }
-    };
+    } catch (err) {
+      console.error("Failed to create PO", err);
+    } finally {
+      // setCreating(false);
+    }
+  };
   return (
     <div style={{ fontFamily: FONT, marginLeft: -5, marginRight: -5 }}>
 
@@ -159,13 +159,13 @@ const Dashboard = () => {
         </div>
         <div className="d-flex gap-2">
           <button
-            onClick={()=>handleAddNew()}
-            className={`nav-link ${creating ? "disabled" : ""} btn btn-primary btn-sm px-3`} 
-            style={{fontFamily: FONT, fontWeight: 500, borderRadius: 8 , cursor: creating ? "default" : "pointer", pointerEvents: creating ? "none" : "auto" , color:"white"}}
+            onClick={() => handleAddNew()}
+            className={`nav-link ${creating ? "disabled" : ""} btn btn-primary btn-sm px-3`}
+            style={{ fontFamily: FONT, fontWeight: 500, borderRadius: 8, cursor: creating ? "default" : "pointer", pointerEvents: creating ? "none" : "auto", color: "white" }}
           >
-           {!creating ?(<><FontAwesomeIcon icon={faPlus} className="me-1" />Add Purchase Order</>):<><FontAwesomeIcon icon={faSpinner} className="me-1" />  Creating...</>} 
+            {!creating ? (<><FontAwesomeIcon icon={faPlus} className="me-1" />Add Purchase Order</>) : <><FontAwesomeIcon icon={faSpinner} className="me-1" />  Creating...</>}
           </button>
-          <button onClick={()=>navigate("/purchaseorder/listing")}
+          <button onClick={() => navigate("/purchaseorder/listing")}
             className="btn btn-outline-secondary btn-sm px-3"
             style={{ fontFamily: FONT, fontWeight: 500, borderRadius: 8 }}
           >
@@ -178,14 +178,14 @@ const Dashboard = () => {
 
         {/* ── Stat Cards ── */}
         <div className="row g-2 mb-3">
-          <StatCard icon={faDollarSign}  label="Total Sales"      value="$25,450.00" change="+5.2%"  gradient="linear-gradient(135deg,#11998e,#38ef7d)" />
-          <StatCard icon={faShoppingCart} label="Purchase Orders" value="1,258"      change="+10.4%" gradient="linear-gradient(135deg,#4776e6,#8e54e9)" />
-          <StatCard icon={faBoxOpen}      label="Products"        value="320"        change="+2.7%"  gradient="linear-gradient(135deg,#f7971e,#ffd200)" />
-          <StatCard icon={faUsers}        label="Vendors"         value="75"         change="+3.1%"  gradient="linear-gradient(135deg,#f46b45,#eea849)" />
+          <StatCard icon={faDollarSign} label="Total Sales" value="$25,450.00" change="+5.2%" gradient="linear-gradient(135deg,#11998e,#38ef7d)" />
+          <StatCard icon={faShoppingCart} label="Purchase Orders" value="1,258" change="+10.4%" gradient="linear-gradient(135deg,#4776e6,#8e54e9)" />
+          <StatCard icon={faBoxOpen} label="Products" value="320" change="+2.7%" gradient="linear-gradient(135deg,#f7971e,#ffd200)" />
+          <StatCard icon={faUsers} label="Vendors" value="75" change="+3.1%" gradient="linear-gradient(135deg,#f46b45,#eea849)" />
         </div>
 
         {/* ── Charts Row ── */}
-        <div className="row g-3 mb-3">
+        <div className="row g-3 mb-3 align-items-stretch">
 
           {/* Sales Overview */}
           <div className="col-12 col-lg-5">
@@ -210,12 +210,12 @@ const Dashboard = () => {
                   <AreaChart data={salesData}>
                     <defs>
                       <linearGradient id="thisYearGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#4e9af1" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#4e9af1" stopOpacity={0}   />
+                        <stop offset="5%" stopColor="#4e9af1" stopOpacity={0.2} />
+                        <stop offset="95%" stopColor="#4e9af1" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="lastYearGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#bbb" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#bbb" stopOpacity={0}   />
+                        <stop offset="5%" stopColor="#bbb" stopOpacity={0.2} />
+                        <stop offset="95%" stopColor="#bbb" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8e8e8" />
@@ -236,7 +236,7 @@ const Dashboard = () => {
                       ticks={[4000, 5500, 7500]}
                     />
                     <Tooltip content={<CustomTooltip />} />
-                    <Area type="monotone" dataKey="lastYear" stroke="#bbb"    strokeWidth={2} fill="url(#lastYearGrad)" dot={{ r: 3, fill: "#bbb"    }} />
+                    <Area type="monotone" dataKey="lastYear" stroke="#bbb" strokeWidth={2} fill="url(#lastYearGrad)" dot={{ r: 3, fill: "#bbb" }} />
                     <Area type="monotone" dataKey="thisYear" stroke="#4e9af1" strokeWidth={2} fill="url(#thisYearGrad)" dot={{ r: 3, fill: "#4e9af1" }} />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -267,8 +267,8 @@ const Dashboard = () => {
                         <Label
                           content={() => (
                             <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
-                              <tspan x="50%" dy="-8"  fontSize="26" fontWeight="600" fill="#111827" fontFamily={FONT}>720</tspan>
-                              <tspan x="50%" dy="22"  fontSize="12" fill="#6b7280"   fontFamily={FONT}>POs</tspan>
+                              <tspan x="50%" dy="-8" fontSize="26" fontWeight="600" fill="#111827" fontFamily={FONT}>720</tspan>
+                              <tspan x="50%" dy="22" fontSize="12" fill="#6b7280" fontFamily={FONT}>POs</tspan>
                             </text>
                           )}
                         />
@@ -290,28 +290,62 @@ const Dashboard = () => {
           </div>
 
           {/* Top Products + Top Vendors */}
-          <div className="col-lg-3 d-flex flex-column gap-3">
+          <div className="col-lg-3 d-flex flex-column gap-3 h-100">
             {[
               { title: "Top Products", data: topProducts, keyName: "name", keyVal: "count" },
-              { title: "Top Vendors",  data: topVendors,  keyName: "name", keyVal: "count" },
+              { title: "Top Vendors", data: topVendors, keyName: "name", keyVal: "count" },
             ].map(({ title, data, keyName, keyVal }) => (
-              <div key={title} className="card border shadow-sm" style={{ borderRadius: 10, fontFamily: FONT }}>
-                <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb" }}>
-                  <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>{title}</h6>
+
+              <div
+                key={title}
+                className="card  margin_none border shadow-sm d-flex flex-column"
+                style={{
+                  borderRadius: 10,
+                  fontFamily: FONT,
+                  flex: 1,                // 🔥 important (equal height)
+                  minHeight: 0,            // 🔥 prevents overflow issues
+                  marginBottom: "0px !important"
+                }}
+              >
+
+                <div
+                  className="card-header"
+                  style={{
+                    background: "#fff",
+                    borderBottom: "0.5px solid #e5e7eb"
+                  }}
+                >
+                  <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>
+                    {title}
+                  </h6>
                 </div>
-                <div className="card-body">
+
+                <div className="card-body overflow-auto">
                   {data.map((item, i) => (
                     <div key={i} className="d-flex justify-content-between align-items-center mb-2">
-                      <span style={{ fontSize: 12, color: "#374151" }}>{item[keyName]}</span>
-                      <span style={{ fontSize: 12, fontWeight: 500 }}>{item[keyVal].toLocaleString()}</span>
+                      <span style={{ fontSize: 12, color: "#374151" }}>
+                        {item[keyName]}
+                      </span>
+                      <span style={{ fontSize: 12, fontWeight: 500 }}>
+                        {item[keyVal].toLocaleString()}
+                      </span>
                     </div>
                   ))}
+
                   {title === "Top Vendors" && (
                     <div className="text-end mt-1">
-                      <span style={{ fontSize: 12, color: "#4e9af1", cursor: "pointer", fontWeight: 500 }}>View All ›</span>
+                      <span style={{
+                        fontSize: 12,
+                        color: "#4e9af1",
+                        cursor: "pointer",
+                        fontWeight: 500
+                      }}>
+                        View All ›
+                      </span>
                     </div>
                   )}
                 </div>
+
               </div>
             ))}
           </div>
@@ -322,7 +356,7 @@ const Dashboard = () => {
 
           {/* Recent Purchase Orders */}
           <div className="col-12 col-lg-6">
-            <div className="card border shadow-sm" style={{ borderRadius: 10, fontFamily: FONT }}>
+            <div className="card  border shadow-sm" style={{ borderRadius: 10, fontFamily: FONT, height: "-webkit-fill-available" }}>
               <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb" }}>
                 <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Recent Purchase Orders</h6>
               </div>
