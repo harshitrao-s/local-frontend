@@ -39,7 +39,6 @@ const CSS = `
     display:flex;align-items:center;justify-content:center;
     transition:all .15s;font-size:13px;
   }
-  .ptm-close-btn:hover { background:rgba(255,255,255,.15);color:#fff; }
 
   .ptm-body { padding:22px; }
 
@@ -90,16 +89,33 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
   const isEdit = type === "edit";
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    type: "", name: "", frequency: "", status: 1,
+    type: "", name: "", termOption: "", frequency: "", status: 1,
   });
+
+  const termOptionLabels = {
+    frequency: "Frequency (Days)",
+    nextMonth14: "14th of Next Month",
+    nextMonthLastDay: "Last day of Next Month",
+    nextNextMonthLastDay: "Last day of Next to Next Month",
+  };
 
   useEffect(() => {
     if (isEdit && data) {
+      const normalized = data.frequency?.toString().trim().toLowerCase();
+      const option = normalized === "14th of next month"
+        ? "nextMonth14"
+        : normalized === "last day of next month"
+          ? "nextMonthLastDay"
+          : normalized === "last day of next to next month"
+            ? "nextNextMonthLastDay"
+            : "frequency";
+
       setFormData({
-        type:      data.type,
-        name:      data.name,
-        frequency: data.frequency,
-        status:    data.status,
+        type:       data.type,
+        name:       data.name,
+        termOption: option,
+        frequency:  option === "frequency" ? data.frequency : "",
+        status:     data.status,
       });
     }
   }, [type, data]);
@@ -107,9 +123,17 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
   const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
 
   const handleSave = async () => {
-    if (!formData.name || !formData.frequency) {
+    if (!formData.name || !formData.termOption || (formData.termOption === "frequency" && !formData.frequency)) {
       return Swal.fire("Required", "Please fill in all mandatory fields.", "info");
     }
+
+    const payload = {
+      ...formData,
+      frequency: formData.termOption === "frequency"
+        ? formData.frequency
+        : termOptionLabels[formData.termOption],
+    };
+
     setLoading(true);
     const url = isEdit
       ? `${API_BASE}api/payment-terms/update/${data.id}`
@@ -117,7 +141,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
     try {
       const res = await apiFetch(url, {
         method: isEdit ? "PUT" : "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       if (res.status) {
         Swal.fire("Success", res.message || "Term saved", "success");
@@ -172,7 +196,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
             <div className="ptm-row">
               {/* Type */}
-              <div className="ptm-field mb-0">
+              <div className="ptm-field mb-2">
                 <label className="ptm-label">Type</label>
                 <select className="ptm-select" value={formData.type} onChange={e => set("type", e.target.value)}>
                   <option value="">Select</option>
@@ -181,21 +205,38 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
                 </select>
               </div>
 
-              {/* Frequency */}
-              <div className="ptm-field  mb-0">
+              {/* Term Option */}
+              <div className="ptm-field mb-0">
                 <label className="ptm-label">Frequency (Days) <span style={{ color: "#ef4444" }}>*</span></label>
+                <select
+                  className="ptm-select"
+                  value={formData.termOption}
+                  onChange={e => set("termOption", e.target.value)}
+                >
+                  <option value="" disabled hidden>Select payment term</option>
+                  <option value="frequency">Frequency</option>
+                  <option value="nextMonth14">14th of Next Month</option>
+                  <option value="nextMonthLastDay">Last day of Next Month</option>
+                  <option value="nextNextMonthLastDay">Last day of Next to Next Month</option>
+                </select>
+              </div>
+            </div>
+
+            {formData.termOption === "frequency" && (
+              <div className="ptm-field">
+                <label className="ptm-label">Days <span style={{ color: "#ef4444" }}>*</span></label>
                 <input
                   type="number"
                   className="ptm-input"
-                  placeholder="e.g., 30"
+                  placeholder="Enter day count, e.g. 30"
                   min="0"
                   value={formData.frequency}
                   onChange={e => set("frequency", e.target.value)}
                   onKeyDown={e => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
                 />
-                <p className="ptm-hint">Enter number of days (7, 15, 30…)</p>
+                <p className="ptm-hint">Enter the number of days for the frequency term.</p>
               </div>
-            </div>
+            )}
 
             {/* Status */}
             <div className="ptm-field">
