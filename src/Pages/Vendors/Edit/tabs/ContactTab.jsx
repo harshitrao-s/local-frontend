@@ -17,7 +17,7 @@ const ContactTab = ({ vendorId }) => {
     useEffect(() => { fetchContacts(); }, [fetchContacts]);
 
     const handleSave = async () => {
-        const url = tempContact.id ? `${API_BASE}api/vendor/contact/update/${tempContact.id}` : `${API_BASE}vendor/contact/addNew/${vendorId}`;
+        const url = tempContact.id ? `${API_BASE}api/vendor/contact/update/${tempContact.id}` : `${API_BASE}api/vendor/contact/addNew/${vendorId}`;
         const res = await apiFetch(url, { method: "POST", body: JSON.stringify(tempContact) });
         if (res.status) {
             setShowModal(false);

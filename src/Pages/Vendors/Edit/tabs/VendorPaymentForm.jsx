@@ -16,21 +16,24 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
         bank_country: "",
     });
 
-    // Sync local state when parent data loads (on mount / vendor fetch)
-    const isFirstSync = useRef(true);
+    // Sync local state whenever parent data changes (e.g., after edit API fetch).
     useEffect(() => {
-        if (isFirstSync.current && data.bank_name !== undefined) {
-            setBankLocal({
-                bank_name: data.bank_name || "",
-                bank_account_holder_name: data.bank_account_holder_name || "",
-                bank_ifsc: data.bank_ifsc || "",
-                bank_account_number: data.bank_account_number || "",
-                bank_account_number_confirm: data.bank_account_number_confirm || "",
-                bank_country: data.bank_country || "",
-            });
-            isFirstSync.current = false;
-        }
-    }, [data]);
+        setBankLocal({
+            bank_name: data.bank_name || "",
+            bank_account_holder_name: data.bank_account_holder_name || "",
+            bank_ifsc: data.bank_ifsc || "",
+            bank_account_number: data.bank_account_number || "",
+            bank_account_number_confirm: data.bank_account_number_confirm || "",
+            bank_country: data.bank_country || "",
+        });
+    }, [
+        data.bank_name,
+        data.bank_account_holder_name,
+        data.bank_ifsc,
+        data.bank_account_number,
+        data.bank_account_number_confirm,
+        data.bank_country,
+    ]);
 
     // Push local → parent only on blur (no lag while typing)
     const flushBankField = useCallback((field, value) => {
@@ -189,7 +192,11 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                             size="sm"
                                             // ✅ value → local state, onBlur → parent sync
                                             value={bankLocal.bank_name}
-                                            onChange={(e) => setBankLocal(p => ({ ...p, bank_name: e.target.value }))}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setBankLocal(p => ({ ...p, bank_name: val }));
+                                                flushBankField('bank_name', val);
+                                            }}
                                             onBlur={(e) => flushBankField('bank_name', e.target.value)}
                                         />
                                     </FormGroup>
@@ -198,7 +205,11 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                         <Form.Control
                                             size="sm"
                                             value={bankLocal.bank_account_holder_name}
-                                            onChange={(e) => setBankLocal(p => ({ ...p, bank_account_holder_name: e.target.value }))}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setBankLocal(p => ({ ...p, bank_account_holder_name: val }));
+                                                flushBankField('bank_account_holder_name', val);
+                                            }}
                                             onBlur={(e) => flushBankField('bank_account_holder_name', e.target.value)}
                                         />
                                     </FormGroup>
@@ -212,6 +223,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                                 const val = e.target.value;
                                                 if (/^[a-zA-Z0-9]*$/.test(val)) {
                                                     setBankLocal(p => ({ ...p, bank_account_number: val }));
+                                                    flushBankField('bank_account_number', val);
                                                 }
                                             }}
                                             onBlur={(e) => flushBankField('bank_account_number', e.target.value)}
@@ -225,7 +237,11 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                         <Form.Control
                                             size="sm"
                                             value={bankLocal.bank_ifsc}
-                                            onChange={(e) => setBankLocal(p => ({ ...p, bank_ifsc: e.target.value }))}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setBankLocal(p => ({ ...p, bank_ifsc: val }));
+                                                flushBankField('bank_ifsc', val);
+                                            }}
                                             onBlur={(e) => flushBankField('bank_ifsc', e.target.value)}
                                         />
                                     </FormGroup>
@@ -236,7 +252,11 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                             placeholder="Search"
                                             list="bank-country-list"
                                             value={bankLocal.bank_country}
-                                            onChange={(e) => setBankLocal(p => ({ ...p, bank_country: e.target.value }))}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setBankLocal(p => ({ ...p, bank_country: val }));
+                                                flushBankField('bank_country', val);
+                                            }}
                                             onBlur={(e) => flushBankField('bank_country', e.target.value)}
                                         />
                                         <datalist id="bank-country-list">
@@ -255,6 +275,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                                 const val = e.target.value;
                                                 if (/^[a-zA-Z0-9]*$/.test(val)) {
                                                     setBankLocal(p => ({ ...p, bank_account_number_confirm: val }));
+                                                    flushBankField('bank_account_number_confirm', val);
                                                 }
                                             }}
                                             onBlur={(e) => flushBankField('bank_account_number_confirm', e.target.value)}
