@@ -8,10 +8,10 @@ import { apiFetch } from "../../Utils/apiFetch";
 const AttributeManagement = () => {
   const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
-  const [modalConfig, setModalConfig] = useState({ 
-    show: false, 
-    mode: 'add', 
-    initialData: null 
+  const [modalConfig, setModalConfig] = useState({
+    show: false,
+    mode: 'add',
+    initialData: null
   });
 
   const openModal = (mode, data = null) => {
@@ -47,13 +47,14 @@ const AttributeManagement = () => {
 
   const columns = [
     { title: "Name", field: "attribute_name", minWidth: 200, formatter: (cell) => `<span class="fw-bold">${cell.getValue()}</span>` },
-    { title: "Type", field: "attribute_type", width: 120, hozAlign: "center" },
-    { title: "Default Value", field: "default_value", width: 150 },
-    { title: "Created", field: "created_at", width: 150, hozAlign: "center" },
+    { title: "Type", field: "attribute_type", width: 200, hozAlign: "center", headerHozAlign: "center", },
+    { title: "Default Value", field: "default_value", width: 200, headerHozAlign: "center",  hozAlign: "center", },
+    { title: "Created", field: "created_at", width: 200, hozAlign: "center", headerHozAlign: "center", },
     {
       title: "Actions",
-      width: 120,
+      width: 200,
       headerSort: false,
+      headerHozAlign: "center", 
       hozAlign: "center",
       formatter: function (cell) {
         const d = cell.getRow().getData();
@@ -123,8 +124,8 @@ const AttributeManagement = () => {
       </div>
 
       {modalConfig.show && (
-        <AttributeModal 
-          mode={modalConfig.mode} 
+        <AttributeModal
+          mode={modalConfig.mode}
           initialData={modalConfig.initialData}
           onClose={closeModal}
           onRefresh={refreshTable}

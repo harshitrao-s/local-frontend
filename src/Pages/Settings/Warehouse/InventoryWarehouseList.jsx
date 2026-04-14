@@ -185,17 +185,17 @@ const InventoryWarehouseList = () => {
       },
       columns: [
         {
-          title: "Warehouse Name", field: "warehouse_name", minWidth: 200, headerSort: false,
+          title: "Warehouse Name", field: "warehouse_name", Width: 200, headerSort: false, 
           formatter: (cell) =>
             `<span style="font-weight:700;color:#0f0f1a;">${cell.getValue()}</span>`
         },
         {
-          title: "Location", field: "location_name", width: 160, headerSort: false,
+          title: "Location", field: "location_name", width: 200, headerSort: false,
           formatter: (cell) =>
             `<span style="font-size:12px;color:#6b7280;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Status", field: "status", hozAlign: "center", width: 110, headerSort: false,
+          title: "Status", field: "status", hozAlign: "center", width: 200, headerSort: false, headerHozAlign: "center", 
           formatter: (cell) => {
             const active = cell.getValue() === 1 || cell.getValue() === "Active";
             return active
@@ -204,19 +204,19 @@ const InventoryWarehouseList = () => {
           }
         },
         {
-          title: "Default", field: "is_default", hozAlign: "center", width: 110, headerSort: false,
+          title: "Default", field: "is_default", hozAlign: "center", width: 200, headerSort: false, headerHozAlign: "center",
           formatter: (cell) =>
             cell.getValue() === 1
               ? `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#e0e7ff;color:#4338ca;">DEFAULT</span>`
               : `<span style="font-size:12px;color:#d1d5db;">—</span>`
         },
         {
-          title: "Created", field: "created_at", width: 160, headerSort: false,
+          title: "Created", field: "created_at", width: 200, headerSort: false, headerHozAlign: "center",
           formatter: (cell) =>
             `<span style="font-size:12px;color:#9ca3af;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Actions", width: 130, hozAlign: "center", headerSort: false,
+          title: "Actions", width: 200, hozAlign: "center", headerSort: false, headerHozAlign: "center",
           formatter: () => `
             <button class="iwl-edit-btn" title="Edit"><i class="fas fa-pen"></i> Edit</button>
             <button class="iwl-del-btn" title="Delete"><i class="fas fa-trash"></i></button>
