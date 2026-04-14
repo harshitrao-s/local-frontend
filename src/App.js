@@ -149,7 +149,7 @@ const MainLayout = ({ children }) => {
 
       <div
         className="content-wrapper"
-        style={{ minHeight: "100vh", backgroundColor: "#f4f6f9" }}
+        style={{ minHeight: "auto", backgroundColor: "#f4f6f9" }}
       >
         <div className="content-header py-2 px-3">
           <div className="container-fluid" />

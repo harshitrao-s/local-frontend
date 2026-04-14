@@ -147,7 +147,7 @@ const POKanbanList = () => {
         </div>
       </div>
 
-      <div className="d-flex gap-2 rounded-4 overflow-auto px-2" style={{ minHeight: "85vh" }}>
+      <div className="d-flex gap-2 rounded-4 overflow-auto px-2" style={{ Height: "auto" }}>
         {displayColumns.map((col) => (
           <KanbanColumn
             key={col.id}
@@ -184,7 +184,7 @@ const KanbanColumn = ({ column, items, draggedItem, setDraggedItem, onDropItem, 
 
       <div
         className={`p-2 kanban-column-body ${isOver && column.canDrop ? "kanban-drop-hover" : ""}`}
-        style={{ height: "68vh", overflowY: "auto", borderRadius: "12px", backgroundColor: !column.canDrop ? "rgba(0,0,0,0.02)" : "transparent" }}
+        style={{ height: "70VH", overflowY: "auto", borderRadius: "12px", backgroundColor: !column.canDrop ? "rgba(0,0,0,0.02)" : "transparent" }}
         onDragOver={(e) => { if (column.canDrop) { e.preventDefault(); setIsOver(true); } }}
         onDragLeave={() => setIsOver(false)}
         onDrop={() => { setIsOver(false); if (column.canDrop && draggedItem) onDropItem(draggedItem); setDraggedItem(null); }}
