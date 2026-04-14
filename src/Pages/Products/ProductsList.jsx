@@ -9,27 +9,30 @@ const STORAGE_KEY = "product_list_columns";
    COLUMN DEFINITIONS
 ---------------------------------------- */
 const ALL_COLUMNS = [
-  { title: "Title", field: "title", fixed: true },
-  { title: "SKU", field: "sku", fixed: true },
-  { title: "Brand", field: "brand_name_val", fixed: true },
-  { title: "Type", field: "product_type_name", fixed: true },
-  { 
-    title: "QTY", 
-    field: "total_stock_qty", 
+  { title: "Title", field: "title", fixed: true, width: 500 },
+  { title: "SKU", field: "sku", fixed: true, width: 250 },
+  { title: "Brand", field: "brand_name_val", fixed: true, width: 250 },
+  { title: "Type", field: "product_type_name", fixed: true, width: 200 },
+  {
+    title: "QTY",
+    field: "total_stock_qty",
+    hozAlign: "center",
+    headerHozAlign: "center",
     fixed: true,
+    width: 160,
     formatter: (cell) => `<span class="badge bg-primary">${cell.getValue() || 0}</span>`
   },
   {
     title: "ACTIONS",
     field: "actions",
     fixed: true,
-    hozAlign: "center",
+    headerHozAlign: "center",
     headerSort: false,
-    width: 100,
+    width: 220,
     formatter: (cell) => {
       const id = cell.getData().product_id;
       return `
-        <div class="d-flex gap-2 justify-content-center">
+        <div class="d-flex gap-2 items-center justify-content-center">
             <a href="/product/edit/${id}" class="btn btn-outline-primary btn-sm" title="Edit">
                 <i class="fas fa-pen"></i> 
             </a>
@@ -71,7 +74,7 @@ const ProductsList = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "600px",
+      height: "auto-fit",
       pagination: true,
       paginationMode: "remote",
       paginationSize: 20,
@@ -79,20 +82,20 @@ const ProductsList = () => {
 
       // API Integration
       ajaxURL: `${API_BASE}api/product/api/allproducts`,
-      
-      ajaxRequestFunc: async function(url, config, params) {
+
+      ajaxRequestFunc: async function (url, config, params) {
         // Construct the URL with query parameters matching your request: q, page, size
         const urlObj = new URL(url);
         urlObj.searchParams.set("q", document.getElementById("filter_q")?.value || "");
         urlObj.searchParams.set("page", params.page || 1);
         urlObj.searchParams.set("size", params.size || 20);
         const res = await apiFetch(urlObj.toString(), {
-                      credentials: "include",
-                  });
+          credentials: "include",
+        });
         return res;
       },
 
-      ajaxResponse: function(url, params, response) {
+      ajaxResponse: function (url, params, response) {
         // Standardizing response for Tabulator
         return {
           data: response.data || [],
