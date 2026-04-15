@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense, lazy } from "react";
-
+import Lottie from "lottie-react";
+import data from "./Assets/dist/img/sb_logo.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
@@ -20,7 +21,7 @@ import { MasterDataProvider } from "./Context/MasterDataProvider";
 
 import Header from "./Components/Common/Topbar";
 import SideMenu from "./Components/Common/Sidebar";
-import Footer from "./Components/Common/Footer";
+// import Footer from "./Components/Common/Footer";
 
 import { Toaster } from "react-hot-toast";
 
@@ -68,8 +69,7 @@ const POImportHome = lazy(() => import("./Pages/PurchaseOrder/ImportExport/POImp
 const InvoiceList = lazy(() => import("./Pages/PurchaseOrder/Invoices/InvoiceList"));
 const InvoiceDetail = lazy(() => import("./Pages/PurchaseOrder/Invoices/InvoiceDetail"));
 const ShipmentsList = lazy(() => import("./Pages/PurchaseOrder/Shipments/ShipmentsList"));
-import Lottie from "lottie-react";
-import data from "./Assets/dist/img/sb_logo.json";
+
 
 const LoadingFallback = () => (
   <div
@@ -148,7 +148,7 @@ const MainLayout = ({ children }) => {
       <SideMenu />
 
       <div
-        className="content-wrapper"
+        className="content-wrapper min-h-100vh"
         style={{ minHeight: "auto", backgroundColor: "#f4f6f9" }}
       >
         <div className="content-header py-2 px-3">
@@ -207,8 +207,8 @@ const MainLayout = ({ children }) => {
         }}
 
       />
-
-      <Footer />
+{/* 
+      <Footer /> */}
     </div>
   );
 };

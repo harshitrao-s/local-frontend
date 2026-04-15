@@ -118,9 +118,9 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <div className="sidebar clearfix" style={{ height: "calc(100vh - 120px)", overflowY: "auto" }}>
+      <div className="sidebar clearfix" style={{ height: "calc(100vh - 120px)", overflowY: "auto", paddingBottom: '120px' }}>
         <nav className="mt-2">
-          <ul className="nav nav-pills nav-sidebar flex-column" role="menu" style={{ paddingBottom: '50px' }}>
+          <ul className="nav nav-pills nav-sidebar flex-column" role="menu" style={{ paddingBottom: '20px' }}>
             
             {/* Dashboard */}
             <li className="nav-item">
@@ -461,6 +461,18 @@ export default function Sidebar() {
 
           </ul>
         </nav>
+      </div>
+      <div className="sidebar-footer d-flex align-items-center">
+        <img
+          src="/sblogo.png"
+          className="sidebar-footer-logo"
+          alt="SB Admin Logo"
+        />
+        <div className="sidebar-footer-meta ms-2">
+          <div className="sidebar-footer-name">SB Admin</div>
+          <div className="sidebar-footer-note">All rights reserved</div>
+        </div>
+        <div className="sidebar-footer-version ms-auto">v1.0</div>
       </div>
     </aside>
   );
