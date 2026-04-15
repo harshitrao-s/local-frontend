@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 const VendorImportIndex = () => {
     const navigate = useNavigate();
     const [importType, setImportType] = useState("vendor");
+    const [vendorDetailsCompleted, setVendorDetailsCompleted] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [processing, setProcessing] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
@@ -32,6 +33,19 @@ const VendorImportIndex = () => {
         preview_data: [],
         errors: []
     });
+    const isContactImportLocked = !vendorDetailsCompleted && importType !== "contact";
+
+    const resetImportWizard = () => {
+        setStep(1);
+        setSelectedFile(null);
+        setImportSummary({ file_id: "", total_rows: 0, valid_count: 0, invalid_count: 0, preview_data: [], errors: [] });
+    };
+
+    const handleImportTypeChange = (type) => {
+        if (type === "contact" && isContactImportLocked) return;
+        setImportType(type);
+        resetImportWizard();
+    };
 
     const handleExportVendors = async (format) => {
         setIsDownloading(true);
@@ -177,9 +191,10 @@ const VendorImportIndex = () => {
 
             if (res.status) {
                 const summary = res.summary || {};
+                const isVendorFlow = importType === "vendor";
 
                 Swal.fire({
-                    title: "Import Completed",
+                    title: isVendorFlow ? "Vendor Details Imported" : "Import Completed",
                     icon: "success",
                     html: `
                     <div style="text-align:middle">
@@ -190,11 +205,18 @@ const VendorImportIndex = () => {
                         <p><strong>Total Processed:</strong> ${summary.total_processed || 0} Records.</p>
                     </div>
                     `,
-                    confirmButtonText: "OK",
+                    confirmButtonText: isVendorFlow ? "Continue to Vendor Contacts" : "OK",
                     confirmButtonColor: "#000000"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate("/vendor/vendors");
+                        if (isVendorFlow) {
+                            setVendorDetailsCompleted(true);
+                            setImportType("contact");
+                            resetImportWizard();
+                            toast.success("Step 1 completed. Continue with Vendor Contacts.");
+                        } else {
+                            navigate("/vendor/vendors");
+                        }
                     }
                 });  
 
@@ -210,9 +232,7 @@ const VendorImportIndex = () => {
     };
 
     const handleReset = () => {
-        setStep(1);
-        setSelectedFile(null);
-        setImportSummary({ file_id: "", total_rows: 0, valid_count: 0, invalid_count: 0, preview_data: [], errors: [] });
+        resetImportWizard();
     };
 
     return (
@@ -278,7 +298,7 @@ const VendorImportIndex = () => {
                     <Button
                         variant={importType === 'vendor' ? 'primary' : 'outline-primary'}
                         className="px-3 shadow-sm"
-                        onClick={() => setImportType('vendor')}
+                        onClick={() => handleImportTypeChange('vendor')}
                     >
                         Vendor Details
                     </Button>
@@ -286,7 +306,8 @@ const VendorImportIndex = () => {
                     <Button
                         variant={importType === 'contact' ? 'primary' : 'outline-primary'}
                         className="px-3 shadow-sm"
-                        onClick={() => setImportType('contact')}
+                        onClick={() => handleImportTypeChange('contact')}
+                        disabled={isContactImportLocked}
                     >
                         Vendor Contacts
                     </Button>
