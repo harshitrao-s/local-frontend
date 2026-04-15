@@ -372,14 +372,15 @@ const VendorImportIndex = () => {
                                                         Duplicate detection rules:<br />
                                                         • Validation requires Vendor Code, Vendor Name, and Company Name.<br />
                                                         • Duplicate detection checks Vendor Code, Vendor Name, and Company Name.<br />
-                                                        • If you choose update, related details like addresses, contacts, and bank records are refreshed from the file.
+                                                        • If you choose update, the vendor row in the database is overwritten using the columns in this file (contacts, addresses, and bank records are not changed by this vendor-details import).
                                                     </>
                                                 ) : (
                                                     <>
                                                         Duplicate detection rules for contacts:<br />
                                                         • Validation requires Vendor Code and Email.<br />
-                                                        • Duplicate detection checks Vendor Code and Email.<br />
-                                                        • If you choose update, matching contact details are refreshed from the file.
+                                                        • If the Vendor Code is new, a vendor is created using optional columns (Vendor Name, Company Name, Payment Term, etc.) when present; otherwise the code is used as the display name.<br />
+                                                        • Duplicates are rows with the same Vendor Code and the same email (per vendor).<br />
+                                                        • If you choose update, that contact row is refreshed from the file; new Vendor Code + email pairs create new contacts.
                                                     </>
                                                 )}
                                             </small>
@@ -430,6 +431,7 @@ const VendorImportIndex = () => {
                                                     <th>Department</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
+                                                    <th>Mobile</th>
                                                     <th>Description</th>
                                                 </tr>
                                             ) : (
@@ -457,6 +459,7 @@ const VendorImportIndex = () => {
                                                         <td>{row["Department"] || "-"}</td>
                                                         <td>{row["Email"] || "-"}</td>
                                                         <td>{row["Phone"] || "-"}</td>
+                                                        <td>{row["Mobile"] || row["MOBILE"] || "-"}</td>
                                                         <td>{row["Description"] || "-"}</td>
                                                     </tr>
                                                 ) : (

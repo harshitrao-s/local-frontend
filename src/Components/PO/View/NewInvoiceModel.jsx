@@ -41,14 +41,15 @@ const calculateDueDate = (invoiceDate, selectedTerm) => {
   const date = toDateOnly(invoiceDate);
   if (!date || !selectedTerm) return "";
 
+  const termOption = String(selectedTerm.term_option || "frequency").trim();
   const key = String(selectedTerm.name || "").trim().toLowerCase();
   let result = null;
 
-  if (key.includes("last day of next to next month") || key.includes("last date of next to next month") || key.includes("last day of next to next months")) {
+  if (termOption === "nextNextMonthLastDay" || key.includes("last day of next to next month") || key.includes("last date of next to next month") || key.includes("last day of next to next months")) {
     result = lastDayOfMonth(addMonths(date, 2));
-  } else if (key.includes("last day of next month") || key.includes("last date of next month")) {
+  } else if (termOption === "nextMonthLastDay" || key.includes("last day of next month") || key.includes("last date of next month")) {
     result = lastDayOfMonth(addMonths(date, 1));
-  } else if (key.includes("14th of next month")) {
+  } else if (termOption === "nextMonth14" || key.includes("14th of next month")) {
     const nextMonth = addMonths(date, 1);
     result = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 14);
   } else {
@@ -118,7 +119,16 @@ const InvoiceModel = ({ poId, setShowModal, preferredPaymentId, onSuccess, maxIn
 
   const handleSaveInvoice = async () => {
     if (!formData.invoice_number.trim()) { toast.error("Invoice No required"); invoiceNumberRef.current?.focus(); return; }
+    if (!formData.payment_term_id)       { toast.error("Payment term required"); return; }
+    if (!formData.invoice_date)          { toast.error("Invoice date required"); invoiceDateRef.current?.focus?.(); return; }
+    if (!formData.due_date)              { toast.error("Due date required"); return; }
     if (!formData.payment_status_id)     { toast.error("Payment status required"); paymentStatusRef.current?.focus(); return; }
+    const selectedTerm = paymentTerms?.find((t) => String(t.id) === String(formData.payment_term_id));
+    const expectedDueDate = selectedTerm ? calculateDueDate(formData.invoice_date, selectedTerm) : "";
+    if (expectedDueDate && expectedDueDate !== formData.due_date) {
+      toast.error(`Due date must be ${expectedDueDate} as per selected payment term`);
+      return;
+    }
 
     const payload = {
       po_id: poId,
@@ -248,7 +258,8 @@ const InvoiceModel = ({ poId, setShowModal, preferredPaymentId, onSuccess, maxIn
                   <label className="form-label small fw-semibold">Due Date</label>
                   <DateInput
                     value={formData.due_date}
-                    onChange={(e) => setFormData({ ...formData, due_date: e })}
+                    onChange={() => {}}
+                    disabled
                   />
                 </div>
 

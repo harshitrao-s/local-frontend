@@ -3,9 +3,12 @@ import { Row, Col, FormGroup, Form } from 'react-bootstrap';
 import { motion, AnimatePresence } from "framer-motion";
 import DiaryInput from "../../../../Components/Common/DiaryInput";
 import SearchableSelect from "../../../../Components/Common/SearchableSelect";
+import { API_BASE } from "../../../../Config/api";
+import { apiFetch } from "../../../../Utils/apiFetch";
 
 const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => {
     const [activeView, setActiveView] = useState("bank_transfer");
+    const [activePaymentTerms, setActivePaymentTerms] = useState([]);
 
     // ✅ Local state for bank fields — lag fix
     const [bankLocal, setBankLocal] = useState({
@@ -114,6 +117,25 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
         [countries]
     );
 
+    useEffect(() => {
+        let mounted = true;
+        const loadActiveTerms = async () => {
+            try {
+                const res = await apiFetch(`${API_BASE}api/payment-terms?page=1&size=500`);
+                const rows = Array.isArray(res?.data) ? res.data : [];
+                const activeOnly = rows.filter((row) => {
+                    const normalized = String(row?.status ?? "").trim().toLowerCase();
+                    return normalized === "active" || normalized === "1";
+                });
+                if (mounted) setActivePaymentTerms(activeOnly);
+            } catch (_) {
+                if (mounted) setActivePaymentTerms([]);
+            }
+        };
+        loadActiveTerms();
+        return () => { mounted = false; };
+    }, []);
+
     return (
         <Row className="g-0 pb-3 rounded m-2 shadow-sm border">
             {/* LEFT SIDEBAR */}
@@ -127,7 +149,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                             onChange={(e) => updateField('payment_term', e.target.value)}
                         >
                             <option value="">Select Term</option>
-                            {paymentTerms?.map(pt => (
+                            {activePaymentTerms?.map(pt => (
                                 <option key={pt.id} value={pt.id}>{pt.name}</option>
                             ))}
                         </Form.Select>

@@ -7,10 +7,10 @@ import { apiFetch } from "../../Utils/apiFetch";
 const BrandManagement = () => {
   const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
-  const [modalConfig, setModalConfig] = useState({ 
-    show: false, 
-    mode: 'add', 
-    initialData: null 
+  const [modalConfig, setModalConfig] = useState({
+    show: false,
+    mode: 'add',
+    initialData: null
   });
 
   // --- Handlers ---
@@ -24,63 +24,66 @@ const BrandManagement = () => {
 
   const refreshTable = () => {
     if (tabulatorRef.current) {
-      tabulatorRef.current.setData(); 
+      tabulatorRef.current.setData();
     }
   };
 
   const handleDelete = async (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!"
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await apiFetch(`${API_BASE}api/product_api/api/brands/delete/${id}`, { 
-          method: "DELETE",
-        });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await apiFetch(`${API_BASE}api/product_api/api/brands/delete/${id}`, {
+            method: "DELETE",
+          });
 
-        if (response.status) {
-          Swal.fire("Deleted!", "The brand has been deleted.", "success");
-          refreshTable();
-        } else {
-          Swal.fire("Error!", "Failed to delete the brand.", "error");
+          if (response.status) {
+            Swal.fire("Deleted!", "The brand has been deleted.", "success");
+            refreshTable();
+          } else {
+            Swal.fire("Error!", "Failed to delete the brand.", "error");
+          }
+        } catch (error) {
+          Swal.fire("Error!", "Failed to delete.", "error");
         }
-      } catch (error) {
-        Swal.fire("Error!", "Failed to delete.", "error");
       }
-    }
-  });
-};
+    });
+  };
 
   // --- Define Columns INSIDE the component ---
   const columns = [
     {
-      title: "ID", 
-      field: "brand_id", 
+      title: "ID",
+      field: "brand_id",
       width: 100,
-      hozAlign: "center",headerSort:false,
+      hozAlign: "center", headerSort: false,
+      headerHozAlign: "center",
       formatter: (cell) => `<span class="fw-bold text-dark">${cell.getValue()}</span>`
     },
     {
       title: "Name",
-      field: "name",headerSort:false,
-      minWidth: 200,
+      field: "name", headerSort: false,
+      hozAlign: "center",
+      headerHozAlign: "center",
+      Width: 200,
     },
     {
       title: "Status",
-      field: "status",headerSort:false,
+      field: "status", headerSort: false,
       width: 120,
       formatter: (cell) => {
         const val = cell.getValue();
-        if(val === 1)
+        if (val === 1)
           return `<span class="badge badge-success fw-bold">Active</span>`;
         else
-          return `<span class="badge badge-secondary fw-bold">In-active</span>`; 
+          return `<span class="badge badge-secondary fw-bold">In-active</span>`;
       }
     },
     {
@@ -145,7 +148,7 @@ const BrandManagement = () => {
   }, []);
 
   const applyFilter = () => tabulatorRef.current.setPage(1);
-  
+
   const clearFilter = () => {
     const input = document.getElementById("filter_brand_name");
     if (input) input.value = "";
@@ -181,8 +184,8 @@ const BrandManagement = () => {
       </div>
 
       {modalConfig.show && (
-        <BrandModal 
-          mode={modalConfig.mode} 
+        <BrandModal
+          mode={modalConfig.mode}
           initialData={modalConfig.initialData}
           onClose={closeModal}
           onRefresh={refreshTable}

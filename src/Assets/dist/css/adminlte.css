@@ -15219,6 +15219,10 @@ textarea.form-control.is-warning {
   margin-bottom: 1rem;
 }
 
+
+.margin_bottom_none {
+  margin-bottom: 0 !important;
+}
 .card.bg-dark .card-header {
   border-color: #383f45;
 }

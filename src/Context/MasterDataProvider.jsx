@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from "../Config/api";
 import { apiFetch } from "../Utils/apiFetch";
 
 const MasterDataContext = createContext(null);
-const CACHE_KEY = "master_data_cache";
+const CACHE_KEY = "master_data_cache_v2";
 
 export const MasterDataProvider = ({ children }) => {
   const [vendors, setVendors] = useState([]);

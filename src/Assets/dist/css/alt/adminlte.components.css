@@ -1946,6 +1946,10 @@ textarea.form-control.is-warning {
   margin-bottom: 1rem;
 }
 
+.margin_none {
+  margin-bottom: 0px !important;
+}
+
 .card.bg-dark .card-header {
   border-color: #383f45;
 }

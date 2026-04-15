@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
+import { useMasterData } from "../../../Context/MasterDataProvider";
 
 const CSS = `
   .ptm-overlay {
@@ -39,7 +40,6 @@ const CSS = `
     display:flex;align-items:center;justify-content:center;
     transition:all .15s;font-size:13px;
   }
-  .ptm-close-btn:hover { background:rgba(255,255,255,.15);color:#fff; }
 
   .ptm-body { padding:22px; }
 
@@ -88,28 +88,74 @@ const CSS = `
 const PaymentTermModals = ({ config, onClose, onRefresh }) => {
   const { type, data } = config;
   const isEdit = type === "edit";
+  const { refreshMasterData } = useMasterData();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    type: "", name: "", frequency: "", status: 1,
+    type: "", name: "", termOption: "", frequency: "", status: "Active",
   });
+
+  const termOptionLabels = {
+    frequency: "Frequency (Days)",
+    nextMonth14: "14th of Next Month",
+    nextMonthLastDay: "Last day of Next Month",
+    nextNextMonthLastDay: "Last day of Next to Next Month",
+  };
+
+  const normalizeStatus = (raw) => {
+    const s = String(raw ?? "").trim().toLowerCase();
+    if (s === "1" || s === "active") return "Active";
+    if (s === "0" || s === "inactive") return "Inactive";
+    return "Active";
+  };
 
   useEffect(() => {
     if (isEdit && data) {
+      const normalized = data.frequency?.toString().trim().toLowerCase();
+      const option = data.term_option
+        || (normalized === "14th of next month"
+          ? "nextMonth14"
+          : normalized === "last day of next month"
+            ? "nextMonthLastDay"
+            : normalized === "last day of next to next month"
+              ? "nextNextMonthLastDay"
+              : "frequency");
+
       setFormData({
-        type:      data.type,
-        name:      data.name,
-        frequency: data.frequency,
-        status:    data.status,
+        type:       data.type,
+        name:       data.name,
+        termOption: option,
+        frequency:  option === "frequency" ? data.frequency : "",
+        status:     normalizeStatus(data.status),
       });
     }
   }, [type, data]);
 
+  useEffect(() => {
+    // Business rule: Prepaid is always Frequency with 0 days.
+    if (String(formData.type) === "1") {
+      if (formData.termOption !== "frequency" || String(formData.frequency) !== "0") {
+        setFormData(prev => ({ ...prev, termOption: "frequency", frequency: "0" }));
+      }
+    }
+  }, [formData.type, formData.termOption, formData.frequency]);
+
   const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
 
   const handleSave = async () => {
-    if (!formData.name || !formData.frequency) {
+    if (!formData.name || !formData.termOption || (formData.termOption === "frequency" && !formData.frequency)) {
       return Swal.fire("Required", "Please fill in all mandatory fields.", "info");
     }
+
+    const payload = {
+      ...formData,
+      term_option: formData.termOption,
+      frequency: String(formData.type) === "1"
+        ? 0
+        : (formData.termOption === "frequency"
+          ? formData.frequency
+          : termOptionLabels[formData.termOption]),
+    };
+
     setLoading(true);
     const url = isEdit
       ? `${API_BASE}api/payment-terms/update/${data.id}`
@@ -117,10 +163,11 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
     try {
       const res = await apiFetch(url, {
         method: isEdit ? "PUT" : "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       if (res.status) {
         Swal.fire("Success", res.message || "Term saved", "success");
+        await refreshMasterData();
         onRefresh();
         onClose();
       } else {
@@ -172,7 +219,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
             <div className="ptm-row">
               {/* Type */}
-              <div className="ptm-field mb-0">
+              <div className="ptm-field mb-2">
                 <label className="ptm-label">Type</label>
                 <select className="ptm-select" value={formData.type} onChange={e => set("type", e.target.value)}>
                   <option value="">Select</option>
@@ -181,28 +228,51 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
                 </select>
               </div>
 
-              {/* Frequency */}
-              <div className="ptm-field  mb-0">
+              {/* Term Option */}
+              <div className="ptm-field mb-0">
                 <label className="ptm-label">Frequency (Days) <span style={{ color: "#ef4444" }}>*</span></label>
+                <select
+                  className="ptm-select"
+                  value={formData.termOption}
+                  onChange={e => set("termOption", e.target.value)}
+                  disabled={String(formData.type) === "1"}
+                >
+                  <option value="" disabled hidden>Select payment term</option>
+                  <option value="frequency">Frequency</option>
+                  <option value="nextMonth14">14th of Next Month</option>
+                  <option value="nextMonthLastDay">Last day of Next Month</option>
+                  <option value="nextNextMonthLastDay">Last day of Next to Next Month</option>
+                </select>
+              </div>
+            </div>
+
+            {formData.termOption === "frequency" && (
+              <div className="ptm-field">
+                <label className="ptm-label">Days <span style={{ color: "#ef4444" }}>*</span></label>
                 <input
                   type="number"
                   className="ptm-input"
-                  placeholder="e.g., 30"
+                  placeholder="Enter day count, e.g. 30"
                   min="0"
                   value={formData.frequency}
                   onChange={e => set("frequency", e.target.value)}
                   onKeyDown={e => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
+                  disabled={String(formData.type) === "1"}
                 />
-                <p className="ptm-hint">Enter number of days (7, 15, 30…)</p>
+                <p className="ptm-hint">
+                  {String(formData.type) === "1"
+                    ? "For Prepaid, days are fixed to 0."
+                    : "Enter the number of days for the frequency term."}
+                </p>
               </div>
-            </div>
+            )}
 
             {/* Status */}
             <div className="ptm-field">
               <label className="ptm-label">Status</label>
               <select className="ptm-select" value={formData.status} onChange={e => set("status", e.target.value)}>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
               </select>
             </div>
 

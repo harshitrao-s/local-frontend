@@ -63,24 +63,26 @@ const ManageUserRoles = () => {
                 return await apiFetch(`${url}?${query}`);
             },
             columns: [
-                { title: "ID", field: "id", width: 70, headerSort: false, hozAlign: "center" },
-                { title: "Role Name", field: "name", headerSort: false, minWidth: 150 },
+                { title: "ID", field: "id", width: 100, headerSort: false, hozAlign: "center" ,headerHozAlign: "center",  },
+                { title: "Role Name", field: "name", headerSort: false, midth: 200 },
                 { 
                     title: "Users Assigned", 
                     field: "user_count", 
-                    width: 150, 
+                    width: 200, 
                     hozAlign: "center",
+                    headerHozAlign: "center", 
                     formatter: (cell) => `<span class="badge bg-light text-dark border">${cell.getValue()} Users</span>`
                 },
                 {
                     title: "Actions",
-                    width: 120,
+                    width: 200,
                     headerSort: false,
                     hozAlign: "center",
+                    headerHozAlign: "center",
                     formatter: function (cell) {
                         const d = cell.getData();
                         const container = document.createElement("div");
-                        container.className = "d-flex gap-2";
+                        container.className = "d-flex gap-2 justify-content-center align-items-center";
 
                         const editBtn = document.createElement("button");
                         editBtn.className = "btn btn-sm btn-outline-primary";

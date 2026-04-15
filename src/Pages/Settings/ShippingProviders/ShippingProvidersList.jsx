@@ -47,7 +47,7 @@ const ShippingProvidersList = () => {
     }
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout:   "fitColumns",
-      height:   "750px",
+      height:   "auto-fit",
       placeholder: `<div class="cl-state-cell"><div class="cl-state-icon"><i class="fas fa-truck"></i></div>No shipping providers found</div>`,
       ajaxURL:  `${API_BASE}api/shipping-providers`,
       ajaxRequestFunc: async (url, config, params) => {
@@ -57,27 +57,27 @@ const ShippingProvidersList = () => {
       ajaxResponse: (url, params, response) => response.data || [],
       columns: [
         {
-          title: "Carrier Name", field: "carrier_name", minWidth: 200, headerSort: false,
+          title: "Carrier Name", field: "carrier_name", maxWidth: 300, headerSort: false,
           formatter: (cell) =>
             `<span style="font-weight:700;color:#111827;font-size:14px;">${cell.getValue()}</span>`
         },
         {
-          title: "Carrier Code", field: "carrier_code", width: 120, headerSort: false,
+          title: "Carrier Code", field: "carrier_code", width: 250, headerSort: false,
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;font-weight:600;font-family:monospace;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Class Code", field: "class_code", width: 120, headerSort: false,
+          title: "Class Code", field: "class_code", width: 250, headerSort: false,
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;font-weight:600;font-family:monospace;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Tracking URL", field: "tracking_url", minWidth: 250, headerSort: false,
+          title: "Tracking URL", field: "tracking_url", Width: 200, headerSort: false,
           formatter: (cell) =>
             `<span style="font-size:12px;color:#6b7280;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Status", field: "status", hozAlign: "center", width: 110, headerSort: false,
+          title: "Status", field: "status", width: 250, headerSort: false,
           formatter: (cell) => {
             const active = cell.getValue() === "Active" || cell.getValue() === 1;
             return active
@@ -86,7 +86,7 @@ const ShippingProvidersList = () => {
           }
         },
         {
-            title: "Actions", width: 160, hozAlign: "center", headerSort: false,
+            title: "Actions", width: 180, headerSort: false,
             formatter: function(cell) {
                 const d = cell.getData();
                 const statusIcon = (d.status === "Active" || d.status === 1) ? "fa-eye-slash" : "fa-eye";

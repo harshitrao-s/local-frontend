@@ -37,7 +37,7 @@ const deletePO = async (po_id, e) => {
 const ALL_COLUMNS = [
   // FIXED COLUMNS (cannot be hidden)
   {
-    title: "SB PO",field: "po_number", width: 120,headerHozAlign: "center",headerHozAlign: "left",
+    title: "SB PO",field: "po_number", width: 170,headerHozAlign: "center",headerHozAlign: "left",
                 hozAlign: "left",
     
     formatter: (cell) =>
@@ -45,13 +45,13 @@ const ALL_COLUMNS = [
          className="fw-bold text-primary">${cell.getValue()}</a>`,
   },
   {
-    title: "Vendor PO",field: "master_vendor_po_number", width: 120, headerHozAlign: "left",
+    title: "Vendor PO",  hozAlign: "center", field: "master_vendor_po_number", width: 170, headerHozAlign: "left",
     hozAlign: "left", headerSort: false,
   },
   {
     title: "Order Date",
-    field: "order_date",width: 130,
-                headerSort: false,
+    field: "order_date",width: 170,
+                headerSort: false, 
     fixed: true,formatter: function(cell) {
         const dateValue = cell.getValue(); 
         if (!dateValue) return "-"; 
@@ -62,10 +62,14 @@ const ALL_COLUMNS = [
         }
     }
   },
-  { title: "Vendor Name",minWidth:220,  field: "vendor_name",headerSort: false, optional: true },
+  { title: "Vendor Name",Width:220,   field: "vendor_name",headerSort: false, optional: true },
   {
-    title: "PO Status",headerSort: false,
-    field: "status_id",width:130,
+    title: "PO Status",
+    headerSort: false,
+    headerHozAlign: "center",
+    hozAlign: "center",
+    field: "status_id",
+    width:150,
     fixed: true,
     formatter: function (cell) {
       const status = cell.getValue();
@@ -99,21 +103,20 @@ const ALL_COLUMNS = [
         return `<span class="px-3 py-2 fs-7 badge badge-pill ${badge}">${status.toUpperCase()}</span>`;
     },
   },*/
-  { title: "Currency", field: "currency_code",width: 105,
-                headerSort: false },
+  { title: "Currency", field: "currency_code", width: 170, hozAlign: "center", headerHozAlign: "center", headerSort: false },
   //  OPTIONAL COLUMNS (hide / show)
     {
     title: "Total Amount",
     field: "summary_total",
     //optional: true,
-    hozAlign: "right",width: 135,
+    hozAlign: "center",width: 150,
                 headerSort: false
   },
   {
     title: "Ordered QTY",
     field: "product_total_qty",
     optional: true,
-    hozAlign: "right",width: 125,
+    hozAlign: "center",width: 170,
                 headerSort: false
   },
   /*{
@@ -125,8 +128,8 @@ const ALL_COLUMNS = [
   },*/
   {
     title: "ACTION",
-    width: 100,
-    hozAlign: "center", hozAlign: "center",
+    width: 170,
+    hozAlign: "center",
     headerSort: false,
     formatter: function (cell) {
       const d = cell.getRow().getData();
@@ -208,7 +211,7 @@ const PurchaseOrderList = () => {
     placeholder: "No records found",
   
     layout: "fitColumns",
-    height: "600px",
+    height: "auto-fit",
 
     pagination: true,
     paginationMode: "remote",
@@ -357,7 +360,7 @@ const PurchaseOrderList = () => {
             <button className="btn btn-outline-dark" data-bs-toggle="dropdown" // Add this
                 aria-expanded="false" style={{height:"42px"}}>
                 <i className="fas fa-bars me-2"></i>
-                Actions
+                Action
             </button>
             <button
                 className="btn btn-dark dropdown-toggle dropdown-toggle-split"

@@ -250,13 +250,15 @@ const InvoiceList = () => {
     {
       title: "Vendor PO",
       field: "vendor_po_number",
-      width: 140,
+      width: 100,
       fixed: true, headerSort:false
     },
 {
       title: "VENDOR NAME",
       field: "vendor_name",
-      minWidth:160,
+       headerHozAlign: "center", 
+       hozAlign: "center",
+      Width:80,
       formatter: (cell) => {
         const id = cell.getRow().getData().vendor_id;
         return `
@@ -268,7 +270,9 @@ const InvoiceList = () => {
     {
       title: "INVOICE NO",
       field: "invoice_number",
-      width: 140,
+      width: 200,
+       headerHozAlign: "center", 
+       hozAlign: "center",
       fixed: true,headerSort:true,
       formatter: (cell) => {
         const id = cell.getRow().getData().po_invoice_id;
@@ -279,7 +283,7 @@ const InvoiceList = () => {
     {
       title: "INVOICE DATE",
       field: "invoice_date",
-      width: 140,
+      width: 170,
       fixed: true,
       headerSort: false,
       formatter: (cell) => {
@@ -289,7 +293,7 @@ const InvoiceList = () => {
     {
       title: " DUE DATE",
       field: "due_date",
-      width: 160,
+      width: 170,
       headerSort: false,
       formatter: (cell) => {
         return formattedDate(cell.getValue());
@@ -297,7 +301,9 @@ const InvoiceList = () => {
     },
     {
       title: "INVOICE AMOUNT",
-      field: "invoice_total", width:180,headerSort:false,
+      field: "invoice_total", width:170,headerSort:false,
+      headerHozAlign: "center", 
+       hozAlign: "center",
       formatter: (cell) => {
         return formatCurrency(cell.getValue());
       } 
@@ -305,7 +311,7 @@ const InvoiceList = () => {
     {
       title: " STATUS",
       field: "status_display",
-      width: 140,headerSort:false, hozAlign:"center", 
+      width: 160,headerSort:false, hozAlign:"center", 
       headerHozAlign: "center",
       fixed: true,
       formatter: (cell) => {
@@ -322,6 +328,8 @@ const InvoiceList = () => {
     {
       title: "PAYMENT TERM",
       field: "payment_term_name",
+       headerHozAlign: "center", 
+       hozAlign: "center",
       width: 160,headerSort:false,
       fixed: true
     },
@@ -333,7 +341,7 @@ const InvoiceList = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "600px",
+      height: "auto-fit",
       placeholder: "No records found",
       pagination: true,
       paginationMode: "remote",

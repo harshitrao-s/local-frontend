@@ -185,7 +185,7 @@ const Dashboard = () => {
         </div>
 
         {/* ── Charts Row ── */}
-        <div className="row g-3 mb-3">
+        <div className="row g-3 mb-3 align-items-stretch">
 
           {/* Sales Overview */}
           <div className="col-12 col-lg-5">
@@ -357,7 +357,7 @@ const Dashboard = () => {
 
           {/* Recent Purchase Orders */}
           <div className="col-12 col-lg-6">
-            <div className="card border shadow-sm" style={{ borderRadius: 10, fontFamily: FONT, height: "-webkit-fill-available" }}>
+            <div className="card  border shadow-sm" style={{ borderRadius: 10, fontFamily: FONT, height: "-webkit-fill-available" }}>
               <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb" }}>
                 <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Recent Purchase Orders</h6>
               </div>
