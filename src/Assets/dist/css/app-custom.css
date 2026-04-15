@@ -221,6 +221,11 @@ body {
     overflow: hidden;
 }
 
+.sidebar-footer-dim {
+    opacity: 0.7;
+    font-weight: 400;
+}
+
 .sidebar-footer-note {
     font-size: 0.75rem;
     color: #6b7280;
@@ -230,16 +235,20 @@ body {
 }
 
 .sidebar-footer-version {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     color: #2563eb;
     white-space: nowrap;
+    font-weight: 700;
+    background: #e0f2fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #0ea5e9;
 }
 
 .sidebar-collapse .sidebar-footer {
     justify-content: center;
 }
 
-.sidebar-collapse .sidebar-footer-meta,
 .sidebar-collapse .sidebar-footer-version {
     display: none;
 }
@@ -424,7 +433,7 @@ body:not(.sidebar-collapse) .main-sidebar .nav-sidebar .nav-treeview .nav-link[s
   height: calc(100vh - 120px); /* Adjust based on your header height */
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 80px; /* The bottom padding you requested */
+  padding-bottom: 120px; /* Match the JSX inline style */
 }
 
 /* 1. The Scrollbar container */

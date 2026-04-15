@@ -400,7 +400,7 @@ const Dashboard = () => {
                 <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Total Invoices</h6>
               </div>
               <div className="card-body d-flex flex-column align-items-center">
-                <ResponsiveContainer width="100%" height={200}>
+                <ResponsiveContainer width="100%" height={230}>
                   <PieChart>
                     <Pie
                       data={invoiceStatusData}

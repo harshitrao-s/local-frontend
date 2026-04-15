@@ -463,14 +463,8 @@ export default function Sidebar() {
         </nav>
       </div>
       <div className="sidebar-footer d-flex align-items-center">
-        <img
-          src="/sblogo.png"
-          className="sidebar-footer-logo"
-          alt="SB Admin Logo"
-        />
         <div className="sidebar-footer-meta ms-2">
-          <div className="sidebar-footer-name">SB Admin</div>
-          <div className="sidebar-footer-note">All rights reserved</div>
+          <div className="sidebar-footer-name">© SB Admin <span className="sidebar-footer-dim">- All rights reserved</span></div>
         </div>
         <div className="sidebar-footer-version ms-auto">v1.0</div>
       </div>
