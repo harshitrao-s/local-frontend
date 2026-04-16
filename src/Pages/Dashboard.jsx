@@ -379,7 +379,7 @@ const Dashboard = () => {
                           <td style={{ padding: "9px 12px", color: "#374151" }}>{o.vendor}</td>
                           <td style={{ padding: "9px 12px", color: "#6b7280" }}>{o.date}</td>
                           <td style={{ padding: "9px 12px" }}>
-                            <span className={`badge bg-${o.statusColor} rounded-pill px-2`} style={{ fontFamily: FONT, fontSize: 11 }}>
+                            <span className={`new_badge bg-${o.statusColor} `} style={{ fontFamily: FONT, fontSize: 11 }}>
                               {o.status}
                             </span>
                           </td>
