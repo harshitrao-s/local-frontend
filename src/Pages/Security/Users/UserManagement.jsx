@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import { API_BASE } from "../../../Config/api";
-import UserModals from "./UserModals"; 
+import UserModals from "./UserModals";
 import { apiFetch } from "../../../Utils/apiFetch";
 
 const UserManagement = () => {
     const tableRef = useRef(null);
     const tabulatorRef = useRef(null);
-    
+
     // Config for Modals
     const [modalConfig, setModalConfig] = useState({ type: null, data: null });
     // Dynamic roles fetched from the list API
@@ -25,7 +25,7 @@ const UserManagement = () => {
             pagination: true,
             paginationMode: "remote",
             paginationSize: 20,
-            
+
             // Intercept response to get both Users and the Roles list
             ajaxResponse: (url, params, response) => {
                 if (response.roles) setAvailableRoles(response.roles);
@@ -36,35 +36,47 @@ const UserManagement = () => {
             },
             ajaxRequestFunc: async function (url, config, params) {
                 const query = new URLSearchParams({
-                ...params,
-                page: params.page || 1,
-                size: params.size || 20,
+                    ...params,
+                    page: params.page || 1,
+                    size: params.size || 20,
                 }).toString();
 
                 return await apiFetch(`${url}?${query}`);
             },
             columns: [
-                { title: "Name", field: "name", minWidth: 150, headerSort: false },
-                { title: "Email", field: "email", minWidth: 200, headerSort: false },
-                { 
-                    title: "Roles", 
+                {
+                    title: "Name", field: "name", minWidth: 150, headerSort: false, headerHozAlign: "center",
+                    hozAlign: "center",
+                },
+                {
+                    title: "Email", field: "email", minWidth: 200, headerSort: false, headerHozAlign: "center",
+                    hozAlign: "center",
+                },
+                {
+                    title: "Roles",
                     field: "role", headerSort: false,
+                    headerHozAlign: "center",
+                    hozAlign: "center",
                     formatter: (cell) => `<span class="badge bg-info text-white rounded-pill px-3">${cell.getValue() || 'No Role'}</span>`
                 },
-                { 
-                    title: "Status", 
+                {
+                    title: "Status",
                     field: "status",
                     hozAlign: "center", headerSort: false,
+                    headerHozAlign: "center",
+                    hozAlign: "center",
                     formatter: (cell) => {
                         const val = cell.getValue();
                         const color = (val === "Active" || val === 1) ? "bg-success" : "bg-secondary";
                         return `<span class="badge ${color} rounded-pill px-3">${val === 1 ? 'Active' : 'Inactive'}</span>`;
                     }
                 },
-                { 
-                    title: "System User", 
+                {
+                    title: "System User",
                     field: "is_system",
                     hozAlign: "center", headerSort: false,
+                    headerHozAlign: "center",
+                    hozAlign: "center",
                     formatter: (cell) => {
                         const val = cell.getValue();
                         const color = val ? "bg-warning text-dark" : "bg-light text-muted border";
@@ -74,6 +86,8 @@ const UserManagement = () => {
                 {
                     title: "Actions",
                     width: 150,
+                    hozAlign: "center",
+                    headerHozAlign: "center",
                     hozAlign: "center",
                     headerSort: false,
                     formatter: function (cell) {
@@ -107,7 +121,7 @@ const UserManagement = () => {
         <div className="p-0">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 className="mb-0 fw-bold">User Management</h3>
-                <button 
+                <button
                     className="btn btn-dark shadow-sm px-4"
                     onClick={() => setModalConfig({ type: 'add', data: null })}
                 >
@@ -120,8 +134,8 @@ const UserManagement = () => {
             </div>
 
             {modalConfig.type && (
-                <UserModals 
-                    config={modalConfig} 
+                <UserModals
+                    config={modalConfig}
                     availableRoles={availableRoles}
                     onClose={() => setModalConfig({ type: null, data: null })}
                     onRefresh={refreshTable}

@@ -16,7 +16,7 @@ import { Search,X } from "lucide-react";
 const StatCard = ({ title, amount, count, icon, colorClass, iconBg, lucid }) => {
   
   return (
-    <div className="col-xl col-lg-4 col-md-6 col-sm-12 mb-4">
+    <div className="col-xl col-lg-4 col-md-6 col-sm-12 mb-3">
       <div className="card stat-card border-0 h-100" style={{ borderRadius: '20px' }}>
         <div className="card-body ps-3 pt-3 pe-3 pb-1">
           <div className="d-flex justify-content-between align-items-start">
@@ -368,8 +368,8 @@ const ShipmentsList = () => {
   
   useEffect(() => {
     tabulatorRef.current = new Tabulator(tableRef.current, {
-      layout: "fitData",
-      height: "600px",
+      layout: "fitColumns",
+      height: "calc(100vh - 350px)",
       placeholder: "No records found",
       pagination: true,
       paginationMode: "remote",
@@ -472,7 +472,7 @@ const ShipmentsList = () => {
       </div>
       <DashboardOverview summary={summary} />
       <div className="card mb-3">
-        <div className="card-body">
+        <div className="p-3">
           <div className="">
         <div className="row mb-3">
         {/* Order Number */}
@@ -553,7 +553,7 @@ const ShipmentsList = () => {
       </div>
     
       {/* FILTER ACTIONS */}
-      <div className="mt-4 d-flex gap-2">
+      <div className="mt-3 d-flex gap-2">
         <button type="button" className="btn btn-primary" onClick={applyFilter}>
             <i className="fas fa-search me-2"></i>
             Search
@@ -575,7 +575,7 @@ const ShipmentsList = () => {
 
 
     <div className="card ">
-        <div className="card-body d-flex p-1 pt-0 pb-0 mt-0 mb-0 ">
+        <div className="card-body  p-1 pt-0 pb-0 mt-0 mb-0 ">
           <div ref={tableRef} />
         </div>
       </div>
