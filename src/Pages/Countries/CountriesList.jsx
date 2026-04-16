@@ -211,21 +211,27 @@ const CountriesList = () => {
       columns: [
         {
           title: "Name", field: "name", width: 300, headerSort: false,
+          headerHozAlign: "center",
+          hozAlign: "center",
           formatter: (cell) =>
             `<span style="font-weight:700;color:#0f0f1a;">${cell.getValue()}</span>`
         },
         {
-          title: "ISO2", field: "iso2", width: 150, headerSort: false, hozAlign: "center",
+          title: "ISO2", field: "iso2", width: 150, headerSort: false, 
+          headerHozAlign: "center",
+          hozAlign: "center",
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;font-weight:600;font-family:monospace;">${cell.getValue()}</span>`
         },
         {
-          title: "ISO3", field: "iso3", width: 150, headerSort: false, hozAlign: "center",
+          title: "ISO3", field: "iso3", width: 150, headerSort: false, headerHozAlign: "center",
+          hozAlign: "center",
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;font-weight:600;font-family:monospace;">${cell.getValue()}</span>`
         },
         {
-          title: "# of States", field: "num_states", width: 150, headerSort: false, hozAlign: "center",
+          title: "# of States", field: "num_states", width: 150, headerSort: false, headerHozAlign: "center",
+          hozAlign: "center",
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;">${cell.getValue()}</span>`
         },
