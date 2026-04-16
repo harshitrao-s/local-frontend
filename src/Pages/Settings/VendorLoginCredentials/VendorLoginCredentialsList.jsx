@@ -84,8 +84,10 @@ const VendorLoginCredentialsList = () => {
         {
           title: "Vendor",
           field: "vendor_company_name",
-          minWidth: 200,
+          minWidth: 180,
           headerSort: false,
+          headerHozAlign: "center",
+          hozAlign: "center",
           formatter: (cell) => {
             const d = cell.getData();
             return `<div><span style="font-weight:700;color:#111827;font-size:14px;">${cell.getValue() || "—"}</span><br/>
@@ -95,7 +97,9 @@ const VendorLoginCredentialsList = () => {
         {
           title: "Website user name",
           field: "website_username",
-          minWidth: 140,
+          minWidth: 180,
+          headerHozAlign: "center",
+          hozAlign: "center",
           headerSort: false,
           formatter: (cell) =>
             `<span style="font-size:13px;color:#374151;font-weight:600;">${cell.getValue() || "—"}</span>`,
@@ -103,14 +107,16 @@ const VendorLoginCredentialsList = () => {
         {
           title: "User email",
           field: "website_user_email",
-          minWidth: 200,
+          minWidth: 180, headerHozAlign: "center",
+          hozAlign: "center",
           headerSort: false,
           formatter: (cell) => `<span style="font-size:12px;color:#4b5563;">${cell.getValue() || "—"}</span>`,
         },
         {
           title: "Website link",
           field: "website_link",
-          minWidth: 220,
+          minWidth: 180, headerHozAlign: "center",
+          hozAlign: "center",
           headerSort: false,
           formatter: (cell) => {
             const u = cell.getValue() || "";
@@ -121,7 +127,8 @@ const VendorLoginCredentialsList = () => {
         {
           title: "OTP",
           field: "otp_enabled",
-          width: 90,
+          width: 100, headerHozAlign: "center",
+          hozAlign: "center",
           hozAlign: "",
           headerSort: false,
           formatter: (cell) =>
@@ -133,7 +140,8 @@ const VendorLoginCredentialsList = () => {
           title: "Status",
           field: "is_active",
           width: 100,
-          hozAlign: "",
+          hozAlign: "", headerHozAlign: "center",
+          hozAlign: "center",
           headerSort: false,
           formatter: (cell) => {
             const active = cell.getValue() === true || cell.getValue() === 1;
@@ -145,6 +153,7 @@ const VendorLoginCredentialsList = () => {
         {
           title: "Actions",
           width: 160,
+          hozAlign: "center", headerHozAlign: "center",
           hozAlign: "center",
           headerSort: false,
           formatter: function () {
