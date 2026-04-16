@@ -464,8 +464,7 @@ const AllVendors = () => {
 
         {/* FILTERS */}
         <div className="card">
-          <div className="card-body">
-            <div className="row ">
+            <div className="row p-2">
               {/* Vendor Search */}
               <div className="col-md-4">
                 <label className="form-label">Search</label>
@@ -566,7 +565,6 @@ const AllVendors = () => {
                   ))}
                 </select>
               </div>
-            </div>
 
             {/* FILTER ACTIONS */}
             <div className="mt-2 d-flex gap-2">

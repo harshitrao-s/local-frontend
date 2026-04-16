@@ -74,7 +74,7 @@ const ProductsList = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "auto-fit",
+      height: "calc(100vh - 300px)",
       pagination: true,
       paginationMode: "remote",
       paginationSize: 20,

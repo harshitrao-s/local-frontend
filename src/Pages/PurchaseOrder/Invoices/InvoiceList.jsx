@@ -53,7 +53,7 @@ const DashboardOverview = ({ summary }) => {
 
   return (
     /* Limit the stretch on high-res screens by using a wrapper with max-width */
-    <div className="w-100 px-1 mx-auto" style={{ maxWidth: '1600px' }}>
+    <div className="w-100 mx-auto" style={{ maxWidth: '1620px' }}>
       <div className="row g-2 justify-content-center"> 
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
@@ -341,7 +341,7 @@ const InvoiceList = () => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "auto-fit",
+      height: "calc(100vh - 350px)",
       placeholder: "No records found",
       pagination: true,
       paginationMode: "remote",
@@ -475,7 +475,7 @@ const InvoiceList = () => {
       </div>
       <DashboardOverview summary={summary} />
       <div className="card mb-3">
-        <div className="card-body">
+        <div className="p-3">
           <div className="">
         <div className="row mb-3">
         {/* Order Number */}
@@ -586,7 +586,7 @@ const InvoiceList = () => {
         
       </div>
         {/* FILTER ACTIONS */}
-        <div className="mt-4 d-flex gap-2">
+        <div className="mt-3 d-flex gap-2">
         <button type="button" className="btn btn-primary" onClick={applyFilter}>
             <i className="fas fa-search" style={{fontSize:"13px", marginRight:"5px"}}></i>
             Search

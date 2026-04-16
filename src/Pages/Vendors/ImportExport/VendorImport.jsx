@@ -309,7 +309,7 @@ const VendorImportIndex = () => {
                 </div>
 
 
-                <div className="p-4">
+                <div className="p-3">
                     {step === 1 ? (
                         /* STAGE 1: UPLOAD */
                         <div className="animate__animated animate__fadeIn">
