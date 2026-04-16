@@ -15,6 +15,7 @@ const ShippingProvidersList = () => {
 
   const refreshTable = () => tabulatorRef.current?.setData();
 
+
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Delete Provider?",
@@ -47,7 +48,7 @@ const ShippingProvidersList = () => {
     }
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout:   "fitColumns",
-      height:   "auto-fit",
+      height:   "100%",
       placeholder: `<div class="cl-state-cell"><div class="cl-state-icon"><i class="fas fa-truck"></i></div>No shipping providers found</div>`,
       ajaxURL:  `${API_BASE}api/shipping-providers`,
       ajaxRequestFunc: async (url, config, params) => {
@@ -81,8 +82,8 @@ const ShippingProvidersList = () => {
           formatter: (cell) => {
             const active = cell.getValue() === "Active" || cell.getValue() === 1;
             return active
-              ? `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#dcfce7;color:#15803d;">ACTIVE</span>`
-              : `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#fee2e2;color:#b91c1c;">INACTIVE</span>`;
+              ? `<span  class="new_badge new_badge-success">ACTIVE</span>`
+              : `<span class="new_badge new_badge_inactive">INACTIVE</span>`;
           }
         },
         {
@@ -168,8 +169,8 @@ const ShippingProvidersList = () => {
         )}
       </div>
 
-      <div className="cl-card tbl-purple">
-        <div ref={tableRef} />
+      <div className="cl-card tbl-purple" style={{ height: "75vh" }}>
+        <div ref={tableRef} style={{ height: "100%" }} />
       </div>
 
       {modalConfig.type && (

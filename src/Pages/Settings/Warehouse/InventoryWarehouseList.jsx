@@ -199,15 +199,15 @@ const InventoryWarehouseList = () => {
           formatter: (cell) => {
             const active = cell.getValue() === 1 || cell.getValue() === "Active";
             return active
-              ? `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#dcfce7;color:#15803d;">ACTIVE</span>`
-              : `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#fee2e2;color:#b91c1c;">INACTIVE</span>`;
+              ? `<span  class="new_badge new_badge-success">ACTIVE</span>`
+              : `<span class="new_badge new_badge_inactive">INACTIVE</span>`;
           }
         },
         {
           title: "Default", field: "is_default", hozAlign: "center", width: 200, headerSort: false, headerHozAlign: "center",
           formatter: (cell) =>
             cell.getValue() === 1
-              ? `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#e0e7ff;color:#4338ca;">DEFAULT</span>`
+              ? `<span class="new_badge new_badge-default">DEFAULT</span>`
               : `<span style="font-size:12px;color:#d1d5db;">—</span>`
         },
         {

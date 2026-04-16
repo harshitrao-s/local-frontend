@@ -8,8 +8,48 @@ body {
 }
 
 
-.margin_none  {
+.margin_none {
   margin-bottom: 0px !important;
+}
+.new_badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  display: inline-block;
+}
+
+/* Status variants */
+.new_badge-success {
+  background: #16a34a;
+}
+
+
+.new_badge_inactive {
+  background: #fee2e2;
+}
+
+.new_badge_default {
+  background: #4338ca;
+}
+.new_badge-error {
+  background: #dc2626;
+}
+
+.new_badge-pending {
+  background: #f59e0b;
+}
+
+.new_badge-default {
+  background: #4f46e5;
+}
+
+.new_badge_on {
+background: #b45309;
+}
+.new_badge_off {
+background: #6b7280;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -17,6 +57,6 @@ code {
 }
 
 
-.margin_none  {
+.margin_none {
   margin-bottom: 0px !important;
 }

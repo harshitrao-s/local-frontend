@@ -68,7 +68,7 @@ const VendorLoginCredentialsList = () => {
     }
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
-      height: "750px",
+      // height: "750px",
       placeholder: `<div class="cl-state-cell"><div class="cl-state-icon"><i class="fas fa-key"></i></div>No vendor login credentials yet</div>`,
       ajaxURL: `${API_BASE}api/vendor-portal-credentials`,
       ajaxRequestFunc: async (url) => {
@@ -121,24 +121,24 @@ const VendorLoginCredentialsList = () => {
           title: "OTP",
           field: "otp_enabled",
           width: 90,
-          hozAlign: "center",
+          hozAlign: "",
           headerSort: false,
           formatter: (cell) =>
             cell.getValue()
-              ? `<span style="padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#fef3c7;color:#b45309;">ON</span>`
-              : `<span style="padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#f3f4f6;color:#6b7280;">OFF</span>`,
+              ? `<span class="new_badge new_badge_on">ON</span>`
+              : `<span class="new_badge new_badge_off">OFF</span>`,
         },
         {
           title: "Status",
           field: "is_active",
           width: 100,
-          hozAlign: "center",
+          hozAlign: "",
           headerSort: false,
           formatter: (cell) => {
             const active = cell.getValue() === true || cell.getValue() === 1;
             return active
-              ? `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#dcfce7;color:#15803d;">ACTIVE</span>`
-              : `<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#fee2e2;color:#b91c1c;">INACTIVE</span>`;
+              ? `<span class="new_badge new_badge-success">ACTIVE</span>`
+              : `<span class="new_badge new_badge_inactive">INACTIVE</span>`;
           },
         },
         {
