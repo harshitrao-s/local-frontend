@@ -208,17 +208,16 @@ const PurchaseOrderList = () => {
   useEffect(() => {
     const visibleOptionalCols = getSavedColumns();
     tabulatorRef.current = new Tabulator(tableRef.current, {
-      placeholder: "No records found",
-
-      layout: "fitColumns",
-      height: "auto-fit",
-
-      pagination: true,
-      paginationMode: "remote",
-      paginationSize: 20,
-      paginationSizeSelector: [20, 30, 40, 50],
-      sortMode: "remote",
-      ajaxURL: API_ENDPOINTS.PO_LISTING,
+    placeholder: "No records found",
+  
+    layout: "fitColumns",
+    height: "calc(100vh - 300px)",
+    pagination: true,
+    paginationMode: "remote",
+    paginationSize: 20,
+    paginationSizeSelector: [20, 30, 40, 50],
+    sortMode: "remote",
+    ajaxURL: API_ENDPOINTS.PO_LISTING,
 
       ajaxParams: function () {
         return {
@@ -489,14 +488,14 @@ const PurchaseOrderList = () => {
         </div>
       </div>
 
-      {/* TABLE */}
-      <div className="card">
-        <div className="p-0 mt-0">
-          <div ref={tableRef} />
-        </div>
-        <div className="row clearfix">
-          <div className="d-flex justify-content-end">
-            <div className="mt-5 pt-3 mb-5 pe-3 text-end">
+    {/* TABLE */}
+    <div className="card">
+      <div className="p-0 mt-0">
+        <div ref={tableRef} />
+      </div>
+      <div className="row clearfix py-2 px-2 ">
+        <div className="d-flex justify-content-end">
+          <div className="text-end">
               <p className="text-uppercase mb-0">
                 <span className="text-uppercase text-muted mb-0">Purchase Orders Total</span>
                 <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
