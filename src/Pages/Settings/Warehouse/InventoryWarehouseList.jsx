@@ -172,7 +172,7 @@ const InventoryWarehouseList = () => {
     tabulatorRef.current = new Tabulator(tableRef.current, {
       ajaxURL:  `${API_BASE}api/inventory-locations`,
       layout:   "fitColumns",
-      height:   "calc(100vh - 290px)",
+      height:   "stretch",
       placeholder: `<div class="iwl-empty"><div class="iwl-empty-icon"><i class="fas fa-warehouse"></i></div>No inventory locations found</div>`,
       ajaxResponse: (url, params, response) => {
         setWarehouseLocations(response.warehouse_locations || []);

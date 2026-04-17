@@ -48,7 +48,7 @@ const ShippingProvidersList = () => {
     }
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout:   "fitColumns",
-      height:   "100%",
+      height:   "stretch",
       placeholder: `<div class="cl-state-cell"><div class="cl-state-icon"><i class="fas fa-truck"></i></div>No shipping providers found</div>`,
       ajaxURL:  `${API_BASE}api/shipping-providers`,
       ajaxRequestFunc: async (url, config, params) => {

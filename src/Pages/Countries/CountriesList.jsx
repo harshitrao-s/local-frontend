@@ -8,7 +8,7 @@ import { apiFetch } from "../../Utils/apiFetch";
 const CSS = `
   .cl-header {
     display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:24px;
+    margin-bottom:16px;
   }
 
   .cl-title-wrap { display:flex;align-items:center;gap:14px; }
@@ -25,8 +25,8 @@ const CSS = `
   .cl-subtitle { font-size:12px;color:#9ca3af;margin:0; }
 
   .cl-search-wrap {
-    background:#fff;border-radius:12px;padding:14px;
-    border:1px solid #f0f0f5;margin-bottom:16px;
+    background:#fff;border-radius:12px;padding:12px;
+    border:1px solid #f0f0f5;margin-bottom:12px;
     display:flex;gap:10px;
   }
 
@@ -58,13 +58,14 @@ const CSS = `
 
   .cl-card.tbl-purple {
     width:100%;
+    height:100%;
   }
 
   .cl-card.tbl-purple .tabulator {
     width:100%!important;
+    height:100%!important;
   }
 
-  /* ✅ GLOBAL LEFT ALIGN */
   .tabulator-cell {
     text-align: left !important;
   }
@@ -148,44 +149,19 @@ const CountriesList = () => {
       },
       ajaxResponse: (url, params, res) => res.data || [],
 
-      layout: "fitColumns", // ✅ Equal width
+      layout: "fitColumns",
+      height: "100%", // full inside parent
 
       pagination: "remote",
       paginationSize: 10,
 
       columns: [
-        {
-          title: "Name",
-          field: "name",
-          hozAlign: "left",
-          headerHozAlign: "left",
-          widthGrow: 1,
-        },
-        {
-          title: "ISO2",
-          field: "iso2",
-          hozAlign: "left",
-          headerHozAlign: "left",
-          widthGrow: 1,
-        },
-        {
-          title: "ISO3",
-          field: "iso3",
-          hozAlign: "left",
-          headerHozAlign: "left",
-          widthGrow: 1,
-        },
-        {
-          title: "# States",
-          field: "num_states",
-          hozAlign: "left",
-          headerHozAlign: "left",
-          widthGrow: 1,
-        },
+        { title: "Name", field: "name", widthGrow: 1 },
+        { title: "ISO2", field: "iso2", widthGrow: 1 },
+        { title: "ISO3", field: "iso3", widthGrow: 1 },
+        { title: "# States", field: "num_states", widthGrow: 1 },
         {
           title: "Actions",
-          hozAlign: "left",
-          headerHozAlign: "left",
           widthGrow: 1,
           formatter: () => `
             <button class="cl-edit-btn">Edit</button>
@@ -207,7 +183,13 @@ const CountriesList = () => {
   }, [handleDelete, navigate]);
 
   return (
-    <div>
+    <div
+      style={{
+        height: "stretch", // ✅ 95% of available space
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <style>{CSS}</style>
 
       <div className="cl-header">
@@ -230,9 +212,6 @@ const CountriesList = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search..."
-            style={{
-              width: "200px"
-            }}
           />
         </div>
 
@@ -247,9 +226,12 @@ const CountriesList = () => {
         )}
       </div>
 
-      {/* ✅ Auto height */}
-      <div className="cl-card tbl-purple">
-        <div ref={tableRef} />
+      {/* TABLE */}
+      <div
+        className="cl-card tbl-purple"
+        style={{ flex: 1, minHeight: 0 }}
+      >
+        <div ref={tableRef} style={{ height: "100%" }} />
       </div>
     </div>
   );
