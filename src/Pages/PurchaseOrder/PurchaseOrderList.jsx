@@ -87,7 +87,7 @@ const ALL_COLUMNS = [
       else if (status === 7) { text = "Closed"; badge = "badge-danger"; }
       else if (status === 8) { text = "Cancelled"; badge = "badge-danger"; }
 
-      return `<span class="new_badge ${badge}" style="min-width:70px;">${text.toUpperCase()}</span>`;
+      return `<span class="new_badge ${badge}" style="min-width:80px;">${text.toUpperCase()}</span>`;
     },
   },
   /* {

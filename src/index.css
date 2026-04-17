@@ -21,6 +21,10 @@ body {
   margin-bottom: 0px !important;
 }
 
+.top_border_design {
+  border: 12px 12px 0px 0px;
+}
+
 .new_badge {
   padding: 3px 10px;
   border-radius: 20px;

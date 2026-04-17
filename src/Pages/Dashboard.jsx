@@ -188,8 +188,8 @@ const Dashboard = () => {
 
           {/* Sales Overview */}
           <div className="col-12 col-lg-5">
-            <div className="card border shadow-sm h-100 d-flex flex-column" style={{ borderRadius: 10, fontFamily: FONT }}>
-              <div className="p-2 d-flex justify-content-between align-items-center" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb" }}>
+            <div className="card border  shadow-sm h-100 d-flex flex-column" style={{ borderRadius: 10, fontFamily: FONT }}>
+              <div className="p-2 d-flex justify-content-between top_border_design align-items-center" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb" }}>
                 <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Sales Overview</h6>
                 <button
                   className="btn btn-sm btn-outline-secondary"
