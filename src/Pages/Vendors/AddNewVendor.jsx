@@ -246,7 +246,7 @@ const AddNewVendor = () => {
         vendor_type: "",
         currency: "",
         min_order_value: "",
-        vendor_account_number:"",
+        vendor_account_number: "",
         status: "",
         is_taxable: false,
         tax_percent: "",
@@ -264,10 +264,10 @@ const AddNewVendor = () => {
         bank_account_holder_name: "",
         bank_ifsc: "",
         bank_country: "",
-        bank_account_number:"",
-        bank_account_number_confirm:"",
+        bank_account_number: "",
+        bank_account_number_confirm: "",
         first_contact_date: "",
-        first_contact_via: "",   
+        first_contact_via: "",
         onboard_date: "",
         onboard_by: "",
         onboard_comments: "",
@@ -359,7 +359,7 @@ const AddNewVendor = () => {
                         : fd.mode_of_payment,
                     tax_percent: fd.is_taxable ? parseFloat(fd.tax_percent || 0) : 0,
                     first_contact_date: formatToISODate(fd.first_contact_date),
-                    onboard_date:       formatToISODate(fd.onboard_date),
+                    onboard_date: formatToISODate(fd.onboard_date),
                 }),
             });
 
@@ -585,10 +585,10 @@ const AddNewVendor = () => {
                                             <DateInput
                                                 value={formData.first_contact_date || null}
                                                 onChange={date =>
-                                                setFormData(prev => ({ ...prev, first_contact_date: date }))
+                                                    setFormData(prev => ({ ...prev, first_contact_date: date }))
                                                 }
                                             />
-                                            
+
                                         </FormGroup>
                                         <FormGroup className="mb-3">
                                             <Form.Label className="small fw-bold">First Contact Via</Form.Label>
@@ -606,10 +606,10 @@ const AddNewVendor = () => {
                                             <DateInput
                                                 value={formData.onboard_date || null}
                                                 onChange={date =>
-                                                setFormData(prev => ({ ...prev, onboard_date: date }))
+                                                    setFormData(prev => ({ ...prev, onboard_date: date }))
                                                 }
                                             />
-                                            
+
                                         </FormGroup>
                                         <FormGroup className="mb-3">
                                             <Form.Label className="small fw-bold">Onboard By</Form.Label>
