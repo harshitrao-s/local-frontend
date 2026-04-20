@@ -13,10 +13,6 @@ const CommonTable = ({
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filteredData, setFilteredData] = useState(data);
-  const [colWidths, setColWidths] = useState(
-    config.map((col) => col.width || 180)
-  );
-  const [isResizing, setIsResizing] = useState(false);
 
   // ================= DEBOUNCE =================
   useEffect(() => {
@@ -47,34 +43,6 @@ const CommonTable = ({
     }
   }, [debouncedSearch, data, searchFromApi, onSearch]);
 
-  // ================= RESIZE =================
-  const startResize = (index, e) => {
-    e.preventDefault();
-    setIsResizing(true);
-
-    const startX = e.clientX;
-    const startWidth = colWidths[index];
-
-    const onMove = (eMove) => {
-      const newWidth = Math.max(100, startWidth + (eMove.clientX - startX));
-
-      setColWidths((prev) => {
-        const updated = [...prev];
-        updated[index] = newWidth;
-        return updated;
-      });
-    };
-
-    const onUp = () => {
-      setIsResizing(false);
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-    };
-
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-  };
-
   // ================= SEARCH HANDLERS =================
   const handleSearch = () => {
     if (searchFromApi) {
@@ -93,7 +61,7 @@ const CommonTable = ({
   const tableData = searchFromApi ? data : filteredData;
 
   return (
-    <div style={{ userSelect: isResizing ? "none" : "auto" }}>
+    <div>
       {/* ================= SEARCH ================= */}
       {isSearchable && (
         <div
@@ -190,7 +158,7 @@ const CommonTable = ({
           <table
             style={{
               width: "100%",
-              tableLayout: "fixed",
+              tableLayout: "auto", // 🔥 changed from fixed
               borderCollapse: "separate",
               borderSpacing: 0,
             }}
@@ -201,28 +169,15 @@ const CommonTable = ({
                   <th
                     key={i}
                     style={{
-                      position: "relative",
                       padding: "14px 16px",
                       fontSize: "10px",
                       fontWeight: "700",
                       color: "#9ca3af",
                       textAlign: col.align || "left",
                       borderBottom: "1px solid #f0f0f5",
-                      width: colWidths[i],
                     }}
                   >
                     {col.title}
-                    <div
-                      onMouseDown={(e) => startResize(i, e)}
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        top: 0,
-                        width: "8px",
-                        height: "100%",
-                        cursor: "col-resize",
-                      }}
-                    />
                   </th>
                 ))}
               </tr>
@@ -238,14 +193,12 @@ const CommonTable = ({
                         style={{
                           padding: "12px 16px",
                           borderBottom: "1px solid #f1f5f9",
-                          width: colWidths[j],
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           textAlign: col.align || "left",
                         }}
                       >
-                        {/* ✅ ACTIONS SUPPORT */}
                         {col.type === "actions" ? (
                           <div
                             style={{
@@ -291,7 +244,10 @@ const CommonTable = ({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={config.length} style={{ padding: "50px", textAlign:"center" }}>
+                  <td
+                    colSpan={config.length}
+                    style={{ padding: "50px", textAlign: "center" }}
+                  >
                     No data found
                   </td>
                 </tr>
