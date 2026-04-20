@@ -423,9 +423,103 @@ body:not(.sidebar-collapse) .main-sidebar .nav-sidebar .nav-treeview .nav-link[s
 }
 
 /* Container styling */
-.main-sidebar {
-  overflow-x: hidden;
+
+
+.sidebar-boundary-toggle {
+  position: absolute;
+  top: 1.75rem;
+  right: 0;                 
+  transform: translate(50%, -50%); 
+  z-index: 9999;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;      
+  color: #343a40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
 }
+
+
+
+.main-sidebar {
+  position: relative;
+  overflow: visible !important;
+}
+
+.sidebar-boundary-toggle:hover {
+  background: transparent;
+}
+
+.sidebar-boundary-toggle:focus {
+  outline: none;
+}
+
+/* Remove hover/active/focus effects ONLY for toggle button */
+.sidebar-boundary-toggle,
+.sidebar-boundary-toggle:hover,
+.sidebar-boundary-toggle:active,
+.sidebar-boundary-toggle:focus,
+.sidebar-boundary-toggle:focus-visible {
+  background: #f8f9fa !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  outline: none !important;
+  filter: none !important;
+}
+
+.sidebar-boundary-toggle i,
+.sidebar-boundary-toggle svg {
+  pointer-events: none;
+}
+
+/* normal state */
+.nav-text {
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+body.sidebar-mini.sidebar-collapse .nav-text {
+  display: none !important;
+}
+
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .nav-text {
+  display: none !important;
+}
+
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link .nav-text,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .nav-sidebar .nav-link .nav-text {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Disable AdminLTE hover-expand when sidebar is collapsed */
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused,
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-link,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .brand-link,
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .sidebar,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .sidebar {
+  width: 4.6rem !important;
+  margin-left: 0 !important;
+}
+
+
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .nav-sidebar .nav-link p,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .nav-sidebar .nav-link p,
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-text,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .brand-text,
+body.sidebar-mini.sidebar-collapse .main-sidebar:hover .user-panel .info,
+body.sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused .user-panel .info {
+  visibility: hidden !important;
+}
+
+
 
 .sidebar {
   position: relative;

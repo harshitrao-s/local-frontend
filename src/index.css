@@ -77,3 +77,18 @@ code {
 .margin_none {
   margin-bottom: 0px !important;
 }
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 15px;              /* navbar ke according adjust karo */
+  left: 250px;            /* sidebar width ke equal (important) */
+  transform: translateX(-50%);
+  z-index: 999;
+}
+
+.sidebar-toggle-btn .btn {
+  background: #343a40;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 10px;
+}

@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import apiFetch from "../../Utils/apiFetch";
 import { API_BASE } from "../../Config/api";
 import { useAuth } from "../../Context/AuthContext";
+import { useLayout } from "../../Context/LayoutContext";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -17,6 +18,7 @@ export default function Sidebar() {
   const isActive = (path) => location.pathname === path;
   const isParentActive = (prefix) => location.pathname.startsWith(prefix);
   const { logout } = useAuth();
+  const { toggleSidebar } = useLayout();
 
 
   // Sync openMenu state with current URL on load and navigation
@@ -108,6 +110,15 @@ export default function Sidebar() {
 
   return (
     <aside className="main-sidebar sidebar-light-dark elevation-2">
+      <button
+        type="button"
+        className="sidebar-boundary-toggle"
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"  fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-right-icon lucide-chevrons-left-right" style={{ color: "#f8f9fa" }}><path d="m9 7-5 5 5 5" /><path d="m15 7 5 5-5 5" /></svg>
+      </button>
+
       {/* Brand */}
       <Link to="/dashboard" className="brand-link navbar-light">
         <img
@@ -117,6 +128,8 @@ export default function Sidebar() {
         />
         <span className="brand-text font-weight-bold text-black ">SB Admin</span>
       </Link>
+
+
 
       <div className="user-panel mt-1 pt-2 pb-3 mb-2 d-flex">
         <div className="image">
@@ -481,15 +494,32 @@ export default function Sidebar() {
             </li>
 
             <li className="nav-item">
-              <button
+              <Link
                 onClick={handleLogout}
-                type="button"
-                className="nav-link text-start "
-                disabled={loggingOut}
+                className={`nav-link d-flex align-items-center ${isParentActive("/logout") ? "active" : ""}`}
               >
-                <i className="nav-icon fas fa-power-off text-danger fs-6"></i>
-                <p className="fs-6 ">{loggingOut ? "Logging out..." : "Logout"}</p>
-              </button>
+                <span className="nav-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m16 17 5-5-5-5" />
+                    <path d="M21 12H9" />
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  </svg>
+                </span>
+
+                <span className="nav-text">
+                  {loggingOut ? "Logging out..." : "Logout"}
+                </span>
+              </Link>
             </li>
 
           </ul>
