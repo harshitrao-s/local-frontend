@@ -5,6 +5,7 @@ import PaymentTermModals from "./PaymentTermModals";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import { useMasterData } from "../../../Context/MasterDataProvider";
+import CmnHeader from "../../../Components/Common/CmnHeader";
 
 const CSS = `
   /* ── header ── */
@@ -123,11 +124,11 @@ const CSS = `
 
 const PaymentTermsList = () => {
   const { refreshMasterData } = useMasterData();
-  const tableRef     = useRef(null);
+  const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
   const [modalConfig, setModalConfig] = useState({ type: null, data: null });
-  const [search, setSearch]           = useState("");
-  const [totalCount, setTotalCount]   = useState(0);
+  const [search, setSearch] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
   const termOptionLabels = {
     frequency: "Frequency",
     nextMonth14: "14th of Next Month",
@@ -166,7 +167,7 @@ const PaymentTermsList = () => {
     const val = document.getElementById("ptl_search")?.value || "";
     tabulatorRef.current.setFilter([
       [
-        { field: "name",      type: "like", value: val },
+        { field: "name", type: "like", value: val },
         { field: "type_label", type: "like", value: val },
       ]
     ]);
@@ -180,8 +181,8 @@ const PaymentTermsList = () => {
   useEffect(() => {
     tabulatorRef.current = new Tabulator(tableRef.current, {
       ajaxURL: `${API_BASE}api/payment-terms`,
-      layout:  "fitColumns",
-      height:  "calc(100vh - 290px)",
+      layout: "fitColumns",
+      height: "calc(100vh - 290px)",
       placeholder: `<div class="ptl-empty"><div class="ptl-empty-icon"><i class="fas fa-file-invoice-dollar"></i></div>No payment terms found</div>`,
       ajaxResponse: (url, params, response) => {
         const rows = response.data || [];
@@ -204,7 +205,7 @@ const PaymentTermsList = () => {
             `<span style="font-weight:700;color:#0f0f1a;">${cell.getValue() || "—"}</span>`
         },
         {
-          title: "Type", field: "type", hozAlign: "center",headerHozAlign: "center", width: 110, headerSort: false,
+          title: "Type", field: "type", hozAlign: "center", headerHozAlign: "center", width: 110, headerSort: false,
           formatter: (cell) => {
             const val = cell.getValue();
             if (val === "" || val === null || val === undefined) return "—";
@@ -269,22 +270,7 @@ const PaymentTermsList = () => {
       <style>{CSS}</style>
 
       {/* ── Header ── */}
-      <div className="ptl-header">
-        <div className="ptl-title-wrap">
-          <div className="ptl-icon">
-            <i className="fas fa-file-invoice-dollar" />
-          </div>
-          <div>
-            <h3 className="ptl-title">Payment Terms</h3>
-            <p className="ptl-subtitle">
-              {totalCount > 0 ? `${totalCount} terms configured` : "Manage vendor payment terms"}
-            </p>
-          </div>
-        </div>
-        <button className="ptl-add-btn" onClick={() => setModalConfig({ type: "add", data: null })}>
-          <i className="fas fa-plus" style={{ fontSize: 11 }} /> Add Term
-        </button>
-      </div>
+      <CmnHeader title="Payment Terms" subtitle="Manage vendor payment terms" icon1={"fas fa-file-invoice-dollar"} icon="ptl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Term" />
 
       {/* ── Search ── */}
       <div className="ptl-search-wrap">

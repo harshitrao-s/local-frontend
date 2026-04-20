@@ -4,6 +4,7 @@ import InventoryWarehouseModals from "./InventoryWarehouseModals";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import CommonTable from "../../../Components/Common/CmnTable";
+import CmnHeader from "../../../Components/Common/CmnHeader";
 
 const CSS = `
   .iwl-header {
@@ -167,28 +168,7 @@ const InventoryWarehouseList = () => {
       <style>{CSS}</style>
 
       {/* Header */}
-      <div className="iwl-header">
-        <div className="iwl-title-wrap">
-          <div className="iwl-icon">
-            <i className="fas fa-warehouse" />
-          </div>
-          <div>
-            <h3 className="iwl-title">Inventory Warehouse</h3>
-            <p className="iwl-subtitle">
-              Manage warehouse locations & inventory slots
-            </p>
-          </div>
-        </div>
-
-        <button
-          className="iwl-add-btn"
-          onClick={() =>
-            setModalConfig({ type: "add", data: null })
-          }
-        >
-          + Add Location
-        </button>
-      </div>
+      <CmnHeader title="Inventory Warehouse" subtitle="Manage warehouse locations & inventory slots" icon1={"fas fa-warehouse"} icon="iwl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Location" />
 
       {/* ✅ Common Table */}
       <CommonTable config={tableConfig} data={filteredData} isSearchable={true} showSearchButton={true}

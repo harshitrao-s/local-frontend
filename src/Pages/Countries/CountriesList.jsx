@@ -4,6 +4,7 @@ import { TabulatorFull as Tabulator } from "tabulator-tables";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
+import CmnHeader from "../../Components/Common/CmnHeader";
 
 const CSS = `
   .cl-header {
@@ -192,17 +193,8 @@ const CountriesList = () => {
     >
       <style>{CSS}</style>
 
-      <div className="cl-header">
-        <div className="cl-title-wrap">
-          <div className="cl-icon">
-            <i className="fas fa-globe" />
-          </div>
-          <div>
-            <h3 className="cl-title">Countries</h3>
-            <p className="cl-subtitle">Manage countries</p>
-          </div>
-        </div>
-      </div>
+    
+      <CmnHeader  title={"Countries"} subtitle={"Manage countries"} icon1={"fas fa-globe"} />  
 
       <div className="cl-search-wrap">
         <div className="cl-search-inner">
