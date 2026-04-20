@@ -420,7 +420,7 @@ const AddNewVendor = () => {
                     </div>
                 </StickyHeader>
 
-                <div className="bg-white shadow-sm mt-4">
+                <div className="bg-white  mt-4 h-100 rounded-3">
                     <Form id="vendor-form" onSubmit={handleCreate}>
                         <Tabs activeKey={activeTab} onSelect={handleTabSelect} className="mb-4 custom-tabs mt-2">
 

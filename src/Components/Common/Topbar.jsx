@@ -15,32 +15,32 @@ export default function Topbar() {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Add Vendors", path: "/vendor/addnewvendor" },
-    {name:"Vendor Listing", path:"/vendor/vendors"},
-    {name:"Import/Export", path:"/vendor/import"},
-    {name:"Add Purchases",  path:"/purchaseorder/create/AddNew"},
-    {name:"View Purchases", path:"/purchaseorder/listing"},
-    {name:"Purchase Order Kanban", path:"/purchaseorder/kanbanlisting"},
-    {name:"Import/Export", path:"/purchaseorder/importexport"},
-    {name:"Add Supplier Return", path:"/"},
-    {name:"View Returns", path:"/"},
-    {name:"Track Status", path:"/purchaseorder/shipments"},
-    {name:"All Invoices", path:"/purchaseorder/invoices"},
-    {name:"Dues Todays", path:"/purchaseorder/invoicedue"},
-    {name:"All Products", path:"/product/allproducts"},
-    {name:"Brands", path:"/product/brands"},
-    {name:"Category", path:"/product/categories"},
-    {name:"Manufacturers", path:"/product/manufacturers"},
-    {name:"Attributes", path:"/product/attributes"},
-    {name:"Unit of Measurement", path:"/product/unit_of_measurements"},
-    {name:"Users",path:"/security/users"},
-    {name:"Roles",path:"/security/roles"},
-    {name:"Country",path:"/settings/countries"},
-    {name:"Payment Terms",path:"/settings/payment_terms"},
-    {name:"Warehouse", path:"/settings/warehouses"},
-    {name:"Shipping Providers",path:"/settings/shipping_providers"},
-    {name:"Vendor Login Credentials", path:"/settings/vendor_login_credentials"},
-    {name:"Organization Profile", path:"/organizations/view"},
-  
+    { name: "Vendor Listing", path: "/vendor/vendors" },
+    { name: "Import/Export", path: "/vendor/import" },
+    { name: "Add Purchases", path: "/purchaseorder/create/AddNew" },
+    { name: "View Purchases", path: "/purchaseorder/listing" },
+    { name: "Purchase Order Kanban", path: "/purchaseorder/kanbanlisting" },
+    { name: "Import/Export", path: "/purchaseorder/importexport" },
+    { name: "Add Supplier Return", path: "/" },
+    { name: "View Returns", path: "/" },
+    { name: "Track Status", path: "/purchaseorder/shipments" },
+    { name: "All Invoices", path: "/purchaseorder/invoices" },
+    { name: "Dues Todays", path: "/purchaseorder/invoicedue" },
+    { name: "All Products", path: "/product/allproducts" },
+    { name: "Brands", path: "/product/brands" },
+    { name: "Category", path: "/product/categories" },
+    { name: "Manufacturers", path: "/product/manufacturers" },
+    { name: "Attributes", path: "/product/attributes" },
+    { name: "Unit of Measurement", path: "/product/unit_of_measurements" },
+    { name: "Users", path: "/security/users" },
+    { name: "Roles", path: "/security/roles" },
+    { name: "Country", path: "/settings/countries" },
+    { name: "Payment Terms", path: "/settings/payment_terms" },
+    { name: "Warehouse", path: "/settings/warehouses" },
+    { name: "Shipping Providers", path: "/settings/shipping_providers" },
+    { name: "Vendor Login Credentials", path: "/settings/vendor_login_credentials" },
+    { name: "Organization Profile", path: "/organizations/view" },
+
   ];
 
 
@@ -51,15 +51,18 @@ export default function Topbar() {
 
   return (
     <nav className="main-header navbar navbar-expand text-sm border-bottom-0 bg-body-tertiary shadow-sm">
-      <div className="navbar-nav ms-auto">
-        <div style={{ position: "relative",width: "300px" }} className="d-flex align-items-center">
+
+      <div className="navbar-nav w-100 d-flex justify-content-center">
+
+        <div className="position-relative" style={{ width: "500px" }}>
+
           {/* Search Input */}
           <input
             type="text"
             placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="form-control"
+            className="form-control rounded-pill"
           />
 
           {/* Dropdown */}
@@ -67,15 +70,16 @@ export default function Topbar() {
             <div
               style={{
                 position: "absolute",
-                top: "40px",
+                top: "100%",
                 left: 0,
-                right: 0,
+                width: "100%",
                 background: "#fff",
                 border: "1px solid #ddd",
                 borderRadius: "6px",
                 maxHeight: "200px",
                 overflowY: "auto",
                 zIndex: 1000,
+                marginTop: "5px"
               }}
             >
               {filteredItems.length > 0 ? (
@@ -107,8 +111,11 @@ export default function Topbar() {
               )}
             </div>
           )}
+
         </div>
+
       </div>
+
     </nav>
   );
 }
