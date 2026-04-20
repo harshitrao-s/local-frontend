@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Spinner } from 'react-bootstrap';
 import { toast } from "react-hot-toast";
 import { useMasterData } from "../../../Context/MasterDataProvider";
@@ -416,13 +416,13 @@ const PurchaseReceiveForm = () => {
             <span dangerouslySetInnerHTML={{ __html: getPOStatusBadge(poStatus) }} />
           </div>
           <div className="d-flex gap-2 align-items-center">
-            <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/purchaseorder/listing")}>
+            <Link to="/purchaseorder/listing" className="btn btn-outline-primary px-3 shadow-sm" >
               All PO's
-            </button>
+            </Link>
             {poVendorCode && poStatus >= 0 && (
-              <button className="btn btn-outline-primary px-4 shadow-sm" onClick={() => navigate(`/purchaseorder/create/${poReceiveDetails?.po_id}`)}>
+              <Link to ={`/purchaseorder/create/${poReceiveDetails?.po_id}`}className="btn btn-outline-primary px-4 shadow-sm">
                 View Purchase
-              </button>
+              </Link>
             )}
             {poStatus !== 4 && poVendorCode && !allReceived && (
               <>

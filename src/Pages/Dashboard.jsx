@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import apiFetch from "../Utils/apiFetch";
 import { API_BASE } from "../Config/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SalesChart from "../Components/DashboardCharts/SalesChart";
 import { POStatusPieChart } from "../Components/DashboardCharts/POStatusPieChart";
 import RecentPurchaseOrders from "../Components/DashboardCharts/RecentPurchaseOrders";
@@ -130,12 +130,12 @@ const Dashboard = () => {
           >
             {!creating ? (<><FontAwesomeIcon icon={faPlus} className="me-1" />Add Purchase Order</>) : <><FontAwesomeIcon icon={faSpinner} className="me-1" />  Creating...</>}
           </button>
-          <button onClick={() => navigate("/purchaseorder/listing")}
+          <Link to="/purchaseorder/listing"
             className="btn btn-outline-secondary btn-sm px-3"
             style={{ fontFamily: FONT, fontWeight: 500, borderRadius: 8 }}
           >
             <FontAwesomeIcon icon={faEye} className="me-1" /> View
-          </button>
+          </Link>
         </div>
       </div>
 

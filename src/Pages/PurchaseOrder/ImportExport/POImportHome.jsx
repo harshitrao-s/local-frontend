@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Tabs, Tab, Table, Spinner, Dropdown, ButtonGroup, Row, Col } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
 import { toast } from "react-hot-toast";
@@ -296,9 +296,9 @@ const POImportHome = () => {
                                 </li>>*/}
                             </ul>
                         </div>
-                        <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/purchaseorder/listing")}>
+                        <Link to="/purchaseorder/listing" className="btn btn-outline-primary px-3 shadow-sm" >
                             <FontAwesomeIcon icon={faListUl} className="me-1" /> Listing
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </StickyHeader>

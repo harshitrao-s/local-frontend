@@ -8,10 +8,10 @@ import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
-import { getVendorStatusName } from "../../../Constants/vendorStatus";
+// import { getVendorStatusName } from "../../../Constants/vendorStatus";
 import { SHIPPING_STATUS } from "../../../Constants/shippingStatus";
 import { Truck, Package, PackageCheck, CheckCircle, RotateCcw } from "lucide-react";
-import { Search,X } from "lucide-react"; 
+// import { Search,X } from "lucide-react"; 
 
 const StatCard = ({ title, amount, count, icon, colorClass, iconBg, lucid }) => {
   
@@ -75,10 +75,10 @@ const DashboardOverview = ({ summary }) => {
             transition: all 0.25s ease;
           }
 
-          .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-          }
+          // .stat-card:hover {
+          //   transform: translateY(-4px);
+          //   box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+          // }
 
           .stat-count {
             font-size: 28px;

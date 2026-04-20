@@ -11,6 +11,7 @@ import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 /* ═══════════════════════════════════════════════════════════
    STYLES
@@ -949,8 +950,8 @@ export default function PendingInvoiceList() {
           </span>
           Due Invoices
         </h5>
-        <button
-          onClick={() => { window.location.href = "/purchaseorder/invoices"; }}
+        <Link
+          to="/purchaseorder/invoices"
           style={{
             background: "#c8efff",
             color: "#0ca9ed",
@@ -979,7 +980,7 @@ export default function PendingInvoiceList() {
           }}
         >
           All Invoices
-        </button>
+        </Link>
       </div>
 
       {/* Stat cards */}
@@ -1045,7 +1046,7 @@ export default function PendingInvoiceList() {
           </div>
           <div className="col-md-2 d-flex gap-2">
             <button onClick={() => { setPage(1); fetchData(); }}
-              style={{ flex: "0 0 auto", background: "#343a40", color: "#ffffff" ,borderRadius: 8, fontSize: 12, fontWeight: 700, padding: "5px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 , width: "100px"}}>
+              style={{ flex: "0 0 auto", background: "#343a40", color: "#ffffff", borderRadius: 8, fontSize: 12, fontWeight: 700, padding: "5px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, width: "100px" }}>
               <FontAwesomeIcon icon={faSearch} style={{ fontSize: 15 }} /> Search
             </button>
             {/*<button onClick={clearAll} title="Clear" className="btn btn-light" 

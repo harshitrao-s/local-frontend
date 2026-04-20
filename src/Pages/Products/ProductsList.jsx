@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import { API_BASE } from "../../Config/api";
 import apiFetch from "../../Utils/apiFetch";
+import { Link } from "react-router-dom";
 
 const STORAGE_KEY = "product_list_columns";
 
@@ -124,9 +125,9 @@ const ProductsList = () => {
     <div className=" pt-0">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="mb-0 fw-bold">Product Inventory</h3>
-        <button className="btn btn-dark" onClick={() => window.location.href = "/product/create"}>
+        <Link to="/product/create" className="btn btn-dark" >
           <i className="fas fa-plus me-2"></i> Add Product
-        </button>
+        </Link>
       </div>
 
       {/* FILTER SECTION */}

@@ -12,7 +12,7 @@ body {
   background: white;
   padding: 20px !important;
   border-radius: 12px;
-  /* height: calc(100vh - 92px); */
+  height: calc(100vh - 92px);
   overflow-x: hidden;
   overflow-y: auto;
 }

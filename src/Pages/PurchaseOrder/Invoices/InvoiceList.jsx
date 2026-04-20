@@ -9,6 +9,7 @@ import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import { getVendorStatusName } from "../../../Constants/vendorStatus";
+import { Link } from "react-router-dom";
 
 const StatCard = ({ title, amount, count, icon, colorClass, iconBg }) => {
   return (
@@ -440,8 +441,8 @@ const InvoiceList = () => {
           </span>
           All Invoices
         </h5>
-        <button
-          onClick={() => { window.location.href = "/purchaseorder/invoicedue"; }}
+        <Link
+          to="/purchaseorder/invoicedue"
           style={{
             background: "#fef3c7",
             color: "#d97706",
@@ -471,7 +472,7 @@ const InvoiceList = () => {
           }}
         >
           Due Payments
-        </button>
+        </Link>
       </div>
       <DashboardOverview summary={summary} />
       <div className="card mb-3">

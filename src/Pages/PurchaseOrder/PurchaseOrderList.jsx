@@ -10,6 +10,7 @@ import { faTableColumns, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { formatAUD, formattedDate } from "../../Utils/utilFunctions";
 import { PO_STATUS } from "../../Constants/PO_Status";
 import { INVOICE_STATUS } from "../../Constants/InvoiceStatus";
+import { Link } from "react-router-dom";
 /* ----------------------------------------
    CONSTANTS & HELPERS
 ---------------------------------------- */
@@ -334,25 +335,22 @@ const PurchaseOrderList = () => {
           All Purchases</h5>
         <div className="d-flex gap-1">
           {/* In-transit */}
-          <button
+          <Link
+          to="/purchaseorder/kanbanlisting"
             className="btn btn-outline-primary"
-            onClick={() => {
-              window.location.href = "/purchaseorder/kanbanlisting";
-            }}
           >
             <FontAwesomeIcon className="me-1 ps-0" icon={faTableColumns} />
             Kanban View
-          </button>
+          </Link>
 
-          <button disabled={true}
+          <Link 
+          to= "/purchaseorder/intransit/listing"
+          disabled={true}
             className="btn btn-outline-primary"
-            onClick={() => {
-              window.location.href = "/purchaseorder/intransit/listing";
-            }}
           >
             <i className="fas fa-truck me-2"></i>
             In-transit
-          </button>
+          </Link>
 
           {/* Actions dropdown */}
           <div className="btn-group">
