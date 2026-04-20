@@ -5,6 +5,7 @@ import formatCurrency, { formattedDate } from "../../Utils/utilFunctions";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl, faSliders, faLock } from '@fortawesome/free-solid-svg-icons';
 import KanbanLayoutModal from "./POComponents/KanbanLayoutModal";
+import { Link } from "react-router-dom";
 
 /* ================= STATUS HELPERS (Existing) ================= */
 const STATUS = { DRAFT: -1, PARKED: 0, PLACED: [1, 2, 3] };
@@ -138,9 +139,9 @@ const POKanbanList = () => {
       <div className="p-0 d-flex justify-content-between align-items-center mb-3">
         <h3 className="mb-0 fw-bold">Purchase Order Kanban</h3>
         <div className="d-flex gap-2 align-items-center">
-          <button className="btn btn-outline-primary shadow-sm" onClick={() => { window.location.href = "/purchaseorder/listing"; }}>
+          <Link to= "/purchaseorder/listing" className="btn btn-outline-primary shadow-sm">
             <FontAwesomeIcon className="me-2" icon={faListUl} /> List View
-          </button>
+          </Link>
           <button className="btn btn-outline-info px-3 shadow-sm" onClick={() => setShowLayoutConfig(true)}> 
             <FontAwesomeIcon className="me-1 ps-0" icon={faSliders} /> Edit Layout
           </button>
