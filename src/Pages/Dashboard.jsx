@@ -12,26 +12,17 @@ import {
 import apiFetch from "../Utils/apiFetch";
 import { API_BASE } from "../Config/api";
 import { useNavigate } from "react-router-dom";
+import SalesChart from "../Components/DashboardCharts/SalesChart";
+import { POStatusPieChart } from "../Components/DashboardCharts/POStatusPieChart";
+import RecentPurchaseOrders from "../Components/DashboardCharts/RecentPurchaseOrders";
+import TotalInvoice from "../Components/DashboardCharts/TotalInvoice";
+import TopProductList from "../Components/DashboardCharts/TopProductList";
 
 // ── Inter font (add this in index.html <head> if not already)
 // <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 const FONT = "'Inter', system-ui, sans-serif";
 
-const salesData = [
-  { month: "Jan", thisYear: 3800, lastYear: 3200 },
-  { month: "Feb", thisYear: 4200, lastYear: 3500 },
-  { month: "Mar", thisYear: 3900, lastYear: 3800 },
-  { month: "Apr", thisYear: 5200, lastYear: 4100 },
-  { month: "May", thisYear: 4800, lastYear: 4400 },
-  { month: "Jun", thisYear: 5500, lastYear: 4600 },
-  { month: "Jul", thisYear: 5100, lastYear: 4900 },
-  { month: "Aug", thisYear: 6200, lastYear: 5100 },
-  { month: "Sep", thisYear: 5800, lastYear: 5400 },
-  { month: "Oct", thisYear: 6500, lastYear: 5600 },
-  { month: "Nov", thisYear: 6800, lastYear: 5900 },
-  { month: "Dec", thisYear: 7200, lastYear: 6100 },
-];
 
 const poStatusData = [
   { name: "Placed", value: 720, color: "#4e9af1" },
@@ -40,33 +31,7 @@ const poStatusData = [
   { name: "Cancelled", value: 43, color: "#e05c5c" },
 ];
 
-const recentOrders = [
-  { id: "PO0319", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Partially Received", statusColor: "warning", total: "7,260.00 AUD", poTotal: "12,750.00 AUD" },
-  { id: "PO0318", vendor: "HealthFirst Ltd.", date: "16 Apr 2024", status: "Placed", statusColor: "primary", total: "7,220.00 AUD", poTotal: "8,400.00 AUD" },
-  { id: "PO0317", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Completed", statusColor: "success", total: "1,250.00 AUD", poTotal: "9,200.00 AUD" },
-  { id: "PO0316", vendor: "GreenLeaf Supplies", date: "15 Apr 2024", status: "Cancelled", statusColor: "danger", total: "2,220.00 AUD", poTotal: "2,200.00 AUD" },
-];
 
-const topProducts = [
-  { name: "Vitamin C 500mg", count: 1200 },
-  { name: "Organic Protein Power", count: 850 },
-  { name: "Herbal Sleep Aid", count: 760 },
-  { name: "Fish Oil 1000mg", count: 640 },
-];
-
-const topVendors = [
-  { name: "PharmaSource Inc.", count: 354 },
-  { name: "GreenLeaf Supplies", count: 287 },
-  { name: "HealthFirst Ltd.", count: 243 },
-  { name: "Wellness International", count: 198 },
-];
-
-const invoiceStatusData = [
-  { name: "Paid", value: 145, color: "#4caf8a" },
-  { name: "Unpaid", value: 89, color: "#e05c5c" },
-  { name: "Cancelled", value: 23, color: "#9e9e9e" },
-  { name: "On Hold", value: 34, color: "#f5a623" },
-];
 
 // ── Stat Card ──────────────────────────────────────────────────────────────────
 const StatCard = ({ icon, label, value, change, gradient, bgIcon }) => (
@@ -103,24 +68,24 @@ const StatCard = ({ icon, label, value, change, gradient, bgIcon }) => (
   </div>
 );
 
-// ── Custom Tooltip ─────────────────────────────────────────────────────────────
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null;
-  return (
-    <div style={{
-      background: "#fff", border: "0.5px solid #e5e7eb",
-      borderRadius: 8, padding: "8px 12px",
-      fontFamily: FONT, fontSize: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
-    }}>
-      <div style={{ fontWeight: 500, marginBottom: 4, color: "#374151" }}>{label}</div>
-      {payload.map((p, i) => (
-        <div key={i} style={{ color: p.color }}>
-          {p.name === "thisYear" ? "This Year" : "Last Year"}: ${p.value.toLocaleString()}
-        </div>
-      ))}
-    </div>
-  );
-};
+// // ── Custom Tooltip ─────────────────────────────────────────────────────────────
+// const CustomTooltip = ({ active, payload, label }) => {
+//   if (!active || !payload?.length) return null;
+//   return (
+//     <div style={{
+//       background: "#fff", border: "0.5px solid #e5e7eb",
+//       borderRadius: 8, padding: "8px 12px",
+//       fontFamily: FONT, fontSize: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+//     }}>
+//       <div style={{ fontWeight: 500, marginBottom: 4, color: "#374151" }}>{label}</div>
+//       {payload.map((p, i) => (
+//         <div key={i} style={{ color: p.color }}>
+//           {p.name === "thisYear" ? "This Year" : "Last Year"}: ${p.value.toLocaleString()}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
 
 // ── Dashboard ──────────────────────────────────────────────────────────────────
 const Dashboard = () => {
@@ -188,168 +153,17 @@ const Dashboard = () => {
 
           {/* Sales Overview */}
           <div className="col-12 col-lg-5">
-            <div className="card border  shadow-sm h-100 d-flex flex-column" style={{ borderRadius: 10, fontFamily: FONT }}>
-              <div className="p-2 d-flex justify-content-between top_border_design align-items-center" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb", borderRadius: "10px 10px 0 0" }}>
-                <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Sales Overview</h6>
-                <button
-                  className="btn btn-sm btn-outline-secondary"
-                  style={{ fontFamily: FONT, fontSize: 11, borderRadius: 6 }}
-                  onClick={() => setSalesPeriod(salesPeriod === "Monthly" ? "Yearly" : "Monthly")}
-                >
-                  {salesPeriod} <FontAwesomeIcon icon={faChevronDown} className="ms-1" />
-                </button>
-              </div>
-              <div className="card-body p-2 d-flex flex-column ustify-content-between">
-                <div className="d-flex align-items-center gap-3 mb-2" style={{ fontSize: 11, color: "#6b7280" }}>
-                  <span>Total Sales ($ USD)</span>
-                  <span><span style={{ color: "#4e9af1" }}>●</span> This Year</span>
-                  <span><span style={{ color: "#ccc" }}>●</span> Last Year</span>
-                </div>
-                <div style={{ flex:1 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={salesData}>
-                      <defs>
-                        <linearGradient id="thisYearGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#4e9af1" stopOpacity={0.2} />
-                          <stop offset="95%" stopColor="#4e9af1" stopOpacity={0} />
-                        </linearGradient>
-                        <linearGradient id="lastYearGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#bbb" stopOpacity={0.2} />
-                          <stop offset="95%" stopColor="#bbb" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8e8e8" />
-                      <XAxis
-                        dataKey="month"
-                        tick={{ fontSize: 11, fontFamily: FONT }}
-                        height={18}
-                        axisLine={{ stroke: "#e8e8e8" }}
-                        tickLine={false}
-                      />
-                      <YAxis
-                        width={28}
-                        tick={{ fontSize: 11, fontFamily: FONT }}
-                        axisLine={false}
-                        tickLine={false}
-                        tickFormatter={(v) => `${v / 1000}k`}
-                        domain={[2500, 8000]}
-                        ticks={[4000, 5500, 7500]}
-                      />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Area type="monotone" dataKey="lastYear" stroke="#bbb" strokeWidth={2} fill="url(#lastYearGrad)" dot={{ r: 3, fill: "#bbb" }} />
-                      <Area type="monotone" dataKey="thisYear" stroke="#4e9af1" strokeWidth={2} fill="url(#thisYearGrad)" dot={{ r: 3, fill: "#4e9af1" }} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
+           <SalesChart/>
           </div>
 
           {/* PO Status Donut */}
           <div className="col-12 col-lg-4">
-            <div className="card border shadow-sm h-100" style={{ borderRadius: 10, fontFamily: FONT }}>
-              <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb", borderRadius: "10px 10px 0 0" }}>
-                <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Purchase Order Status</h6>
-              </div>
-              <div className="card-body d-flex flex-column align-items-center justify-content-center">
-                <div style={{ position: "relative", width: 220, height: 200 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={poStatusData}
-                        cx="50%" cy="50%"
-                        innerRadius={65} outerRadius={95}
-                        dataKey="value"
-                        startAngle={90} endAngle={-270}
-                      >
-                        {poStatusData.map((entry, i) => (
-                          <Cell key={i} fill={entry.color} />
-                        ))}
-                        <Label
-                          content={() => (
-                            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
-                              <tspan x="50%" dy="-8" fontSize="26" fontWeight="600" fill="#111827" fontFamily={FONT}>720</tspan>
-                              <tspan x="50%" dy="22" fontSize="12" fill="#6b7280" fontFamily={FONT}>POs</tspan>
-                            </text>
-                          )}
-                        />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="d-flex flex-wrap justify-content-center gap-3 mt-2">
-                  {poStatusData.map((item, i) => (
-                    <div key={i} className="d-flex align-items-center gap-2">
-                      <div style={{ width: 9, height: 9, borderRadius: "50%", background: item.color }} />
-                      <span style={{ fontSize: 12, color: "#374151" }}>{item.name}</span>
-                      <span style={{ fontSize: 12, fontWeight: 500 }}>{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <POStatusPieChart/>
           </div>
 
           {/* Top Products + Top Vendors */}
           <div className="col-lg-3 d-flex flex-column gap-3 h-100">
-            {[
-              { title: "Top Products", data: topProducts, keyName: "name", keyVal: "count" },
-              { title: "Top Vendors", data: topVendors, keyName: "name", keyVal: "count" },
-            ].map(({ title, data, keyName, keyVal }) => (
-
-              <div
-                key={title}
-                className="card  margin_none border shadow-sm d-flex flex-column"
-                style={{
-                  borderRadius: 10,
-                  fontFamily: FONT,
-                  flex: 1,                // 🔥 important (equal height)
-                  minHeight: 0,            // 🔥 prevents overflow issues
-                  marginBottom: "0px !important"
-                }}
-              >
-
-                <div
-                  className="card-header"
-                  style={{
-                    background: "#fff",
-                    borderBottom: "0.5px solid #e5e7eb",
-                    borderRadius: "10px 10px 0px 0px"
-                  }}
-                >
-                  <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0  }}>
-                    {title}
-                  </h6>
-                </div>
-
-                <div className="card-body overflow-auto">
-                  {data.map((item, i) => (
-                    <div key={i} className="d-flex justify-content-between align-items-center mb-2">
-                      <span style={{ fontSize: 12, color: "#374151" }}>
-                        {item[keyName]}
-                      </span>
-                      <span style={{ fontSize: 12, fontWeight: 500 }}>
-                        {item[keyVal].toLocaleString()}
-                      </span>
-                    </div>
-                  ))}
-
-                  {title === "Top Vendors" && (
-                    <div className="text-end mt-1">
-                      <span style={{
-                        fontSize: 12,
-                        color: "#4e9af1",
-                        cursor: "pointer",
-                        fontWeight: 500
-                      }}>
-                        View All ›
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-              </div>
-            ))}
+           <TopProductList/>
           </div>
 
         </div>
@@ -359,81 +173,12 @@ const Dashboard = () => {
 
           {/* Recent Purchase Orders */}
           <div className="col-12 col-lg-6">
-            <div className="card border shadow-sm h-100 d-flex flex-column" style={{ borderRadius: 10, fontFamily: FONT, height: 320 }}>
-              <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb", borderRadius: "10px 10px 0px 0px" }}>
-                <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Recent Purchase Orders</h6>
-              </div>
-              <div className="card-body p-0 d-flex flex-column" style={{ minHeight: 0 }}>
-                <div className="table-responsive" style={{ flex: 1, overflowY: "auto" }}>
-                  <table className="table table-hover align-middle mb-0" style={{ fontFamily: FONT, fontSize: 12 }}>
-                    <thead>
-                      <tr style={{ background: "#f9fafb" }}>
-                        {["Order #", "Vendor", "Order Date", "Status", "Total", "PO Total"].map(h => (
-                          <th key={h} style={{ fontSize: 11, fontWeight: 500, color: "#6b7280", padding: "8px 12px", borderBottom: "0.5px solid #e5e7eb" }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recentOrders.map((o) => (
-                        <tr key={o.id}>
-                          <td style={{ padding: "9px 12px", fontWeight: 500 }}>{o.id}</td>
-                          <td style={{ padding: "9px 12px", color: "#374151" }}>{o.vendor}</td>
-                          <td style={{ padding: "9px 12px", color: "#6b7280" }}>{o.date}</td>
-                          <td style={{ padding: "9px 12px" }}>
-                            <span className={`new_badge bg-${o.statusColor} `} style={{ fontFamily: FONT, fontSize: 11, minWidth: '120px', textAlign: "center" }}>
-                              {o.status}
-                            </span>
-                          </td>
-                          <td style={{ padding: "9px 12px", fontWeight: 500 }}>{o.total}</td>
-                          <td style={{ padding: "9px 12px", color: "#6b7280" }}>{o.poTotal}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+           <RecentPurchaseOrders/>
           </div>
 
           {/* Total Invoices Pie */}
           <div className="col-12 col-lg-6">
-            <div className="card border shadow-sm h-100 d-flex flex-column" style={{ borderRadius: 10, fontFamily: FONT, height: 320 }}>
-              <div className="card-header" style={{ background: "#fff", borderBottom: "0.5px solid #e5e7eb", borderRadius: "10px 10px 0px 0px" }}>
-                <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>Total Invoices</h6>
-              </div>
-              <div className="card-body d-flex flex-column align-items-center justify-content-between p-2" style={{ minHeight: 0 }}>
-                <ResponsiveContainer width="100%" height={205}>
-                  <PieChart>
-                    <Pie
-                      data={invoiceStatusData}
-                      cx="50%" cy="50%"
-                      outerRadius={90}
-                      dataKey="value"
-                      startAngle={90} endAngle={-270}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      labelLine={true}
-                    >
-                      {invoiceStatusData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(v, name) => [v, name]}
-                      contentStyle={{ fontFamily: FONT, fontSize: 12, borderRadius: 8, border: "0.5px solid #e5e7eb" }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="d-flex flex-wrap justify-content-center gap-2 mt-1">
-                  {invoiceStatusData.map((item, i) => (
-                    <div key={i} className="d-flex align-items-center gap-2">
-                      <div style={{ width: 9, height: 9, borderRadius: "50%", background: item.color }} />
-                      <span style={{ fontSize: 12, color: "#374151" }}>{item.name}</span>
-                      <span style={{ fontSize: 12, fontWeight: 500 }}>{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+           <TotalInvoice/>
           </div>
 
         </div>
