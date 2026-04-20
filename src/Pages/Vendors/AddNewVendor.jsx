@@ -100,7 +100,6 @@ const DeferredInput = React.memo(({ value, name, onChange, onValidate, helpText,
         </>
     );
 });
-// Testing
 DeferredInput.displayName = "DeferredInput";
 
 // ─── Optimized uncontrolled number input ─────────────────────────
