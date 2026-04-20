@@ -10,7 +10,6 @@ export default function Topbar() {
   const [loggingOut, setLoggingOut] = useState(false);
 
   // Active route check
-  const isOrgActive = location.pathname.startsWith("/organizations");
 
   const handleLogout = async () => {
     if (loggingOut) return; // 🔒 prevent double click
@@ -48,21 +47,10 @@ export default function Topbar() {
       <ul className="navbar-nav ms-auto">
         
         {/* Organization */}
-        <li className="nav-item me-2">
-          <Link
-            to="/organizations/view"
-            className={`btn btn_home_right text-white shadow-sm ${
-              isOrgActive ? "btn-info" : "btn-outline-info"
-            }`}
-            style={{ borderRadius: "6px" }}
-          >
-            <i className="fas fa-university me-1"></i>
-            Organization
-          </Link>
-        </li>
+        
 
         {/* Dropdown */}
-        <li className="nav-item dropdown">
+        {/* <li className="nav-item dropdown">
           <button
             className="nav-link btn"
             data-bs-toggle="dropdown"
@@ -82,7 +70,7 @@ export default function Topbar() {
               {loggingOut ? "Logging out..." : "Logout"}
             </button>
           </div>
-        </li>
+        </li> */}
 
       </ul>
     </nav>
