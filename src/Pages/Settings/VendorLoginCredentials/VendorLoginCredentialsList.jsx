@@ -5,6 +5,7 @@ import VendorLoginCredentialModals from "./VendorLoginCredentialModals";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import { useAuth } from "../../../Context/AuthContext";
+import CmnHeader from "../../../Components/Common/CmnHeader";
 
 const VendorLoginCredentialsList = () => {
   const { user, authChecked } = useAuth();
@@ -47,9 +48,8 @@ const VendorLoginCredentialsList = () => {
   const handleDelete = async (row) => {
     Swal.fire({
       title: "Remove credentials?",
-      text: `This will delete stored login details for ${
-        row.vendor_company_name || "this vendor"
-      }.`,
+      text: `This will delete stored login details for ${row.vendor_company_name || "this vendor"
+        }.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#111827",
@@ -257,26 +257,7 @@ const VendorLoginCredentialsList = () => {
 
   return (
     <div className="cl-wrap">
-      <div className="cl-header">
-        <div className="cl-title-wrap">
-          <div className="cl-icon">
-            <i className="fas fa-key" />
-          </div>
-          <div>
-            <h3 className="cl-title">Vendor Login Credentials</h3>
-            <p className="cl-subtitle">
-              Manage encrypted vendor portal logins (Super Admin only)
-            </p>
-          </div>
-        </div>
-
-        <button
-          className="cl-search-btn"
-          onClick={() => setModalConfig({ type: "add", data: null })}
-        >
-          <i className="fas fa-plus" /> Add credential
-        </button>
-      </div>
+      <CmnHeader title="Vendor Login Credentials" subtitle="Manage encrypted vendor portal logins (Super Admin only)" icon1={"fas fa-key"} icon="iwl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Credential" />
 
       <div className="cl-search-wrap">
         <div className="cl-search-inner">
