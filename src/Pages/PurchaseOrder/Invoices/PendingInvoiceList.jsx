@@ -20,7 +20,6 @@ const CSS = `
 
   /* stat cards */
   .pil-stat { border-radius:16px!important;border:none!important;transition:transform .15s,box-shadow .15s; }
-  .pil-stat:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.10)!important; }
   .pil-icon-box { width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px; }
   .pil-card { border-radius:16px;border:1px solid #e8eaf0;overflow:visible;box-shadow:0 1px 4px rgba(0,0,0,.06); }
 
@@ -232,7 +231,7 @@ const CSS = `
 /* ═══════════════════════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════════════════════ */
-const BADGE_MAP = { 1:"paid", 2:"unpaid", 3:"pending", 4:"Cancelled", 4:"On Hold" };
+const BADGE_MAP = { 1: "paid", 2: "unpaid", 3: "pending", 4: "Cancelled", 4: "On Hold" };
 const STATUS_LABEL = {
   1: "Paid",
   2: "Unpaid",
@@ -246,45 +245,45 @@ const StatusBadge = ({ s }) => (
 );
 const SortArrow = ({ field, sortBy, sortDir }) => {
   const on = sortBy === field;
-  return <span style={{ opacity:on?1:.3, marginLeft:3, fontSize:9, color:on?"#4f46e5":"inherit" }}>{on?(sortDir==="asc"?"▲":"▼"):"⇅"}</span>;
+  return <span style={{ opacity: on ? 1 : .3, marginLeft: 3, fontSize: 9, color: on ? "#4f46e5" : "inherit" }}>{on ? (sortDir === "asc" ? "▲" : "▼") : "⇅"}</span>;
 };
 
 /* ═══════════════════════════════════════════════════════════
    STAT CARDS
 ═══════════════════════════════════════════════════════════ */
 const STAT_CFG = [
-  { key:"total_vendors",  label:"Vendors Due Today", icon:"fas fa-store",               bg:"#ede9fe", col:"#7c3aed", isCurrency:false, showSub:false },
-  { key:"total_due",      label:"Total Due Amount",  icon:"fas fa-money-bill-wave",     bg:"#dcfce7", col:"#15803d", isCurrency:true,  showSub:true  },
-  { key:"total_invoices", label:"Total Invoices",    icon:"fas fa-file-invoice-dollar", bg:"#fee2e2", col:"#b91c1c", isCurrency:false, showSub:false },
-  { key:"overdue",        label:"Overdue",           icon:"fas fa-clock",               bg:"#fef9c3", col:"#a16207", isCurrency:false, showSub:true  },
+  { key: "total_vendors", label: "Vendors Due Today", icon: "fas fa-store", bg: "#ede9fe", col: "#7c3aed", isCurrency: false, showSub: false },
+  { key: "total_due", label: "Total Due Amount", icon: "fas fa-money-bill-wave", bg: "#dcfce7", col: "#15803d", isCurrency: true, showSub: true },
+  { key: "total_invoices", label: "Total Invoices", icon: "fas fa-file-invoice-dollar", bg: "#fee2e2", col: "#b91c1c", isCurrency: false, showSub: false },
+  { key: "overdue", label: "Overdue", icon: "fas fa-clock", bg: "#fef9c3", col: "#a16207", isCurrency: false, showSub: true },
 ];
 function StatCard({ cfg, summary }) {
   const val = summary?.[cfg.key];
   return (
-    <div className="card pil-stat shadow-sm h-100" style={{ padding:"16px 18px" }}>
+    <div className="card pil-stat shadow-sm h-100" style={{ padding: "16px 18px" }}>
       <div className="d-flex justify-content-between align-items-start">
-        <div style={{ minWidth:0 }}>
-          <p style={{ fontSize:11,fontWeight:700,letterSpacing:1,textTransform:"uppercase",color:"#9ca3af",marginBottom:6 }}>{cfg.label}</p>
-          <div style={{ fontSize:20,fontWeight:700,color:"#111827",marginBottom:4,fontVariantNumeric:"tabular-nums" }}>
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#9ca3af", marginBottom: 6 }}>{cfg.label}</p>
+          <div style={{ fontSize: 20, fontWeight: 700, color: "#111827", marginBottom: 4, fontVariantNumeric: "tabular-nums" }}>
             {cfg.isCurrency ? formatCurrency(val?.amount ?? 0) : (val?.count ?? val ?? 0)}
           </div>
           {cfg.showSub && (
-            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {cfg.isCurrency && (
-                <span style={{ fontSize:11,background:"#f3f4f6",color:"#6b7280",padding:"2px 8px",borderRadius:20,fontWeight:500 }}>
+                <span style={{ fontSize: 11, background: "#f3f4f6", color: "#6b7280", padding: "2px 8px", borderRadius: 20, fontWeight: 500 }}>
                   {val?.count ?? 0} invoices
                 </span>
               )}
               {!cfg.isCurrency && val?.amount != null && (
-                <span style={{ fontSize:11,background:"#f3f4f6",color:"#6b7280",padding:"2px 8px",borderRadius:20,fontWeight:500 }}>
+                <span style={{ fontSize: 11, background: "#f3f4f6", color: "#6b7280", padding: "2px 8px", borderRadius: 20, fontWeight: 500 }}>
                   {formatCurrency(val.amount)}
                 </span>
               )}
             </div>
           )}
         </div>
-        <div className="pil-icon-box" style={{ background:cfg.bg }}>
-          <i className={cfg.icon} style={{ color:cfg.col }} />
+        <div className="pil-icon-box" style={{ background: cfg.bg }}>
+          <i className={cfg.icon} style={{ color: cfg.col }} />
         </div>
       </div>
     </div>
@@ -301,28 +300,28 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
     : ["Bank Transfer"];
 
   const [form, setForm] = useState({
-    payment_date:        new Date().toISOString().split("T")[0],
-    payment_mode:        availableMethods[0],
-    surcharge:           "",
-    conversion_charge:   "",
-    notes:               "",
+    payment_date: new Date().toISOString().split("T")[0],
+    payment_mode: availableMethods[0],
+    surcharge: "",
+    conversion_charge: "",
+    notes: "",
     // Bank Transfer
-    bank_name:           "",
-    account_number:      "",
-    reference_number:    "",
-    transaction_date:    "",
+    bank_name: "",
+    account_number: "",
+    reference_number: "",
+    transaction_date: "",
     // Credit Card
-    card_holder:         "",
-    card_number:         "",
-    expiry:              "",
-    cvv:                 "",
+    card_holder: "",
+    card_number: "",
+    expiry: "",
+    cvv: "",
     // Wallet / Paypal
     wallet_confirmation: "",
   });
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const isBank   = form.payment_mode === "Bank Transfer";
-  const isCard   = form.payment_mode === "Credit Card";
+  const isBank = form.payment_mode === "Bank Transfer";
+  const isCard = form.payment_mode === "Credit Card";
   const isWallet = ["Wallet", "Paypal"].includes(form.payment_mode);
 
   return (
@@ -332,13 +331,13 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
 
         {/* header */}
         <div className="mo-hd">
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#ede9fe,#e0e7ff)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-              <FontAwesomeIcon icon={faCreditCard} style={{ fontSize:16, color:"#7c3aed" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg,#ede9fe,#e0e7ff)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <FontAwesomeIcon icon={faCreditCard} style={{ fontSize: 16, color: "#7c3aed" }} />
             </div>
             <div>
-              <div style={{ fontSize:15, fontWeight:700, color:"#111827" }}>Record Payment</div>
-              {vendorName && <div style={{ fontSize:11, color:"#9ca3af" }}>{vendorName}</div>}
+              <div style={{ fontSize: 15, fontWeight: 700, color: "#111827" }}>Record Payment</div>
+              {vendorName && <div style={{ fontSize: 11, color: "#9ca3af" }}>{vendorName}</div>}
             </div>
           </div>
           <button className="mo-close" onClick={onClose}>
@@ -353,12 +352,12 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
           <div className="mo-inv-list">
             {invoices.map(inv => (
               <div key={inv.po_invoice_id} className="mo-inv-row">
-                <span style={{ display:"flex", alignItems:"center", gap:7 }}>
-                  <FontAwesomeIcon icon={faFileInvoiceDollar} style={{ fontSize:11, color:"#818cf8" }} />
-                  <span style={{ fontWeight:600, color:"#4f46e5" }}>{inv.invoice_number}</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <FontAwesomeIcon icon={faFileInvoiceDollar} style={{ fontSize: 11, color: "#818cf8" }} />
+                  <span style={{ fontWeight: 600, color: "#4f46e5" }}>{inv.invoice_number}</span>
                   <StatusBadge s={inv.invoice_payment_status} />
                 </span>
-                <span style={{ fontWeight:700, color:"#111827", fontVariantNumeric:"tabular-nums" }}>
+                <span style={{ fontWeight: 700, color: "#111827", fontVariantNumeric: "tabular-nums" }}>
                   {formatCurrency(inv.invoice_amount)}
                 </span>
               </div>
@@ -375,7 +374,7 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
           <div className="row g-2 mb-3">
             <div className="col-6">
               <label className="pil-lbl">
-                <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight:4 }} />
+                <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: 4 }} />
                 Payment Date
               </label>
               <input type="date" className="pil-inp" value={form.payment_date}
@@ -396,13 +395,13 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
           {/* payment mode tabs */}
           <div className="mb-3">
             <label className="pil-lbl">Payment Mode</label>
-            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {availableMethods.map(m => (
                 <button key={m} type="button"
                   onClick={() => set("payment_mode", m)}
                   style={{
-                    padding:"6px 14px", borderRadius:20, fontSize:12, fontWeight:600,
-                    cursor:"pointer", transition:"all .15s",
+                    padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", transition: "all .15s",
                     border: form.payment_mode === m ? "2px solid #7c3aed" : "1.5px solid #e5e7eb",
                     background: form.payment_mode === m ? "#ede9fe" : "#fff",
                     color: form.payment_mode === m ? "#7c3aed" : "#6b7280",
@@ -486,17 +485,17 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
           {/* notes */}
           <div>
             <label className="pil-lbl">
-              <FontAwesomeIcon icon={faStickyNote} style={{ marginRight:4 }} />
+              <FontAwesomeIcon icon={faStickyNote} style={{ marginRight: 4 }} />
               Notes
             </label>
             <textarea className="pil-inp" rows={3} placeholder="Optional remarks…"
-              style={{ resize:"none" }} value={form.notes}
+              style={{ resize: "none" }} value={form.notes}
               onChange={e => set("notes", e.target.value)} />
           </div>
         </div>
 
         {/* footer */}
-        <div style={{ padding:"16px 24px", borderTop:"1px solid #f0f0f5", display:"flex", gap:10, justifyContent:"flex-end", flexShrink:0, background:"#fff" }}>
+        <div style={{ padding: "16px 24px", borderTop: "1px solid #f0f0f5", display: "flex", gap: 10, justifyContent: "flex-end", flexShrink: 0, background: "#fff" }}>
           <button className="btn-secondary" onClick={onClose}>Cancel</button>
           <button className="btn-confirm"
             onClick={() => onConfirm({ ...form, invoices, total })}>
@@ -517,7 +516,7 @@ function PaymentModal({ invoices, vendorName, vendorData, onClose, onConfirm }) 
 ═══════════════════════════════════════════════════════════ */
 function LineItems({ lines }) {
   if (!lines?.length) return (
-    <div className="li-section" style={{ padding:"10px 16px 10px 72px",color:"#9ca3af",fontSize:12,fontStyle:"italic" }}>
+    <div className="li-section" style={{ padding: "10px 16px 10px 72px", color: "#9ca3af", fontSize: 12, fontStyle: "italic" }}>
       No line items.
     </div>
   );
@@ -525,19 +524,19 @@ function LineItems({ lines }) {
     <div className="li-section">
       <div className="li-head">
         <span>Description</span>
-        <span style={{ textAlign:"right" }}>Qty</span>
-        <span style={{ textAlign:"right" }}>Unit Price</span>
-        <span style={{ textAlign:"right" }}>Total</span>
+        <span style={{ textAlign: "right" }}>Qty</span>
+        <span style={{ textAlign: "right" }}>Unit Price</span>
+        <span style={{ textAlign: "right" }}>Total</span>
       </div>
       {lines.map(l => (
         <div key={l.id} className="li-row">
-          <span style={{ display:"flex",alignItems:"center",gap:6,color:"#374151" }}>
-            <FontAwesomeIcon icon={faBoxOpen} style={{ fontSize:10,color:"#a5b4fc",flexShrink:0 }} />
+          <span style={{ display: "flex", alignItems: "center", gap: 6, color: "#374151" }}>
+            <FontAwesomeIcon icon={faBoxOpen} style={{ fontSize: 10, color: "#a5b4fc", flexShrink: 0 }} />
             {l.product_name}
           </span>
-          <span style={{ textAlign:"right",color:"#6b7280" }}>{l.received_qty}</span>
-          <span style={{ textAlign:"right",color:"#6b7280",fontVariantNumeric:"tabular-nums" }}>{formatCurrency(l.price)}</span>
-          <span style={{ textAlign:"right",fontWeight:600,color:"#374151",fontVariantNumeric:"tabular-nums" }}>{formatCurrency(l.line_total)}</span>
+          <span style={{ textAlign: "right", color: "#6b7280" }}>{l.received_qty}</span>
+          <span style={{ textAlign: "right", color: "#6b7280", fontVariantNumeric: "tabular-nums" }}>{formatCurrency(l.price)}</span>
+          <span style={{ textAlign: "right", fontWeight: 600, color: "#374151", fontVariantNumeric: "tabular-nums" }}>{formatCurrency(l.line_total)}</span>
         </div>
       ))}
     </div>
@@ -563,49 +562,49 @@ function InvoiceRow({ inv, checked, onCheck }) {
         >
           {checked && (
             <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
-              <path d="M1 3.5L3.5 6L8 1" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M1 3.5L3.5 6L8 1" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           )}
         </span>
         <span />
         {/* invoice number */}
-        <span style={{ display:"flex", alignItems:"center", gap:5, overflow:"hidden" }}>
-          <FontAwesomeIcon icon={faFileInvoiceDollar} style={{ fontSize:11, color:"#818cf8", flexShrink:0 }} />
-          <span style={{ fontWeight:700, color:"#4f46e5", fontSize:12, whiteSpace:"nowrap" }}>{inv.invoice_number}</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 5, overflow: "hidden" }}>
+          <FontAwesomeIcon icon={faFileInvoiceDollar} style={{ fontSize: 11, color: "#818cf8", flexShrink: 0 }} />
+          <span style={{ fontWeight: 700, color: "#4f46e5", fontSize: 12, whiteSpace: "nowrap" }}>{inv.invoice_number}</span>
         </span>
 
         {/* PO number */}
-        <span style={{ fontSize:11, color:"#6b7280", whiteSpace:"nowrap" }}>
+        <span style={{ fontSize: 11, color: "#6b7280", whiteSpace: "nowrap" }}>
           {inv.po_number ?? "—"}
         </span>
 
         {/* invoice date */}
-        <span style={{ fontSize:11, color:"#9ca3af", whiteSpace:"nowrap" }}>
+        <span style={{ fontSize: 11, color: "#9ca3af", whiteSpace: "nowrap" }}>
           {formattedDate(inv.invoice_date)}
         </span>
 
         {/* due date */}
-        <span style={{ fontSize:11, color:"#9ca3af", whiteSpace:"nowrap" }}>
+        <span style={{ fontSize: 11, color: "#9ca3af", whiteSpace: "nowrap" }}>
           {formattedDate(inv.invoice_due_date)}
         </span>
 
         {/* amount */}
-        <span style={{ textAlign:"right", fontWeight:700, color:"#111827", fontVariantNumeric:"tabular-nums", paddingRight:6 }}>
+        <span style={{ textAlign: "right", fontWeight: 700, color: "#111827", fontVariantNumeric: "tabular-nums", paddingRight: 6 }}>
           {formatCurrency(inv.invoice_amount)}
         </span>
 
         {/* status */}
-        <span style={{ textAlign:"center" }}>
+        <span style={{ textAlign: "center" }}>
           <StatusBadge s={inv.invoice_payment_status} />
         </span>
 
         {/* expand lines toggle */}
         <span
-          style={{ display:"flex", justifyContent:"center" }}
+          style={{ display: "flex", justifyContent: "center" }}
           onClick={e => { e.stopPropagation(); setOpen(v => !v); }}
         >
           <span className={`chev ${open ? "chev-on" : ""}`}>
-            <FontAwesomeIcon icon={open ? faChevronDown : faChevronRight} style={{ fontSize:9 }} />
+            <FontAwesomeIcon icon={open ? faChevronDown : faChevronRight} style={{ fontSize: 9 }} />
           </span>
         </span>
       </div>
@@ -625,7 +624,7 @@ function VendorRow({ row, onPay }) {
 
   const invoices = useRef(null);
 
-  const selList  = Array.from(selMap.values());
+  const selList = Array.from(selMap.values());
   const selTotal = selList.reduce((s, inv) => s + inv.invoice_amount, 0);
 
   const allSelected = row.po_invoices?.length > 0 && selList.length === row.po_invoices?.length;
@@ -654,75 +653,75 @@ function VendorRow({ row, onPay }) {
   return (
     <>
       <tr className={`rv ${open ? "rv-open" : ""}`}>
-        <td style={{ padding:0 }}>
+        <td style={{ padding: 0 }}>
           <div
             className="rv-inner"
             onClick={() => setOpen(v => !v)}
-            style={{ display:"grid", gridTemplateColumns:"24px 26px 32px 1fr 100px 80px 120px 1fr 140px 55px", alignItems:"center", gap:0 }}
+            style={{ display: "grid", gridTemplateColumns: "24px 26px 32px 1fr 100px 80px 120px 1fr 140px 55px", alignItems: "center", gap: 0 }}
           >
             {/* chevron */}
             <span className={`chev ${open ? "chev-on" : ""}`}>
-              <FontAwesomeIcon icon={open ? faChevronDown : faChevronRight} style={{ fontSize:11 }} />
+              <FontAwesomeIcon icon={open ? faChevronDown : faChevronRight} style={{ fontSize: 11 }} />
             </span>
 
             {/* Select All checkbox */}
             <span className={`pcb ${allSelected ? "pcb-on" : selList.length > 0 ? "pcb-on" : ""}`}
-              style={{ opacity: selList.length > 0 && !allSelected ? 0.5 : 1, flexShrink:0 }}
+              style={{ opacity: selList.length > 0 && !allSelected ? 0.5 : 1, flexShrink: 0 }}
               onClick={toggleSelectAll}
             >
               {allSelected && (
                 <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
-                  <path d="M1 3.5L3.5 6L8 1" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M1 3.5L3.5 6L8 1" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               )}
               {selList.length > 0 && !allSelected && (
                 <svg width="9" height="3" viewBox="0 0 9 3" fill="none">
-                  <path d="M1 1.5H8" stroke="white" strokeWidth="1.6" strokeLinecap="round"/>
+                  <path d="M1 1.5H8" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
                 </svg>
               )}
             </span>
 
             {/* avatar */}
-            <span style={{ width:28, height:28, borderRadius:8, background:"#ede9fe", display:"inline-flex", alignItems:"center", justifyContent:"center" }}>
-              <FontAwesomeIcon icon={faBuilding} style={{ fontSize:12, color:"#7c3aed" }} />
+            <span style={{ width: 28, height: 28, borderRadius: 8, background: "#ede9fe", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              <FontAwesomeIcon icon={faBuilding} style={{ fontSize: 12, color: "#7c3aed" }} />
             </span>
 
             {/* name */}
             {/* vendor name — no vchip */}
-              <span style={{ overflow:"hidden", minWidth:0 }}>
-                <a href={`/vendor/editvendor/${row.vendor_id}`}
-                  target="_blank" rel="noreferrer"
-                  style={{ fontWeight:700, color:"#111827", textDecoration:"none", fontSize:13, whiteSpace:"nowrap" }}
-                  onClick={e => e.stopPropagation()}
-                >
-                  {row.vendor_name}
-                </a>
+            <span style={{ overflow: "hidden", minWidth: 0 }}>
+              <a href={`/vendor/editvendor/${row.vendor_id}`}
+                target="_blank" rel="noreferrer"
+                style={{ fontWeight: 700, color: "#111827", textDecoration: "none", fontSize: 13, whiteSpace: "nowrap" }}
+                onClick={e => e.stopPropagation()}
+              >
+                {row.vendor_name}
+              </a>
             </span>
-            {/* vendor code — தனி column */}
-            <span style={{ fontSize:12, color:"#6b7280", whiteSpace:"nowrap" }}>
+            {/* vendor code  */}
+            <span style={{ fontSize: 12, color: "#6b7280", whiteSpace: "nowrap" }}>
               {row.vendor_code}
             </span>
 
             {/* currency */}
-            <span style={{ color:"#111827", fontSize:12, whiteSpace:"nowrap" }}>
+            <span style={{ color: "#111827", fontSize: 12, whiteSpace: "nowrap" }}>
               {row.vendor_currency}
             </span>
             {/* vendor type */}
-            <span style={{ color:"#111827", fontSize:12, whiteSpace:"nowrap" }}>
+            <span style={{ color: "#111827", fontSize: 12, whiteSpace: "nowrap" }}>
               {row.vendor_type}
             </span>
             {/* payment method chips */}
-            <span style={{ display:"flex", flexWrap:"wrap", gap:4, alignItems:"center" }}>
+            <span style={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
               {(row.mode_of_payment ?? []).map((m, i) => (
-                <span key={i} style={{ background:"#f0f0f5", color:"#4f46e5", borderRadius:20, padding:"2px 8px", fontSize:11, fontWeight:600, whiteSpace:"nowrap" }}>
+                <span key={i} style={{ background: "#f0f0f5", color: "#4f46e5", borderRadius: 20, padding: "2px 8px", fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}>
                   {m}
                 </span>
               ))}
-              {(!row.mode_of_payment?.length) && <span style={{ color:"#9ca3af", fontSize:12 }}>—</span>}
+              {(!row.mode_of_payment?.length) && <span style={{ color: "#9ca3af", fontSize: 12 }}>—</span>}
             </span>
 
             {/* total due amount */}
-            <span style={{ textAlign:"right", paddingRight:20, fontWeight:700, fontSize:13, color:"#111827", fontVariantNumeric:"tabular-nums", whiteSpace:"nowrap" }}>
+            <span style={{ textAlign: "right", paddingRight: 20, fontWeight: 700, fontSize: 13, color: "#111827", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
               {formatCurrency(row.inv_total)}
             </span>
 
@@ -732,8 +731,8 @@ function VendorRow({ row, onPay }) {
             </span> */}
 
             {/* inv count */}
-            <span style={{ textAlign:"center" }}>
-              <span style={{ background:"#ede9fe", color:"#7c3aed", borderRadius:20, padding:"2px 8px", fontSize:11, fontWeight:600 }}>
+            <span style={{ textAlign: "center" }}>
+              <span style={{ background: "#ede9fe", color: "#7c3aed", borderRadius: 20, padding: "2px 8px", fontSize: 11, fontWeight: 600 }}>
                 {row.po_invoices?.length ?? 0}
               </span>
             </span>
@@ -744,18 +743,18 @@ function VendorRow({ row, onPay }) {
       {/* invoice section */}
       {open && (
         <tr>
-          <td style={{ padding:0 }}>
+          <td style={{ padding: 0 }}>
             <div className="inv-section">
               <div className="inv-tbl-head">
                 <span>Select</span>
-                <span /> 
+                <span />
                 <span>Invoice No</span>
                 <span>PO Number</span>
                 <span>Invoice Date</span>
                 <span>Due Date</span>
-                <span style={{ textAlign:"right", paddingRight:6 }}>Invoice Amount</span>
-                <span style={{ textAlign:"center" }}>Status</span>
-                <span style={{ textAlign:"center" }}>Lines</span>
+                <span style={{ textAlign: "right", paddingRight: 6 }}>Invoice Amount</span>
+                <span style={{ textAlign: "center" }}>Status</span>
+                <span style={{ textAlign: "center" }}>Lines</span>
               </div>
 
               {row.po_invoices.map(inv => (
@@ -774,7 +773,7 @@ function VendorRow({ row, onPay }) {
                       <span key={inv.po_invoice_id} className="pay-chip">
                         {inv.invoice_number}
                         <button className="pay-chip-x" onClick={() => removeFromSel(inv.po_invoice_id)} title="Remove">
-                          <FontAwesomeIcon icon={faXmark} style={{ fontSize:9 }} />
+                          <FontAwesomeIcon icon={faXmark} style={{ fontSize: 9 }} />
                         </button>
                       </span>
                     ))}
@@ -790,7 +789,7 @@ function VendorRow({ row, onPay }) {
                       className="btn-pay"
                       onClick={() => onPay(selList, row.vendor_name, row, () => setSelMap(new Map()))}
                     >
-                      <FontAwesomeIcon icon={faCreditCard} style={{ fontSize:13 }} />
+                      <FontAwesomeIcon icon={faCreditCard} style={{ fontSize: 13 }} />
                       Pay Now
                     </button>
                   </div>
@@ -810,14 +809,14 @@ function VendorRow({ row, onPay }) {
 function SkeletonRows() {
   return Array.from({ length: 7 }, (_, i) => (
     <tr key={i} className="rv">
-      <td style={{ padding:"13px 14px" }}>
-        <div style={{ display:"flex",gap:10,alignItems:"center" }}>
-          <div className="skel" style={{ width:20,height:20,borderRadius:5 }} />
-          <div className="skel" style={{ width:28,height:28,borderRadius:8 }} />
-          <div className="skel" style={{ width:120+(i%4)*28,height:13 }} />
-          <div style={{ flex:1 }} />
-          <div className="skel" style={{ width:80,height:13 }} />
-          <div className="skel" style={{ width:64,height:13 }} />
+      <td style={{ padding: "13px 14px" }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <div className="skel" style={{ width: 20, height: 20, borderRadius: 5 }} />
+          <div className="skel" style={{ width: 28, height: 28, borderRadius: 8 }} />
+          <div className="skel" style={{ width: 120 + (i % 4) * 28, height: 13 }} />
+          <div style={{ flex: 1 }} />
+          <div className="skel" style={{ width: 80, height: 13 }} />
+          <div className="skel" style={{ width: 64, height: 13 }} />
         </div>
       </td>
     </tr>
@@ -828,21 +827,21 @@ function SkeletonRows() {
    MAIN
 ═══════════════════════════════════════════════════════════ */
 export default function PendingInvoiceList() {
-  const [searchValue, setSearchValue]             = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [vendorSuggestions, setVendorSuggestions] = useState([]);
-  const [showDropdown, setShowDropdown]           = useState(false);
-  const [dueDateDisplay, setDueDateDisplay]       = useState("");
-  const [filters, setFilters]                     = useState({ due_date_from:"", due_date_to:"" });
-  const [paymentTerm, setPaymentTerm]             = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [dueDateDisplay, setDueDateDisplay] = useState("");
+  const [filters, setFilters] = useState({ due_date_from: "", due_date_to: "" });
+  const [paymentTerm, setPaymentTerm] = useState("");
 
-  const [rows, setRows]         = useState([]);
-  const [summary, setSummary]   = useState(null);
-  const [loading, setLoading]   = useState(false);
-  const [page, setPage]         = useState(1);
+  const [rows, setRows] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [lastPage, setLastPage] = useState(1);
-  const [sortBy, setSortBy]     = useState("");
-  const [sortDir, setSortDir]   = useState("asc");
+  const [sortBy, setSortBy] = useState("");
+  const [sortDir, setSortDir] = useState("asc");
 
   const [modal, setModal] = useState(null); // { invoices, vendorName }
 
@@ -857,7 +856,7 @@ export default function PendingInvoiceList() {
         page, size: pageSize,
         vendor_search: searchValue,
         due_date_from: filters.due_date_from,
-        due_date_to:   filters.due_date_to,
+        due_date_to: filters.due_date_to,
         payment_term_id: paymentTerm,
         sort_by: sortBy, sort_dir: sortDir,
       }).toString();
@@ -881,7 +880,7 @@ export default function PendingInvoiceList() {
       try {
         const res = await apiFetch(`${API_BASE}api/vendor_api/lists?search=${val}`);
         if (res?.data) { setVendorSuggestions(res.data); setShowDropdown(true); }
-      } catch {}
+      } catch { }
     }, 300);
   };
   const selectVendor = (v) => {
@@ -901,7 +900,7 @@ export default function PendingInvoiceList() {
   /* clear */
   const clearAll = () => {
     setSearchValue(""); setDueDateDisplay("");
-    setFilters({ due_date_from:"", due_date_to:"" });
+    setFilters({ due_date_from: "", due_date_to: "" });
     setPaymentTerm(""); setVendorSuggestions([]); setShowDropdown(false); setPage(1);
   };
 
@@ -915,8 +914,8 @@ export default function PendingInvoiceList() {
           method: "POST",
           body: JSON.stringify({
             invoice_ids: data.invoices.map(inv => inv.po_invoice_id),
-            vendor_id:   modal.vendorData?.vendor_id,
-            currency:    modal.vendorData?.currency_code,
+            vendor_id: modal.vendorData?.vendor_id,
+            currency: modal.vendorData?.currency_code,
             ...data,
           }),
         }
@@ -933,7 +932,7 @@ export default function PendingInvoiceList() {
 
   const pageNums = () => {
     const pages = [];
-    for (let i = Math.max(1, page-2); i <= Math.min(lastPage, page+2); i++) pages.push(i);
+    for (let i = Math.max(1, page - 2); i <= Math.min(lastPage, page + 2); i++) pages.push(i);
     return pages;
   };
 
@@ -944,27 +943,27 @@ export default function PendingInvoiceList() {
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-3 ps-1">
-        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2" style={{ color:"#111827" }}>
-          <span style={{ width:32,height:32,borderRadius:10,background:"#ede9fe",display:"inline-flex",alignItems:"center",justifyContent:"center" }}>
-            <FontAwesomeIcon icon={faListUl} style={{ fontSize:13,color:"#7c3aed" }} />
+        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2" style={{ color: "#111827" }}>
+          <span style={{ width: 32, height: 32, borderRadius: 10, background: "#ede9fe", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <FontAwesomeIcon icon={faListUl} style={{ fontSize: 13, color: "#7c3aed" }} />
           </span>
           Due Invoices
         </h5>
         <button
-          onClick={() => { window.location.href="/purchaseorder/invoices"; }}
+          onClick={() => { window.location.href = "/purchaseorder/invoices"; }}
           style={{
-            background:"#c8efff",
-            color:"#0ca9ed",
-            border:"1.5px solid #0ca9ed",
-            fontWeight:700,
-            fontSize:14,
-            padding:"8px 18px",
-            borderRadius:9,
-            cursor:"pointer",
-            display:"flex",
-            alignItems:"center",
-            transition:"all .2s ease",
-            boxShadow:"0 2px 8px rgba(12,169,237,.15)",
+            background: "#c8efff",
+            color: "#0ca9ed",
+            border: "1.5px solid #0ca9ed",
+            fontWeight: 700,
+            fontSize: 14,
+            padding: "8px 18px",
+            borderRadius: 9,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            transition: "all .2s ease",
+            boxShadow: "0 2px 8px rgba(12,169,237,.15)",
           }}
           onMouseEnter={e => {
             e.currentTarget.style.background = "#0ca9ed";
@@ -996,11 +995,11 @@ export default function PendingInvoiceList() {
       <div className="pil-card bg-white mb-3 p-3">
         <div className="row g-2 align-items-end">
           <div className="col-md-5">
-            <label style={{ fontSize:11,fontWeight:700,color:"#9ca3af",letterSpacing:".5px",textTransform:"uppercase",marginBottom:5,display:"block" }}>Search Vendor</label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Search Vendor</label>
             <div className="position-relative">
-              <FontAwesomeIcon icon={faSearch} style={{ position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",color:"#9ca3af",fontSize:12,pointerEvents:"none" }} />
+              <FontAwesomeIcon icon={faSearch} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", fontSize: 12, pointerEvents: "none" }} />
               <input type="text" autoComplete="off" className="form-control form-control-sm"
-                style={{ paddingLeft:30,borderRadius:8,border:"1px solid #e5e7eb",fontSize:13 }}
+                style={{ paddingLeft: 30, borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13 }}
                 placeholder="Name or code…" value={searchValue}
                 onChange={e => { handleVendorInput(e.target.value); setPage(1); }}
                 onFocus={() => vendorSuggestions.length && setShowDropdown(true)}
@@ -1008,12 +1007,12 @@ export default function PendingInvoiceList() {
               />
               {showDropdown && vendorSuggestions.length > 0 && (
                 <ul className="list-group position-absolute w-100 shadow-sm"
-                  style={{ zIndex:1000,top:"calc(100% + 4px)",maxHeight:220,overflowY:"auto",borderRadius:8,border:"1px solid #e5e7eb" }}>
+                  style={{ zIndex: 1000, top: "calc(100% + 4px)", maxHeight: 220, overflowY: "auto", borderRadius: 8, border: "1px solid #e5e7eb" }}>
                   {vendorSuggestions.map(v => (
                     <li key={v.id} className="list-group-item list-group-item-action py-2"
-                      style={{ cursor:"pointer",fontSize:13,borderLeft:"none",borderRight:"none" }}
+                      style={{ cursor: "pointer", fontSize: 13, borderLeft: "none", borderRight: "none" }}
                       onMouseDown={() => selectVendor(v)}>
-                      <strong style={{ color:"#4f46e5" }}>{v.vendor_code}</strong>
+                      <strong style={{ color: "#4f46e5" }}>{v.vendor_code}</strong>
                       <span className="ms-2 text-muted">{v.vendor_name}</span>
                     </li>
                   ))}
@@ -1022,7 +1021,7 @@ export default function PendingInvoiceList() {
             </div>
           </div>
           <div className="col-md-3">
-            <label style={{ fontSize:11,fontWeight:700,color:"#9ca3af",letterSpacing:".5px",textTransform:"uppercase",marginBottom:5,display:"block" }}>Due Date</label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Due Date</label>
             <DateRangeInput
               isRange
               size="sm"
@@ -1032,13 +1031,13 @@ export default function PendingInvoiceList() {
                 setFilters({ due_date_from: s.format("YYYY-MM-DD"), due_date_to: e.format("YYYY-MM-DD") });
                 setPage(1);
               }}
-              onCancel={() => { setDueDateDisplay(""); setFilters({ due_date_from:"", due_date_to:"" }); }}
+              onCancel={() => { setDueDateDisplay(""); setFilters({ due_date_from: "", due_date_to: "" }); }}
               placeholder="Select range"
             />
           </div>
           <div className="col-md-2">
-            <label style={{ fontSize:11,fontWeight:700,color:"#9ca3af",letterSpacing:".5px",textTransform:"uppercase",marginBottom:5,display:"block" }}>Payment Term</label>
-            <select className="form-select form-select-sm" style={{ borderRadius:8,border:"1px solid #e5e7eb",fontSize:13 }}
+            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Payment Term</label>
+            <select className="form-select form-select-sm" style={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13 }}
               value={paymentTerm} onChange={e => { setPaymentTerm(e.target.value); setPage(1); }}>
               <option value="">All terms</option>
               {paymentTerms?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -1046,16 +1045,16 @@ export default function PendingInvoiceList() {
           </div>
           <div className="col-md-2 d-flex gap-2">
             <button onClick={() => { setPage(1); fetchData(); }}
-              style={{ flex:1,background:"#4f46e5",color:"#fff",border:"none",borderRadius:8,fontSize:12,fontWeight:700,padding:"7px 0",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:5 }}>
-              <FontAwesomeIcon icon={faSearch} style={{ fontSize:11 }} /> Search
+              style={{ flex: "0 0 auto", background: "#343a40", color: "#ffffff" ,borderRadius: 8, fontSize: 12, fontWeight: 700, padding: "5px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 , width: "100px"}}>
+              <FontAwesomeIcon icon={faSearch} style={{ fontSize: 15 }} /> Search
             </button>
             {/*<button onClick={clearAll} title="Clear" className="btn btn-light" 
               style={{ width:34,background:"#f3f4f6",color:"#6b7280",border:"none",borderRadius:8,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center" }}
               <FontAwesomeIcon icon={faTimes} style={{ fontSize:12 }} />
               Clear
             </button>*/}
-            <button onClick={clearAll} title="Clear" className="btn btn-light" 
-               >
+            <button onClick={clearAll} title="Clear" className="btn btn-light"
+            >
               Clear
             </button>
           </div>
@@ -1065,43 +1064,60 @@ export default function PendingInvoiceList() {
       {/* Table */}
       <div className="pil-card bg-white">
         {/* toolbar */}
-        <div style={{ padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid #f0f0f5" }}>
-          <div style={{ display:"flex",alignItems:"center",gap:8 }}>
-            <span style={{ fontSize:11,color:"#9ca3af" }}>Show</span>
-            <select className="form-select form-select-sm" style={{ width:65,fontSize:12,borderRadius:6,border:"1px solid #e5e7eb",padding:"2px 6px" }}
+        <div style={{ padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #f0f0f5" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, color: "#9ca3af" }}>Show</span>
+            <select className="form-select form-select-sm" style={{ width: 65, fontSize: 12, borderRadius: 6, border: "1px solid #e5e7eb", padding: "2px 6px" }}
               value={pageSize} onChange={e => { setPageSize(+e.target.value); setPage(1); }}>
-              {[20,30,40,50].map(n => <option key={n}>{n}</option>)}
+              {[20, 30, 40, 50].map(n => <option key={n}>{n}</option>)}
             </select>
-            <span style={{ fontSize:11,color:"#9ca3af" }}>entries</span>
+            <span style={{ fontSize: 11, color: "#9ca3af" }}>entries</span>
           </div>
           {loading && (
-            <div style={{ display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#9ca3af" }}>
-              <div className="spinner-border spinner-border-sm" style={{ width:14,height:14,borderWidth:2,color:"#818cf8" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "#9ca3af" }}>
+              <div className="spinner-border spinner-border-sm" style={{ width: 14, height: 14, borderWidth: 2, color: "#818cf8" }} />
               Loading…
             </div>
           )}
         </div>
 
-        <div style={{ overflowX:"auto" }}>
+        <div style={{ overflowX: "auto" }}>
           <table className="pil-tbl">
             <thead>
               <tr>
-               <th style={{ width:"100%" }}>
-                  <div style={{ display:"grid", gridTemplateColumns:"24px 26px 32px 1fr 100px 80px 120px 1fr 140px 55px", alignItems:"center", gap:0 }}>
-                    <span /> {/* chevron */}
-                    <span /> {/* select all */}
-                    <span /> {/* avatar */}
-                    <span className={sortBy==="vendor_name" ? "th-on" : ""} onClick={() => handleSort("vendor_name")}>
-                      Vendor Name <SortArrow field="vendor_name" sortBy={sortBy} sortDir={sortDir} />
+                <th style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "40px 40px 40px repeat(7, 1fr)",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span />
+                    <span />
+                    <span />
+
+                    <span
+                      className={sortBy === "vendor_name" ? "th-on" : ""}
+                      onClick={() => handleSort("vendor_name")}
+                    >
+                      Vendor Name
                     </span>
+
                     <span>Vendor Code</span>
                     <span>Currency</span>
                     <span>Vendor Type</span>
                     <span>Payment Method</span>
-                    <span className={sortBy==="invoice_amount" ? "th-on" : ""} style={{ textAlign:"right", paddingRight:20 }} onClick={() => handleSort("invoice_amount")}>
-                      Total Due Amount <SortArrow field="invoice_amount" sortBy={sortBy} sortDir={sortDir} />
+
+                    <span
+                      className={sortBy === "invoice_amount" ? "th-on" : ""}
+                      style={{ textAlign: "right" }}
+                      onClick={() => handleSort("invoice_amount")}
+                    >
+                      Total Due Amount
                     </span>
-                    <span style={{ textAlign:"center" }}>No. of Inv</span>
+
+                    <span style={{ textAlign: "center" }}>No. of Inv</span>
                   </div>
                 </th>
               </tr>
@@ -1110,7 +1126,7 @@ export default function PendingInvoiceList() {
               {loading && !rows.length
                 ? <SkeletonRows />
                 : !rows.length
-                  ? <tr><td><div className="pil-empty"><div style={{ fontSize:32,marginBottom:10,opacity:.3 }}>📄</div>No records found</div></td></tr>
+                  ? <tr><td><div className="pil-empty"><div style={{ fontSize: 32, marginBottom: 10, opacity: .3 }}>📄</div>No records found</div></td></tr>
                   : rows.map((r, i) => (
                     <VendorRow key={r.vendor_id ?? i} row={r} onPay={handlePay} />
                   ))
@@ -1120,16 +1136,16 @@ export default function PendingInvoiceList() {
         </div>
 
         {/* pagination */}
-        <div style={{ padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",borderTop:"1px solid #f0f0f5",flexWrap:"wrap",gap:8 }}>
-          <span style={{ fontSize:12,color:"#9ca3af" }}>Page {page} of {lastPage}</span>
+        <div style={{ padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #f0f0f5", flexWrap: "wrap", gap: 8 }}>
+          <span style={{ fontSize: 12, color: "#9ca3af" }}>Page {page} of {lastPage}</span>
           <nav className="pager">
-            <button className="ppage" onClick={() => setPage(1)} disabled={page===1}>«</button>
-            <button className="ppage" onClick={() => setPage(p=>p-1)} disabled={page===1}>‹</button>
+            <button className="ppage" onClick={() => setPage(1)} disabled={page === 1}>«</button>
+            <button className="ppage" onClick={() => setPage(p => p - 1)} disabled={page === 1}>‹</button>
             {pageNums().map(n => (
-              <button key={n} className={`ppage ${n===page?"pp-on":""}`} onClick={() => setPage(n)}>{n}</button>
+              <button key={n} className={`ppage ${n === page ? "pp-on" : ""}`} onClick={() => setPage(n)}>{n}</button>
             ))}
-            <button className="ppage" onClick={() => setPage(p=>p+1)} disabled={page===lastPage}>›</button>
-            <button className="ppage" onClick={() => setPage(lastPage)} disabled={page===lastPage}>»</button>
+            <button className="ppage" onClick={() => setPage(p => p + 1)} disabled={page === lastPage}>›</button>
+            <button className="ppage" onClick={() => setPage(lastPage)} disabled={page === lastPage}>»</button>
           </nav>
         </div>
       </div>
