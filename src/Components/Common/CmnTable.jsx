@@ -1,263 +1,363 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 const CommonTable = ({
-  config = [],
-  data = [],
-  isSearchable = false,
-  searchFromApi = false,
-  onSearch = () => {},
-  debounceTime = 500,
-  showSearchButton = true,
-  showClearButton = true,
+    title = "",
+    subtitle = "",
+    icon = "fas fa-table",
+    config = [],
+    data = [],
+    isSearchable = true,
+    searchFromApi = false,
+    onSearch = () => { },
+    debounceTime = 300,
 }) => {
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [columnWidths, setColumnWidths] = useState({});
 
-  // ================= DEBOUNCE =================
-  useEffect(() => {
-    if (searchFromApi) {
-      const timer = setTimeout(() => {
-        setDebouncedSearch(search);
-      }, debounceTime);
+    // ================= INIT COLUMN WIDTH =================
+    useEffect(() => {
+        const widths = {};
+        config.forEach((col, i) => {
+            widths[i] = col.width || 150;
+        });
+        setColumnWidths(widths);
+    }, [config]);
 
-      return () => clearTimeout(timer);
-    } else {
-      setDebouncedSearch(search);
-    }
-  }, [search, debounceTime, searchFromApi]);
+    // ================= DEBOUNCE =================
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, debounceTime);
 
-  // ================= SEARCH =================
-  useEffect(() => {
-    if (searchFromApi) {
-      onSearch(debouncedSearch);
-    } else {
-      const filtered = data.filter((row) =>
-        Object.values(row).some((val) =>
-          String(val || "")
-            .toLowerCase()
-            .includes(debouncedSearch.toLowerCase())
-        )
-      );
-      setFilteredData(filtered);
-    }
-  }, [debouncedSearch, data, searchFromApi, onSearch]);
+        return () => clearTimeout(timer);
+    }, [search, debounceTime]);
 
-  // ================= SEARCH HANDLERS =================
-  const handleSearch = () => {
-    if (searchFromApi) {
-      onSearch(search);
-    } else {
-      setDebouncedSearch(search);
-    }
-  };
+    // ================= API SEARCH =================
+    useEffect(() => {
+        if (searchFromApi) {
+            onSearch(debouncedSearch);
+        }
+    }, [debouncedSearch, searchFromApi, onSearch]);
 
-  const clearSearch = () => {
-    setSearch("");
-    setDebouncedSearch("");
-    if (searchFromApi) onSearch("");
-  };
+    // ================= LOCAL FILTER =================
+    const filteredData = useMemo(() => {
+        if (searchFromApi) return data;
+        if (!debouncedSearch) return data;
 
-  const tableData = searchFromApi ? data : filteredData;
+        const lower = debouncedSearch.toLowerCase();
 
-  return (
-    <div>
-      {/* ================= SEARCH ================= */}
-      {isSearchable && (
+        return data.filter((row) =>
+            Object.values(row).some((val) =>
+                String(val ?? "")
+                    .toLowerCase()
+                    .includes(lower)
+            )
+        );
+    }, [data, debouncedSearch, searchFromApi]);
+
+    // ================= RESIZE =================
+    const startResizing = (index, e) => {
+        e.preventDefault();
+
+        const startX = e.clientX;
+        const startWidth = columnWidths[index];
+
+        const onMouseMove = (moveEvent) => {
+            const newWidth = startWidth + (moveEvent.clientX - startX);
+
+            setColumnWidths((prev) => ({
+                ...prev,
+                [index]: Math.max(newWidth, 80),
+            }));
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        };
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+    };
+
+    const handleSearch = () => {
+        if (searchFromApi) {
+            onSearch(search);
+        } else {
+            setDebouncedSearch(search);
+        }
+    };
+
+    const clearSearch = () => {
+        setSearch("");
+        setDebouncedSearch("");
+        if (searchFromApi) onSearch("");
+    };
+
+    return (
         <div
-          style={{
-            background: "#f9fafb",
-            borderRadius: "14px",
-            padding: "10px",
-            border: "1px solid #e5e7eb",
-            marginBottom: "16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ position: "relative", width: "260px" }}>
-            <i
-              className="fas fa-search"
-              style={{
-                position: "absolute",
-                left: "12px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "#9ca3af",
-                fontSize: "12px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px 12px 10px 34px",
-                borderRadius: "10px",
-                border: "1px solid #d1d5db",
-                background: "#fff",
-                fontSize: "13px",
-                outline: "none",
-              }}
-            />
-          </div>
-
-          <div style={{ display: "flex", gap: "10px" }}>
-            {showSearchButton && (
-              <button
-                onClick={handleSearch}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: "10px",
-                  background: "#0f0f1a",
-                  color: "#fff",
-                  border: "none",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-              >
-                Search
-              </button>
-            )}
-
-            {showClearButton && (
-              <button
-                onClick={clearSearch}
-                style={{
-                  padding: "8px 14px",
-                  borderRadius: "10px",
-                  background: "#ffffff",
-                  color: "#374151",
-                  border: "1px solid #e5e7eb",
-                  fontSize: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ================= TABLE ================= */}
-      <div
-        style={{
-          width: "100%",
-          background: "#fff",
-          borderRadius: "14px",
-          border: "1px solid #f0f0f5",
-          overflow: "hidden",
-        }}
-      >
-        <div style={{ overflowX: "auto" }}>
-          <table
             style={{
-              width: "100%",
-              tableLayout: "auto", // 🔥 changed from fixed
-              borderCollapse: "separate",
-              borderSpacing: 0,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
             }}
-          >
-            <thead style={{ background: "#fafafa" }}>
-              <tr>
-                {config.map((col, i) => (
-                  <th
-                    key={i}
+        >
+            {/* ================= HEADER ================= */}
+            {(title || subtitle) && (
+                <div
                     style={{
-                      padding: "14px 16px",
-                      fontSize: "10px",
-                      fontWeight: "700",
-                      color: "#9ca3af",
-                      textAlign: col.align || "left",
-                      borderBottom: "1px solid #f0f0f5",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: "16px",
                     }}
-                  >
-                    {col.title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {tableData.length > 0 ? (
-                tableData.map((row, i) => (
-                  <tr key={i}>
-                    {config.map((col, j) => (
-                      <td
-                        key={j}
-                        style={{
-                          padding: "12px 16px",
-                          borderBottom: "1px solid #f1f5f9",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          textAlign: col.align || "left",
-                        }}
-                      >
-                        {col.type === "actions" ? (
-                          <div
+                >
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                        <div
                             style={{
-                              display: "flex",
-                              gap: "10px",
-                              justifyContent:
-                                col.align === "center"
-                                  ? "center"
-                                  : "flex-start",
+                                width: "38px",
+                                height: "38px",
+                                borderRadius: "12px",
+                                background: "#f5f3ff",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                boxShadow: "0 4px 16px rgba(0,0,0,.2)",
                             }}
-                          >
-                            {col.actions?.map((action, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => action.onClick(row)}
-                                title={action.label}
-                                style={{
-                                  border: "none",
-                                  background: "transparent",
-                                  cursor: "pointer",
-                                  color: "#374151",
-                                  fontSize: "13px",
-                                }}
-                                onMouseEnter={(e) =>
-                                  (e.currentTarget.style.color = "#111827")
-                                }
-                                onMouseLeave={(e) =>
-                                  (e.currentTarget.style.color = "#374151")
-                                }
-                              >
-                                <i className={action.icon} />
-                              </button>
-                            ))}
-                          </div>
-                        ) : col.render ? (
-                          col.render(row[col.field], row)
-                        ) : (
-                          row[col.field] ?? "—"
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={config.length}
-                    style={{ padding: "50px", textAlign: "center" }}
-                  >
-                    No data found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                        >
+                            <i className={icon} />
+                        </div>
+
+                        <div>
+                            <h3 style={{ fontSize: "22px", fontWeight: "800", margin: 0 }}>
+                                {title}
+                            </h3>
+                            <p style={{ fontSize: "12px", color: "#9ca3af", margin: 0 }}>
+                                {subtitle}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ================= SEARCH ================= */}
+            {isSearchable && (
+                <div
+                    style={{
+                        background: "#fff",
+                        borderRadius: "12px",
+                        padding: "12px",
+                        border: "1px solid #f0f0f5",
+                        marginBottom: "12px",
+                        display: "flex",
+                        gap: "10px",
+                    }}
+                >
+                    <div style={{ position: "relative", flex: 1 }}>
+                        <i
+                            className="fas fa-search"
+                            style={{
+                                position: "absolute",
+                                left: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "#9ca3af",
+                                fontSize: "12px",
+                            }}
+                        />
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search..."
+                            style={{
+                                width: "100%",
+                                border: "1px solid #e5e7eb",
+                                borderRadius: "8px",
+                                padding: "8px 12px 8px 36px",
+                                fontSize: "13px",
+                                outline: "none",
+                            }}
+                        />
+                    </div>
+
+                    <button
+                        onClick={handleSearch}
+                        style={{
+                            padding: "8px 16px",
+                            borderRadius: "8px",
+                            background: "#0f0f1a",
+                            color: "#fff",
+                            border: "none",
+                            fontSize: "12px",
+                            fontWeight: "700",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Search
+                    </button>
+
+                    {search && (
+                        <button
+                            onClick={clearSearch}
+                            style={{
+                                padding: "8px 12px",
+                                borderRadius: "8px",
+                                border: "1px solid #e5e7eb",
+                                background: "#fff",
+                                fontSize: "12px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Clear
+                        </button>
+                    )}
+                </div>
+            )}
+
+            {/* ================= TABLE ================= */}
+            <div
+                style={{
+                    flex: 1,
+                    minHeight: 0,
+                    background: "#fff",
+                    borderRadius: "12px",
+                    border: "1px solid #f0f0f5",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                <div style={{ flex: 1, overflow: "auto" }}>
+                    <table
+                        style={{
+                            width: "100%",
+                            borderCollapse: "collapse",
+                            fontSize: "13px",
+                            tableLayout: "fixed", // 🔥 required for resizing
+                        }}
+                    >
+                        <thead style={{ background: "#fafafa" }}>
+                            <tr>
+                                {config.map((col, i) => (
+                                    <th
+                                        key={i}
+                                        style={{
+                                            fontSize: "12px",
+                                            fontWeight: "600",
+                                            color: "#6b7280",
+                                            padding: "10px 12px",
+                                            textAlign: col.align || "left",
+                                            borderBottom: "1px solid #e5e7eb",
+                                            whiteSpace: "nowrap",
+                                            width: columnWidths[i],
+                                            position: "relative",
+                                        }}
+                                    >
+                                        {col.title}
+
+                                        {/* RESIZER */}
+                                        <div
+                                            onMouseDown={(e) => startResizing(i, e)}
+                                            style={{
+                                                position: "absolute",
+                                                right: 0,
+                                                top: 0,
+                                                height: "100%",
+                                                width: "6px",
+                                                cursor: "col-resize",
+                                                zIndex: 10,
+                                            }}
+                                        />
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {filteredData.length > 0 ? (
+                                filteredData.map((row, i) => (
+                                    <tr
+                                        key={i}
+                                        style={{
+                                            height: "44px",
+                                            background: i % 2 === 0 ? "#ffffff" : "#f9fafb",
+                                        }}
+                                    >
+                                        {config.map((col, j) => (
+                                            <td
+                                                key={j}
+                                                style={{
+                                                    padding: "10px 12px",
+                                                    borderBottom: "1px solid #f1f5f9",
+                                                    verticalAlign: "middle",
+                                                    whiteSpace: "nowrap",
+                                                    textAlign: col.align || "left",
+                                                    width: columnWidths[j],
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                }}
+                                            >
+                                                {col.type === "actions" ? (
+                                                    <div style={{ display: "flex", alignItems: "center" }}>
+                                                        {col.actions?.map((action, idx) => (
+                                                            <button
+                                                                key={idx}
+                                                                onClick={() => action.onClick(row)}
+                                                                style={{
+                                                                    padding: "3px 10px",
+                                                                    borderRadius: "6px",
+                                                                    fontSize: "11px",
+                                                                    marginRight: "6px",
+                                                                    cursor: "pointer",
+                                                                    border:
+                                                                        action.type === "delete"
+                                                                            ? "1px solid #fee2e2"
+                                                                            : "1px solid #e5e7eb",
+                                                                    background:
+                                                                        action.type === "delete"
+                                                                            ? "#fff5f5"
+                                                                            : "#f8f8fb",
+                                                                    color:
+                                                                        action.type === "delete"
+                                                                            ? "#b91c1c"
+                                                                            : "#111827",
+                                                                }}
+                                                            >
+                                                                {action.label}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                ) : col.render ? (
+                                                    col.render(row[col.field], row)
+                                                ) : (
+                                                    row[col.field] ?? "—"
+                                                )}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={config.length}
+                                        style={{
+                                            textAlign: "center",
+                                            padding: "40px",
+                                            color: "#9ca3af",
+                                        }}
+                                    >
+                                        No data found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default CommonTable;
+export default React.memo(CommonTable);
