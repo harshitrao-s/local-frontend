@@ -9,6 +9,7 @@ import { API_ENDPOINTS } from "../Config/api";
 import { Eye, EyeOff } from "lucide-react"
 import { Input } from "../Components/Common/ui/input";
 import { Button } from "../Components/Common/ui/button";
+import { motion, AnimatePresence } from "framer-motion"
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -19,6 +20,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false)
   const redirectTo = params.get("redirectTo") || "/dashboard";
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,8 +38,12 @@ const LoginPage = () => {
       });
 
       if (data?.status === "success") {
-        login();
-        navigate(decodeURIComponent(redirectTo), { replace: true });
+        setShowSuccess(true)
+
+        setTimeout(() => {
+          login()
+          navigate(decodeURIComponent(redirectTo), { replace: true })
+        }, 1200)
       } else {
         throw new Error("Invalid credentials");
       }
@@ -171,7 +177,6 @@ const LoginPage = () => {
     // </div>
 
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">
-
       {/* Left Side */}
       <div className="w-full lg:w-1/2 flex justify-center items-center px-4 sm:px-6 md:px-10 lg:px-16 py-8">
 
@@ -190,7 +195,7 @@ const LoginPage = () => {
           <div className="flex flex-col gap-5 md:gap-6">
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#323130]">
-                Sign Up
+                Log In
               </h2>
               <p className="text-sm md:text-base text-gray-500">
                 Let's get you started
@@ -254,12 +259,12 @@ const LoginPage = () => {
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center text-gray-600">
                     <Input type="checkbox" className="mr-2 h-4 w-4" />
-                    Remember me?
+                    Remember me
                   </label>
 
-                  <a className="font-semibold text-[#002961] underline">
-                    Forget Password
-                  </a>
+                  <Link className="text-[14px] font-semibold text-[#002961] cursor-pointer">
+                    Forgot Password
+                  </Link>
                 </div>
               </div>
 
@@ -283,6 +288,54 @@ const LoginPage = () => {
           className="w-full h-full object-cover"
         />
       </div>
+
+      {/* Login Animation after click on button */}
+
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white px-8 py-6 rounded-2xl shadow-xl flex flex-col items-center gap-3"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            >
+              {/* Animated Check */}
+              <motion.div
+                className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring" }}
+              >
+                <motion.span
+                  className="text-green-600 text-xl font-bold"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  ✓
+                </motion.span>
+              </motion.div>
+
+              {/* Text */}
+              <motion.p
+                className="text-gray-800 font-semibold text-sm"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Login Successful
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
