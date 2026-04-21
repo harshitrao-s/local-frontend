@@ -170,124 +170,41 @@ const LoginPage = () => {
     //   </div>
     // </div>
 
-    // <div className="flex h-screen w-full flex-col lg:flex-row overflow-hidden ">
-    //   {/* Left Side: Login Form  */}
-    //   <div className="w-full lg:w-1/2 h-full overflow-hidden flex flex-col p-6 md:p-10 lg:p-16 justify-center align-items-center">
-    //     <div className="h-[530px] w-[540px]">
-    //       {/* Logo */}
-    //       <div className="mb-[48px]">
-    //         <img
-    //           src="/Logo.svg"
-    //           alt="Dashboard Preview"
-    //           className="w-[249px] h-[51px] object-cover"
-    //         />
-    //       </div>
+    <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">
 
-    //       {/* Text Header */}
-    //       <div className="flex flex-col gap-[25px]">
-    //         <div className="flex flex-col gap-[8px]">
-    //           <h2 className="text-[30px] text-600 font-roboto font-semibold text-[#323130] leading-[39px]">Sign Up</h2>
-    //           <p className="text-gray-500">Let's get you started</p>
-    //         </div>
-    //         {/* Form */}
-
-    //         <form className="flex flex-col gap-[24px]">
-    //           <div className="h-[214px] flex flex-col gap-[16px]">
-
-    //             <div className="h-[79px] flex flex-col gap-[6px]">
-    //               <label className="block text-sm h-[21px] font-medium text-gray-700">Email</label>
-
-    //               <Input type="email"
-    //                 placeholder="yogavvijaya@gmail.com"
-    //                 className="w-full h-[52px] px-4 py-3 border border-gray-300 rounded-[30px] focus:ring-2 focus:ring-red-500 focus:outline-none" />
-    //             </div>
-
-    //             <div className="h-[79px] flex flex-col gap-[6px]">
-    //               <label className="block text-sm h-[21px] font-medium text-gray-700">
-    //                 Password
-    //               </label>
-
-    //               <div className="relative">
-    //                 <Input
-    //                   type={showPassword ? "text" : "password"}
-    //                   placeholder="Input password"
-    //                   className="w-full px-4 py-3 h-[52px] border border-gray-300 rounded-[30px] pr-10 focus:ring-2 focus:ring-blue-800 focus:outline-none"
-    //                 />
-
-    //                 {/* Eye Button */}
-    //                 <Button
-    //                   type="button"
-    //                   onClick={() => setShowPassword(!showPassword)}
-    //                   className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-0"
-    //                 >
-    //                   {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
-    //                 </Button>
-    //               </div>
-    //             </div>
-
-    //             <div className="flex items-center justify-between h-[24px]">
-    //               <label className="flex items-center text-sm text-gray-600">
-    //                 <Input type="checkbox" className="mr-2 h-4 w-4 rounded border-gray-300 accent-red-600" />
-    //                 Remember me?
-    //               </label>
-    //               <a href="#" className="text-[14px] eading-[0.5em] font-bold text-[#002961] underline">Forget Password</a>
-    //             </div>
-    //           </div>
-
-    //           <Button
-    //             type="submit"
-    //             variant="ghost"
-    //             className="w-full bg-[#FF141F] text-white text-[14px] font-[700] py-4 px-3 rounded-[30px]"
-    //           >
-    //             Sign In
-    //           </Button>
-    //         </form>
-    //       </div>
-
-    //       <p className="pt-3 text-center  text-[14px] leading-[0.5em] text-[#323130]">
-    //         Do not have account ? <Link href="#" className="text-[#002961] font-bold underline text-[14px] leading-[0.5em]">Sign Up</Link>
-    //       </p>
-    //     </div>
-    //   </div>
-
-    //   {/* Right Side: Image Section (720px) - Hidden on Mobile */}
-    //   <div className="hidden lg:flex lg:w-1/2 h-full overflow-hidden">
-    //     <img
-    //       src="/loginBanner.svg"
-    //       alt="Dashboard Preview"
-    //       className="w-full h-full object-cover"
-    //     />
-
-    //   </div>
-    // </div>
-
-    <div className="flex h-screen w-full flex-col lg:flex-row overflow-hidden ">
       {/* Left Side */}
-      <div className="w-full lg:w-1/2 h-full overflow-hidden flex flex-col p-6 md:p-10 lg:p-16 justify-center align-items-center">
-        <div className="h-[530px] w-[540px]">
+      <div className="w-full lg:w-1/2 flex justify-center items-center px-4 sm:px-6 md:px-10 lg:px-16 py-8">
+
+        {/* Container */}
+        <div className="w-full max-w-[540px]">
 
           {/* Logo */}
-          <div className="mb-[48px]">
-            <img src="/Logo.svg" className="w-[249px] h-[51px] object-cover" />
+          <div className="mb-8 md:mb-10">
+            <img
+              src="/Logo.svg"
+              className="w-[180px] md:w-[220px] lg:w-[249px] h-auto"
+            />
           </div>
 
           {/* Header */}
-          <div className="flex flex-col gap-[25px]">
-            <div className="flex flex-col gap-[8px]">
-              <h2 className="text-[30px] text-600 font-roboto font-semibold text-[#323130] leading-[39px]">
+          <div className="flex flex-col gap-5 md:gap-6">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl md:text-3xl font-semibold text-[#323130]">
                 Sign Up
               </h2>
-              <p className="text-gray-500">Let's get you started</p>
+              <p className="text-sm md:text-base text-gray-500">
+                Let's get you started
+              </p>
             </div>
 
             {/* FORM */}
-            <form onSubmit={handleLogin} className="flex flex-col gap-[24px]">
+            <form onSubmit={handleLogin} className="flex flex-col gap-6">
 
-              <div className="h-[214px] flex flex-col gap-[16px]">
+              <div className="flex flex-col gap-4">
 
                 {/* Email */}
-                <div className="h-[79px] flex flex-col gap-[6px]">
-                  <label className="block text-sm h-[21px] font-medium text-gray-700">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-gray-700">
                     Email
                   </label>
 
@@ -299,14 +216,14 @@ const LoginPage = () => {
                       if (loginError) setLoginError(false)
                     }}
                     placeholder="yogavvijaya@gmail.com"
-                    className={`w-full h-[52px] px-4 py-3 border rounded-[30px] focus:ring-2 focus:ring-red-500 focus:outline-none ${loginError ? "border-red-500" : "border-gray-300"
+                    className={`w-full h-[48px] md:h-[52px] px-4 border rounded-[30px] focus:ring-2 focus:ring-red-500 ${loginError ? "border-red-500" : "border-gray-300"
                       }`}
                   />
                 </div>
 
                 {/* Password */}
-                <div className="h-[79px] flex flex-col gap-[6px]">
-                  <label className="block text-sm h-[21px] font-medium text-gray-700">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-gray-700">
                     Password
                   </label>
 
@@ -319,27 +236,28 @@ const LoginPage = () => {
                         if (loginError) setLoginError(false)
                       }}
                       placeholder="Input password"
-                      className={`w-full px-4 py-3 h-[52px] border rounded-[30px] pr-10 focus:ring-2 focus:ring-blue-800 focus:outline-none ${loginError ? "border-red-500" : "border-gray-300"
+                      className={`w-full h-[48px] md:h-[52px] px-4 pr-10 border rounded-[30px] focus:ring-2 focus:ring-blue-800 ${loginError ? "border-red-500" : "border-gray-300"
                         }`}
                     />
 
-                    <Button
+                    <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-0"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
                     >
                       {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
-                    </Button>
+                    </button>
                   </div>
                 </div>
 
                 {/* Remember */}
-                <div className="flex items-center justify-between h-[24px]">
-                  <label className="flex items-center text-sm text-gray-600">
-                    <Input type="checkbox" className="mr-2 h-4 w-4 rounded border-gray-300 accent-red-600" />
+                <div className="flex items-center justify-between text-sm">
+                  <label className="flex items-center text-gray-600">
+                    <Input type="checkbox" className="mr-2 h-4 w-4" />
                     Remember me?
                   </label>
-                  <a href="#" className="text-[14px] font-bold text-[#002961] underline">
+
+                  <a className="font-semibold text-[#002961] underline">
                     Forget Password
                   </a>
                 </div>
@@ -348,28 +266,22 @@ const LoginPage = () => {
               {/* Button */}
               <Button
                 type="submit"
-                variant="ghost"
                 disabled={loading}
-                className="w-full bg-[#FF141F] text-white text-[14px] font-[700] py-4 px-3 rounded-[30px]"
+                className="w-full bg-[#FF141F] text-white text-sm md:text-base font-bold py-4 rounded-[30px]"
               >
                 {loading ? "Loading..." : "Sign In"}
               </Button>
-
             </form>
           </div>
-
-          {/* <p className="pt-3 text-center text-[14px] text-[#323130]">
-            Do not have account ?{" "}
-            <span className="text-[#002961] font-bold underline">
-              Sign Up
-            </span>
-          </p> */}
         </div>
       </div>
 
-      {/* Right Side */}
-      <div className="hidden lg:flex lg:w-1/2 h-full overflow-hidden">
-        <img src="/loginBanner.svg" className="w-full h-full object-cover" />
+      {/* Right Side (only desktop) */}
+      <div className="hidden lg:flex lg:w-1/2">
+        <img
+          src="/loginBanner.svg"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );
