@@ -5,6 +5,7 @@ import ShippingProviderModals from "./ShippingProviderModals";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import useMasterData from "../../../Context/MasterDataProvider";
+import CmnHeader from "../../../Components/Common/CmnHeader";
 
 const ShippingProvidersList = () => {
   const tableRef     = useRef(null);
@@ -130,20 +131,9 @@ const ShippingProvidersList = () => {
   return (
     <div className="cl-wrap">
 
-      <div className="cl-header">
-        <div className="cl-title-wrap">
-          <div className="cl-icon">
-            <i className="fas fa-truck" />
-          </div>
-          <div>
-            <h3 className="cl-title">Shipping Providers</h3>
-            <p className="cl-subtitle">Manage carriers and shipping options</p>
-          </div>
-        </div>
-        <button className="cl-search-btn" onClick={() => setModalConfig({ type: "add", data: null })}>
-          <i className="fas fa-plus" /> New Provider
-        </button>
-      </div>
+      
+
+      <CmnHeader title="Shipping Providers" subtitle="Manage carriers and shipping options" icon1={"fas fa-truck"} icon="iwl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Provider" />
 
       <div className="cl-search-wrap">
         <div className="cl-search-inner">
