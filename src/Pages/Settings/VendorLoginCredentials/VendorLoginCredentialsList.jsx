@@ -1,48 +1,59 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
+import React, { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../../../Config/api";
 import VendorLoginCredentialModals from "./VendorLoginCredentialModals";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import { useAuth } from "../../../Context/AuthContext";
 import CmnHeader from "../../../Components/Common/CmnHeader";
+import CommonTable from "../../../Components/Common/CmnTable";
 
 const VendorLoginCredentialsList = () => {
   const { user, authChecked } = useAuth();
   const isSuper = Boolean(user?.is_superuser);
 
-  const tableRef = useRef(null);
-  const tabulatorRef = useRef(null);
-
-  const [searchValue, setSearchValue] = useState("");
+  const [vendorsLoginCredentials, setVendorsLoginCredentials] = useState([]);
   const [modalConfig, setModalConfig] = useState({ type: null, data: null });
   const [vendorsList, setVendorsList] = useState([]);
-  const [tableRows, setTableRows] = useState([]);
-
-  const refreshTable = () => tabulatorRef.current?.replaceData();
+  const [searchValue, setSearchValue] = useState("");
 
   const credentialVendorIds = useMemo(
-    () => new Set((tableRows || []).map((r) => r.vendor_id)),
-    [tableRows]
+    () => new Set((vendorsLoginCredentials || []).map((r) => r.vendor_id)),
+    [vendorsLoginCredentials]
   );
 
+  // Fetch vendors (for modal)
   useEffect(() => {
     if (!isSuper) return;
-
-    let cancelled = false;
 
     (async () => {
       try {
         const res = await apiFetch(`${API_BASE}api/vendor_api/lists`);
-        if (!cancelled && res?.data) setVendorsList(res.data);
+        setVendorsList(res?.data || []);
       } catch {
-        if (!cancelled) setVendorsList([]);
+        setVendorsList([]);
       }
     })();
+  }, [isSuper]);
 
-    return () => {
-      cancelled = true;
-    };
+  // Fetch credentials
+  const fetchData = async (search = "") => {
+    try {
+      const query = new URLSearchParams({
+        search: search || "",
+      }).toString();
+
+      const res = await apiFetch(
+        `${API_BASE}api/vendor-portal-credentials?${query}`
+      );
+
+      setVendorsLoginCredentials(res?.data || []);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (isSuper) fetchData();
   }, [isSuper]);
 
   const handleDelete = async (row) => {
@@ -65,7 +76,7 @@ const VendorLoginCredentialsList = () => {
 
         if (res.status) {
           Swal.fire("Removed", res.message || "Credentials deleted.", "success");
-          refreshTable();
+          fetchData(searchValue);
         }
       } catch (e) {
         Swal.fire("Error", e.message || "Failed to delete", "error");
@@ -73,220 +84,123 @@ const VendorLoginCredentialsList = () => {
     });
   };
 
-  useEffect(() => {
-    if (!isSuper) return;
-
-    if (tabulatorRef.current) {
-      tabulatorRef.current.destroy();
-      tabulatorRef.current = null;
-    }
-
-    tabulatorRef.current = new Tabulator(tableRef.current, {
-      layout: "fitColumns",
-
-      // ✅ height removed (auto height now)
-      // height: "calc(100vh - 240px)",
-
-      placeholder: `<div class="cl-state-cell">
-        <div class="cl-state-icon"><i class="fas fa-key"></i></div>
-        No vendor login credentials yet
-      </div>`,
-
-      ajaxURL: `${API_BASE}api/vendor-portal-credentials`,
-
-      ajaxRequestFunc: async (url) => {
-        const query = new URLSearchParams({
-          search: searchValue || "",
-        }).toString();
-
-        const response = await apiFetch(`${url}?${query}`);
-        const rows = response.data || [];
-        setTableRows(rows);
-        return response;
-      },
-
-      ajaxResponse: (url, params, response) => response.data || [],
-
-      columns: [
+  const tableConfig = [
+    {
+      title: "Vendor",
+      field: "vendor_company_name",
+      render: (val, row) => (
+        <div>
+          <span style={{ fontWeight: 700, fontSize: "14px" }}>
+            {val || "—"}
+          </span>
+          <br />
+          <span style={{ fontSize: "12px", color: "#6b7280" }}>
+            {row.vendor_code || ""}
+          </span>
+        </div>
+      ),
+    },
+    {
+      title: "Website user name",
+      field: "website_username",
+      render: (val) => (
+        <span >
+          {val || "—"}
+        </span>
+      ),
+    },
+    {
+      title: "User email",
+      field: "website_user_email",
+    },
+    {
+      title: "Website link",
+      field: "website_link",
+      render: (val) =>
+        val ? (
+          <a href={val} target="_blank" rel="noreferrer">
+            {val.length > 48 ? `${val.slice(0, 46)}…` : val}
+          </a>
+        ) : (
+          "—"
+        ),
+    },
+    {
+      title: "OTP",
+      field: "otp_enabled",
+      render: (val) =>
+        val ? (
+          <span className="new_badge new_badge_on">ON</span>
+        ) : (
+          <span className="new_badge new_badge_off">OFF</span>
+        ),
+    },
+    {
+      title: "Status",
+      field: "is_active",
+      render: (val) =>
+        val ? (
+          <span className="new_badge new_badge-success">ACTIVE</span>
+        ) : (
+          <span className="new_badge new_badge_inactive">INACTIVE</span>
+        ),
+    },
+    {
+      title: "Actions",
+      type: "actions",
+      actions: [
         {
-          title: "Vendor",
-          field: "vendor_company_name",
-          minWidth: 180,
-          headerSort: false,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          formatter: (cell) => {
-            const d = cell.getData();
-            return `<div>
-              <span style="font-weight:700;color:#111827;font-size:14px;">
-                ${cell.getValue() || "—"}
-              </span><br/>
-              <span style="font-size:12px;color:#6b7280;font-family:monospace;">
-                ${d.vendor_code || ""}
-              </span>
-            </div>`;
-          },
+          label: "Edit",
+          icon: "fas fa-pen",
+          className: "cl-edit-btn",
+          onClick: (row) =>
+            setModalConfig({ type: "edit", data: row }),
         },
         {
-          title: "Website user name",
-          field: "website_username",
-          minWidth: 180,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          headerSort: false,
-          formatter: (cell) =>
-            `<span style="font-size:13px;color:#374151;font-weight:600;">
-              ${cell.getValue() || "—"}
-            </span>`,
-        },
-        {
-          title: "User email",
-          field: "website_user_email",
-          minWidth: 180,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          headerSort: false,
-          formatter: (cell) =>
-            `<span style="font-size:12px;color:#4b5563;">
-              ${cell.getValue() || "—"}
-            </span>`,
-        },
-        {
-          title: "Website link",
-          field: "website_link",
-          minWidth: 180,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          headerSort: false,
-          formatter: (cell) => {
-            const u = cell.getValue() || "";
-            const short = u.length > 48 ? `${u.slice(0, 46)}…` : u;
-
-            return `<a href="${u}" target="_blank" rel="noopener noreferrer"
-              style="font-size:12px;color:#2563eb;">
-              ${short || "—"}
-            </a>`;
-          },
-        },
-        {
-          title: "OTP",
-          field: "otp_enabled",
-          width: 100,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          headerSort: false,
-          formatter: (cell) =>
-            cell.getValue()
-              ? `<span class="new_badge new_badge_on">ON</span>`
-              : `<span class="new_badge new_badge_off">OFF</span>`,
-        },
-        {
-          title: "Status",
-          field: "is_active",
-          width: 120,
-          headerHozAlign: "left",
-          hozAlign: "left",
-          headerSort: false,
-          formatter: (cell) => {
-            const active =
-              cell.getValue() === true || cell.getValue() === 1;
-
-            return active
-              ? `<span class="new_badge new_badge-success">ACTIVE</span>`
-              : `<span class="new_badge new_badge_inactive">INACTIVE</span>`;
-          },
-        },
-        {
-          title: "Actions",
-          width: 160,
-          hozAlign: "center",
-          headerHozAlign: "center",
-          headerSort: false,
-          formatter: function () {
-            const wrap = document.createElement("div");
-            wrap.style.cssText =
-              "display:flex;gap:5px;justify-content:center;align-items:center;";
-
-            const editBtn = document.createElement("button");
-            editBtn.className = "cl-edit-btn edit-btn";
-            editBtn.innerHTML = `<i class="fas fa-pen"></i> Edit`;
-
-            const delBtn = document.createElement("button");
-            delBtn.className = "cl-del-btn delete-btn";
-            delBtn.innerHTML = `<i class="fas fa-trash"></i>`;
-
-            wrap.appendChild(editBtn);
-            wrap.appendChild(delBtn);
-
-            return wrap;
-          },
-          cellClick: (e, cell) => {
-            const btn = e.target.closest("button");
-            if (!btn) return;
-
-            const rowData = cell.getData();
-
-            if (btn.classList.contains("edit-btn")) {
-              setModalConfig({ type: "edit", data: rowData });
-            } else if (btn.classList.contains("delete-btn")) {
-              handleDelete(rowData);
-            }
-          },
+          icon: "fas fa-trash",
+          className: "cl-del-btn",
+          onClick: (row) => handleDelete(row),
         },
       ],
-    });
-
-    return () => tabulatorRef.current?.destroy();
-  }, [searchValue, isSuper]);
+    },
+  ];
 
   if (!authChecked) return null;
 
   if (!isSuper) {
     return (
-      <div className="cl-wrap">
-        <div className="cl-card tbl-purple p-5 text-center">
-          <i className="fas fa-lock fa-2x text-muted mb-3" />
-          <h4 className="fw-bold text-dark">Access restricted</h4>
-          <p className="text-muted mb-0">
-            Vendor login credentials are visible only to Super Admins.
-          </p>
-        </div>
+      <div className="cl-wrap text-center p-5">
+        <h4>Access restricted</h4>
       </div>
     );
   }
 
   return (
     <div className="cl-wrap">
-      <CmnHeader title="Vendor Login Credentials" subtitle="Manage encrypted vendor portal logins (Super Admin only)" icon1={"fas fa-key"} icon="iwl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Credential" />
+      <CmnHeader
+        title="Vendor Login Credentials"
+        subtitle="Manage encrypted vendor portal logins"
+        icon1="fas fa-key"
+        actionBtn={() => setModalConfig({ type: "add", data: null })}
+        actionName="Add Credential"
+      />
 
+      {/* Search */}
       <div className="cl-search-wrap">
-        <div className="cl-search-inner">
-          <i className="fas fa-search cl-search-icon" />
-          <input
-            type="text"
-            className="cl-search-input"
-            placeholder="Search vendor credentials…"
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              tabulatorRef.current?.replaceData();
-            }}
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
 
-        <button
-          className="cl-search-btn"
-          onClick={() => tabulatorRef.current?.replaceData()}
-        >
-          <i className="fas fa-search" /> Search
-        </button>
+        <button onClick={() => fetchData(searchValue)}>Search</button>
 
         {searchValue && (
           <button
-            className="cl-clear-btn"
             onClick={() => {
               setSearchValue("");
-              tabulatorRef.current?.replaceData();
+              fetchData("");
             }}
           >
             Clear
@@ -294,15 +208,18 @@ const VendorLoginCredentialsList = () => {
         )}
       </div>
 
-      <div className="cl-card tbl-purple">
-        <div ref={tableRef} />
-      </div>
+      {/* ✅ Only CommonTable */}
+      <CommonTable
+        config={tableConfig}
+        data={vendorsLoginCredentials}
+        isSearchable={false}
+      />
 
       {modalConfig.type && (
         <VendorLoginCredentialModals
           config={modalConfig}
           onClose={() => setModalConfig({ type: null, data: null })}
-          onRefresh={refreshTable}
+          onRefresh={() => fetchData(searchValue)}
           credentialVendorIds={credentialVendorIds}
           vendorsList={vendorsList}
         />

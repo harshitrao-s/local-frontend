@@ -105,7 +105,6 @@ const InventoryWarehouseList = () => {
     {
       title: "Warehouse Name",
       field: "warehouse_name",
-      render: (val) => <b>{val}</b>,
     },
     {
       title: "Location",
