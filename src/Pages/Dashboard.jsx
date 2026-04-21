@@ -122,6 +122,7 @@ const Dashboard = () => {
           <h3 style={{ fontWeight: 600, fontSize: 20, margin: 0 }}>Dashboard</h3>
           <small style={{ color: "#e05c5c", fontSize: 12 }}></small>
         </div>
+
         <div className="d-flex gap-2">
           <button
             onClick={() => handleAddNew()}
