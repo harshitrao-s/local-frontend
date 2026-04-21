@@ -21,7 +21,7 @@ const PaymentTermsList = () => {
     nextNextMonthLastDay: "Last day of Next to Next Month",
   };
 
-  // ✅ FETCH DATA
+  // ✅ FETCH DATA (STABLE)
   const fetchData = useCallback(async (search = "") => {
     setLoading(true);
     try {
@@ -36,9 +36,18 @@ const PaymentTermsList = () => {
     setLoading(false);
   }, []);
 
+  // ✅ INITIAL LOAD ONLY ONCE
   useEffect(() => {
-    fetchData();
+    fetchData("");
   }, [fetchData]);
+
+  // ✅ STABLE SEARCH HANDLER (VERY IMPORTANT)
+  const handleSearch = useCallback(
+    (val) => {
+      fetchData(val);
+    },
+    [fetchData]
+  );
 
   // ✅ DELETE
   const handleDelete = async (id) => {
@@ -69,7 +78,7 @@ const PaymentTermsList = () => {
     });
   };
 
-  // ✅ TABLE CONFIG (IMPORTANT)
+  // ✅ TABLE CONFIG
   const tableConfig = [
     {
       title: "Name",
@@ -90,12 +99,11 @@ const PaymentTermsList = () => {
 
         return (
           <span
-            className={`px-2 py-1 rounded-full text-[11px] font-bold border
-              ${
-                isPrepaid
-                  ? "bg-blue-100 text-blue-700 border-blue-200"
-                  : "bg-yellow-100 text-yellow-700 border-yellow-200"
-              }`}
+            className={`px-2 py-1 rounded-full text-[11px] font-bold border ${
+              isPrepaid
+                ? "bg-blue-100 text-blue-700 border-blue-200"
+                : "bg-yellow-100 text-yellow-700 border-yellow-200"
+            }`}
           >
             {isPrepaid ? "Prepaid" : "Postpaid"}
           </span>
@@ -170,8 +178,7 @@ const PaymentTermsList = () => {
       <CmnHeader
         title="Payment Terms"
         subtitle="Manage vendor payment terms"
-        icon1={"fas fa-file-invoice-dollar"}
-        // icon="ptl-add-btn"
+        icon1="fas fa-file-invoice-dollar"
         actionBtn={() =>
           setModalConfig({ type: "add", data: null })
         }
@@ -180,12 +187,12 @@ const PaymentTermsList = () => {
 
       {/* TABLE */}
       <CommonTable
-        title=""
         config={tableConfig}
         data={tableData}
+        loading={loading}
         isSearchable={true}
         searchFromApi={true}
-        onSearch={(val) => fetchData(val)}
+        onSearch={handleSearch}
         isSortable={true}
       />
 
@@ -196,7 +203,7 @@ const PaymentTermsList = () => {
           onClose={() =>
             setModalConfig({ type: null, data: null })
           }
-          onRefresh={fetchData}
+          onRefresh={() => fetchData()}
         />
       )}
     </div>

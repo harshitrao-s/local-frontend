@@ -4,6 +4,7 @@ import { API_BASE } from "../../Config/api";
 import CategoryModal from "./CategoryModal";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../Utils/apiFetch";
+import CmnHeader from "../../Components/Common/CmnHeader";
 const CategoryManagement = () => {
   const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
@@ -12,6 +13,7 @@ const CategoryManagement = () => {
     mode: 'add',
     initialData: null
   });
+  const [categoriesmanagementdata, setCategoriesmanagementdata] = useState([])
   const [main_categories, setMain_categories] = useState([]);
   // --- Handlers ---
   const openModal = (mode, data = null) => {
@@ -121,6 +123,69 @@ const CategoryManagement = () => {
     }
   ];
 
+  const tableConfig = [
+    {
+      title: "Name",
+      field: "name",
+      render: (row) => (
+        <span className="fw-bold text-dark">{row.name}</span>
+      ),
+    },
+    {
+      title: "Type",
+      field: "is_primary",
+      render: (row) => {
+        const isPrimary = row.is_primary === 1;
+
+        return (
+          <span
+            className={`new_badge fw-bold ${isPrimary ? "badge-success" : "badge-secondary"
+              }`}
+            style={{
+              minWidth: "70px",
+              textAlign: "center",
+              display: "inline-block",
+            }}
+          >
+            {isPrimary ? "Primary" : "Secondary"}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Status",
+      field: "status",
+      render: (row) => {
+        const isActive = row.status === 1;
+
+        return (
+          <span
+            className={`new_badge fw-bold ${isActive ? "badge-success" : "badge-secondary"
+              }`}
+          >
+            {isActive ? "Active" : "In-active"}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Actions",
+      type: "actions",
+      actions: [
+        {
+          label: "Edit",
+          icon: "fas fa-pen",
+          onClick: (row) => openModal("edit", row),
+        },
+        {
+          label: "Delete",
+          icon: "fas fa-trash",
+          onClick: (row) => handleDelete(row.category_id),
+        },
+      ],
+    },
+  ];
+
   useEffect(() => {
     tabulatorRef.current = new Tabulator(tableRef.current, {
       layout: "fitColumns",
@@ -164,12 +229,17 @@ const CategoryManagement = () => {
 
   return (
     <div className="p-0">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h3 className="mb-0 fw-bold">Category Management</h3>
-        <button className="btn btn-dark" onClick={() => openModal('add')}>
-          <i className="fas fa-plus me-2"></i>Add Category
-        </button>
-      </div>
+
+
+      <CmnHeader
+        title={"Category Management"}
+        subtitle={"Manage categories"}
+        icon1={"fas fa-layer-group"}
+        actionName={"Add Category"}
+        actionBtn={() => {
+          openModal('add')
+        }}
+      />
 
       <div className="card mb-3">
         <div className="card-body">

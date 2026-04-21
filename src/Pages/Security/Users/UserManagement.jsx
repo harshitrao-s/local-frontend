@@ -1,144 +1,131 @@
-import React, { useEffect, useRef, useState } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
+import React, { useEffect, useState } from "react";
 import { API_BASE } from "../../../Config/api";
 import UserModals from "./UserModals";
 import { apiFetch } from "../../../Utils/apiFetch";
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import CommonTable from "../../../Components/Common/CmnTable";
 
 const UserManagement = () => {
-    const tableRef = useRef(null);
-    const tabulatorRef = useRef(null);
-
-    // Config for Modals
     const [modalConfig, setModalConfig] = useState({ type: null, data: null });
-    // Dynamic roles fetched from the list API
     const [availableRoles, setAvailableRoles] = useState([]);
+    const [tableData, setTableData] = useState([]);
 
-    const refreshTable = () => {
-        if (tabulatorRef.current) tabulatorRef.current.setData();
+    const fetchUsers = async (search = "") => {
+        try {
+            const res = await apiFetch(`${API_BASE}api/users?search=${search}`);
+            if (res?.roles) setAvailableRoles(res.roles);
+            setTableData(res?.data || []);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     useEffect(() => {
-        tabulatorRef.current = new Tabulator(tableRef.current, {
-            ajaxURL: `${API_BASE}api/users`,
-            layout: "fitColumns",
-            height: "600px",
-            pagination: true,
-            paginationMode: "remote",
-            paginationSize: 20,
-
-            // Intercept response to get both Users and the Roles list
-            ajaxResponse: (url, params, response) => {
-                if (response.roles) setAvailableRoles(response.roles);
-                return {
-                    data: response.data || [],
-                    last_page: response.last_page || 1
-                };
-            },
-            ajaxRequestFunc: async function (url, config, params) {
-                const query = new URLSearchParams({
-                    ...params,
-                    page: params.page || 1,
-                    size: params.size || 20,
-                }).toString();
-
-                return await apiFetch(`${url}?${query}`);
-            },
-            columns: [
-                {
-                    title: "Name", field: "name", minWidth: 150, headerSort: false, headerHozAlign: "center",
-                    hozAlign: "center",
-                },
-                {
-                    title: "Email", field: "email", minWidth: 200, headerSort: false, headerHozAlign: "center",
-                    hozAlign: "center",
-                },
-                {
-                    title: "Roles",
-                    field: "role", headerSort: false,
-                    headerHozAlign: "center",
-                    hozAlign: "center",
-                    formatter: (cell) => `<span class="new_badge bg-info  ">${cell.getValue() || 'No Role'}</span>`
-                },
-                {
-                    title: "Status",
-                    field: "status",
-                    hozAlign: "center", headerSort: false,
-                    headerHozAlign: "center",
-                    hozAlign: "center",
-                    formatter: (cell) => {
-                        const val = cell.getValue();
-                        const color = (val === "Active" || val === 1) ? "bg-success" : "bg-secondary";
-                        return `<span class="new_badge ${color} ">${val === 1 ? 'Active' : 'Inactive'}</span>`;
-                    }
-                },
-                {
-                    title: "System User",
-                    field: "is_system",
-                    hozAlign: "center", headerSort: false,
-                    headerHozAlign: "center",
-                    hozAlign: "center",
-                    formatter: (cell) => {
-                        const val = cell.getValue();
-                        const color = val ? "bg-warning text-dark" : "bg-light text-muted border";
-                        return `<span class="new_badge ${color} ">${val ? 'Yes' : 'No'}</span>`;
-                    }
-                },
-                {
-                    title: "Actions",
-                    width: 150,
-                    hozAlign: "center",
-                    headerHozAlign: "center",
-                    hozAlign: "center",
-                    headerSort: false,
-                    formatter: function (cell) {
-                        const d = cell.getData();
-                        const container = document.createElement("div");
-                        container.className = "d-flex gap-2 justify-content-center";
-
-                        const pwdBtn = document.createElement("button");
-                        pwdBtn.className = "btn btn-sm btn-outline-warning";
-                        pwdBtn.title = "Reset Password";
-                        pwdBtn.innerHTML = `<i class="fas fa-key"></i>`;
-                        pwdBtn.onclick = () => setModalConfig({ type: 'password', data: d });
-
-                        const editBtn = document.createElement("button");
-                        editBtn.className = "btn btn-sm btn-outline-success";
-                        editBtn.title = "Edit User";
-                        editBtn.innerHTML = `<i class="fas fa-pen"></i>`;
-                        editBtn.onclick = () => setModalConfig({ type: 'edit', data: d });
-
-                        container.appendChild(pwdBtn);
-                        container.appendChild(editBtn);
-                        return container;
-                    }
-                }
-            ],
-        });
-        return () => tabulatorRef.current?.destroy();
+        fetchUsers();
     }, []);
+
+    const tableConfig = [
+        {
+            title: "Name",
+            field: "name",
+        },
+        {
+            title: "Email",
+            field: "email",
+        },
+        {
+            title: "Roles",
+            field: "role",
+            render: (val) => (
+                <span className="new_badge new_badge-pending">
+                    {val || "No Role"}
+                </span>
+            ),
+        },
+        {
+            title: "Status",
+            field: "status",
+            render: (val) => {
+                const isActive = val === "Active" || val === 1;
+                return (
+                    <span
+                        className={`new_badge ${isActive ? "new_badge-success" : "new_badge_inactive"
+                            }`}
+                    >
+                        {isActive ? "Active" : "Inactive"}
+                    </span>
+                );
+            },
+        },
+        {
+            title: "System User",
+            field: "is_system",
+            render: (val) => (
+                <span
+                    className={`new_badge ${val
+                        ? "new_badge-success"
+                        : "new_badge_inactive"
+                        }`}
+                >
+                    {val ? "Yes" : "No"}
+                </span>
+            ),
+        },
+        {
+            title: "Actions",
+            field: "actions",
+            render: (_, row) => (
+                <div className="flex gap-2 ">
+                    <button
+                        className="px-2 py-1 text-sm border rounded text-yellow-600 border-yellow-400"
+                        onClick={() =>
+                            setModalConfig({ type: "password", data: row })
+                        }
+                    >
+                        <i className="fas fa-key"></i>
+                    </button>
+
+                    <button
+                        className="px-2 py-1 text-sm border rounded text-green-600 border-green-400"
+                        onClick={() =>
+                            setModalConfig({ type: "edit", data: row })
+                        }
+                    >
+                        <i className="fas fa-user-edit"></i>
+                    </button>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <div className="p-0">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="mb-0 fw-bold">User Management</h3>
-                <button
-                    className="btn btn-dark shadow-sm px-4"
-                    onClick={() => setModalConfig({ type: 'add', data: null })}
-                >
-                    <i className="fas fa-plus-circle me-2"></i> Add User
-                </button>
-            </div>
+            <CmnHeader
+                title="User Management"
+                subtitle="Manage system users, roles & access"
+                icon1="fas fa-users-cog"   // ✅ Better icon
+                actionBtn={() => setModalConfig({ type: "add", data: null })}
+                actionName="Add User"     // ✅ Fixed naming
+            />
 
-            <div className="card shadow-sm border-0 rounded-3">
-                <div ref={tableRef}></div>
+            <div className="card shadow-sm border-0 rounded-3 p-3">
+                <CommonTable
+                    config={tableConfig}
+                    data={tableData}
+                    isSearchable={true}
+                // searchFromApi={true}
+                // onSearch={fetchUsers}
+                />
             </div>
 
             {modalConfig.type && (
                 <UserModals
                     config={modalConfig}
                     availableRoles={availableRoles}
-                    onClose={() => setModalConfig({ type: null, data: null })}
-                    onRefresh={refreshTable}
+                    onClose={() =>
+                        setModalConfig({ type: null, data: null })
+                    }
+                    onRefresh={fetchUsers}
                 />
             )}
         </div>
