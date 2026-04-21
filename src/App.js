@@ -7,8 +7,9 @@ import "./Assets/dist/css/adminlte.min.css";
 import ROCKET_LOADER from "./Assets/dist/img/loading_rocket.gif";
 import "./Assets/dist/css/app-custom.css";
 import "./Assets/dist/css/erp-theme.css";
-
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import "./Assets/plugins/icheck-bootstrap.min.css";
 import "./Assets/plugins/fontawesome-free/css/all.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
