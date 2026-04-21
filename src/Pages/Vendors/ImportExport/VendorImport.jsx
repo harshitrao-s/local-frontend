@@ -232,7 +232,7 @@ const VendorImportIndex = () => {
     };
 
     return (
-        <div className="mt-">
+        <div className="mt-0">
             <StickyHeader>
                 <div className="d-flex justify-content-between mb-2">
                     <h5 className="fw-bold py-1 ps-0">
