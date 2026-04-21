@@ -1,12 +1,8 @@
 import { useState } from "react";
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Label
-} from "recharts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShoppingCart, faBoxOpen, faUsers, faDollarSign,
-  faPlus, faEye, faChevronDown, faArrowTrendUp,
+  faPlus, faEye, faArrowTrendUp,
   faSpinner
 } from "@fortawesome/free-solid-svg-icons";
 import apiFetch from "../Utils/apiFetch";
@@ -22,14 +18,6 @@ import TopProductList from "../Components/DashboardCharts/TopProductList";
 // <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 const FONT = "'Inter', system-ui, sans-serif";
-
-
-const poStatusData = [
-  { name: "Placed", value: 720, color: "#4e9af1" },
-  { name: "Receipted", value: 310, color: "#f5a623" },
-  { name: "Completed", value: 185, color: "#4caf8a" },
-  { name: "Cancelled", value: 43, color: "#e05c5c" },
-];
 
 
 
@@ -119,7 +107,7 @@ const Dashboard = () => {
       {/* Top bar */}
       <div className="d-flex justify-content-between align-items-center mb-1">
         <div>
-          <h3 style={{ fontWeight: 600, fontSize: 20, margin: 0 }}>Dashboard</h3>
+          <h3 className="text-black">Dashboard</h3>
           <small style={{ color: "#e05c5c", fontSize: 12 }}></small>
         </div>
 

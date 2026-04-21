@@ -50,7 +50,7 @@ export default function Topbar() {
 
 
   return (
-    <nav className="main-header navbar navbar-expand text-sm border-bottom-0 bg-body-tertiary shadow-sm">
+    <nav className="">
 
       <div className="navbar-nav w-100 d-flex justify-content-center">
 
