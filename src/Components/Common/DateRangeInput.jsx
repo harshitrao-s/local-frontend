@@ -1,6 +1,5 @@
 import React from 'react';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
-import 'bootstrap-daterangepicker/daterangepicker.css';
+
 import moment from 'moment';
 
 const DateRangeInput = ({ 

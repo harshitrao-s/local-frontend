@@ -1,8 +1,7 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import Lottie from "lottie-react";
 import data from "./Assets/dist/img/sb_logo.json";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 
 import "./Assets/dist/css/adminlte.min.css";
 import ROCKET_LOADER from "./Assets/dist/img/loading_rocket.gif";
@@ -12,7 +11,6 @@ import "./Assets/dist/css/erp-theme.css";
 
 import "./Assets/plugins/icheck-bootstrap.min.css";
 import "./Assets/plugins/fontawesome-free/css/all.min.css";
-import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { LayoutProvider } from "./Context/LayoutContext";
