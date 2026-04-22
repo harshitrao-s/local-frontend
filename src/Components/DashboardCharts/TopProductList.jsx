@@ -1,83 +1,59 @@
-import React from 'react'
-const FONT = "'Inter', system-ui, sans-serif";
-const TopProductList = () => {
+import React from 'react';
+import { ArrowUpRight, Box, Users } from 'lucide-react';
 
+
+const ListCard = ({ title, data, type }) => {
+  return (
+    <div 
+      className="flex flex-col w-full xl:max-w-[513px] min-h-[100px] rounded-[20px] p-[16px] border border-gray-200 bg-white"
+    >
+      {/* Header */}
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-[16px] font-semibold text-[#454545]">{title}</h3>
+        <button className="flex items-center gap-1 text-[12px] text-[#3D3D3D] hover:text-gray-800 transition-colors">
+          Show All <ArrowUpRight size={16} />
+        </button>
+      </div>
+
+      {/* List Body */}
+      <div className="flex flex-col gap-3 overflow-hidden">
+        {data.map((item, index) => (
+          <div key={index} className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="text-gray-400">
+                {type === "product" ? <Box size={18} /> : <Users size={18} />}
+              </div>
+              <span className="text-[12px] text-[#737373] font-400">
+                {item.name}
+              </span>
+            </div>
+            <span className="text-[12px] font-bold text-[#101011]">
+              {item.count.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+  const TopProductList = () => {
     const topProducts = [
-        { name: "Vitamin C 500mg", count: 1200 },
-        { name: "Organic Protein Power", count: 850 },
-        { name: "Herbal Sleep Aid", count: 760 },
-        { name: "Fish Oil 1000mg", count: 640 },
+      { name: "Vitamin C 500mg", count: 1200 },
+      { name: "Organic Protein Power", count: 850 },
     ];
-
+  
     const topVendors = [
-        { name: "PharmaSource Inc.", count: 354 },
-        { name: "GreenLeaf Supplies", count: 287 },
-        { name: "HealthFirst Ltd.", count: 243 },
-        { name: "Wellness International", count: 198 },
+      { name: "GreenLeaf Supplies", count: 287 },
+      { name: "Wellness International", count: 198 },
     ];
-
+  
     return (
-        <div>
-            {[
-                { title: "Top Products", data: topProducts, keyName: "name", keyVal: "count" },
-                { title: "Top Vendors", data: topVendors, keyName: "name", keyVal: "count" },
-            ].map(({ title, data, keyName, keyVal }) => (
-
-                <div
-                    key={title}
-                    className="card  margin_none border shadow-sm d-flex flex-column"
-                    style={{
-                        borderRadius: 10,
-                        fontFamily: FONT,
-                        flex: 1,                // 🔥 important (equal height)
-                        minHeight: 0,            // 🔥 prevents overflow issues
-                        marginBottom: "0px !important"
-                    }}
-                >
-
-                    <div
-                        className="card-header"
-                        style={{
-                            background: "#fff",
-                            borderBottom: "0.5px solid #e5e7eb",
-                            borderRadius: "10px 10px 0px 0px"
-                        }}
-                    >
-                        <h6 style={{ fontWeight: 600, fontSize: 13, margin: 0 }}>
-                            {title}
-                        </h6>
-                    </div>
-
-                    <div className="card-body overflow-auto">
-                        {data.map((item, i) => (
-                            <div key={i} className="d-flex justify-content-between align-items-center mb-2">
-                                <span style={{ fontSize: 12, color: "#374151" }}>
-                                    {item[keyName]}
-                                </span>
-                                <span style={{ fontSize: 12, fontWeight: 500 }}>
-                                    {item[keyVal].toLocaleString()}
-                                </span>
-                            </div>
-                        ))}
-
-                        {title === "Top Vendors" && (
-                            <div className="text-end mt-1">
-                                <span style={{
-                                    fontSize: 12,
-                                    color: "#4e9af1",
-                                    cursor: "pointer",
-                                    fontWeight: 500
-                                }}>
-                                    View All ›
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                </div>
-            ))}
+      <div className='flex flex-col gap-4 '>
+        <ListCard title="Top Products" data={topProducts} type="product" />
+        <ListCard title="Top Vendors" data={topVendors} type="vendor" />
         </div>
-    )
-}
-
-export default TopProductList
+    );
+  };
+  
+  export default TopProductList;

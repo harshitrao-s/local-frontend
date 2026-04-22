@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Logo from "../../Assets/dist/img/logo.png";
 import SmallLogo from "../../Assets/dist/img/smalllogo.png";
-import { IoIosArrowBack } from "react-icons/io";
 import {
   MdKeyboardArrowDown,
 

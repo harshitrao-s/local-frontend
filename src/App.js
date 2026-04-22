@@ -144,7 +144,7 @@ const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex  bg-gray-100">
 
       {/* Sidebar */}
       <div
@@ -183,7 +183,7 @@ const MainLayout = ({ children }) => {
         </div>
 
         {/* Content */}
-        <div className="p-4 overflow-y-auto flex-1 bg-[#f3f4f6]">
+        <div className="p-8 flex-1 bg-[#f3f4f6]">
           {children}
         </div>
       </div>

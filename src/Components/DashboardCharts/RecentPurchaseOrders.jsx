@@ -6,6 +6,7 @@ const RecentPurchaseOrders = () => {
         { id: "PO0318", vendor: "HealthFirst Ltd.", date: "16 Apr 2024", status: "Placed", statusColor: "primary", total: "7,220.00 AUD", poTotal: "8,400.00 AUD" },
         { id: "PO0317", vendor: "GreenLeaf Supplies", date: "16 Apr 2024", status: "Completed", statusColor: "success", total: "1,250.00 AUD", poTotal: "9,200.00 AUD" },
         { id: "PO0316", vendor: "GreenLeaf Supplies", date: "15 Apr 2024", status: "Cancelled", statusColor: "danger", total: "2,220.00 AUD", poTotal: "2,200.00 AUD" },
+        { id: "PO0316", vendor: "GreenLeaf Supplies", date: "15 Apr 2024", status: "Cancelled", statusColor: "danger", total: "2,220.00 AUD", poTotal: "2,200.00 AUD" },
     ];
     return (
         <div>

@@ -9,7 +9,6 @@ import { API_ENDPOINTS } from "../Config/api";
 import { Eye, EyeOff } from "lucide-react"
 import { Input } from "../Components/Common/ui/input";
 import { Button } from "../Components/Common/ui/button";
-import { motion, AnimatePresence } from "framer-motion"
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -70,112 +69,6 @@ const LoginPage = () => {
   };
 
   return (
-    // <div className="bg-light min-vh-100 d-flex align-items-center py-5">
-    //   <div className="container">
-    //     <div className="row justify-content-center">
-    //       <div className="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
-
-    //         {/* Logo */}
-    //         <div className="text-center mb-4">
-    //           <img
-    //             src={full_logo_img}
-    //             alt="ShopperBeats Logo"
-    //             className="img-fluid mb-3"
-    //             style={{ maxHeight: "60px" }}
-    //           />
-    //           <h4 className="fw-bold">Admin Portal</h4>
-    //           <p className="text-muted small">
-    //             Please enter your credentials to continue
-    //           </p>
-    //         </div>
-
-    //         {/* Login Card */}
-    //         <div className="card border-0 shadow-sm rounded-4">
-    //           <div className="card-body p-4 p-md-5">
-    //             <form onSubmit={handleLogin}>
-
-    //               {/* Email */}
-    //               <div className="mb-3">
-    //                 <label className="form-label small fw-bold text-muted text-uppercase">
-    //                   Email
-    //                 </label>
-    //                 <div className="input-group">
-    //                   <span className={`input-group-text bg-white border-end-0 ${
-    //                       loginError ? "input-error" : ""
-    //                     }`}>
-    //                     <i className="fas fa-envelope text-muted"></i>
-    //                   </span>
-    //                   <input
-    //                     type="email"
-    //                     value={email}
-    //                     className={`form-control border-start-0 ps-0 ${
-    //                       loginError ? "input-error" : ""
-    //                     }`}
-    //                     placeholder="Email address"
-    //                     onChange={(e) => {
-    //                       setEmail(e.target.value);
-    //                       if (loginError) setLoginError(false);
-    //                     }}
-    //                     required
-    //                   />
-    //                 </div>
-    //               </div>
-
-    //               {/* Password */}
-    //               <div className="mb-4">
-    //                 <label className="form-label small fw-bold text-muted text-uppercase">
-    //                   Password
-    //                 </label>
-    //                 <div className="input-group">
-    //                   <span className={`input-group-text bg-white border-end-0 ${
-    //                       loginError ? "input-error" : ""
-    //                     }`}>
-    //                     <i className="fas fa-lock text-muted"></i>
-    //                   </span>
-    //                   <input
-    //                     type="password"
-    //                     value={password}
-    //                     className={`form-control border-start-0 ps-0 ${
-    //                       loginError ? "input-error" : ""
-    //                     }`}
-    //                     placeholder="••••••••"
-    //                     onChange={(e) => {
-    //                       setPassword(e.target.value);
-    //                       if (loginError) setLoginError(false);
-    //                     }}
-    //                     required
-    //                   />
-    //                 </div>
-    //               </div>
-
-    //               {/* Button */}
-    //               <button
-    //                 type="submit"
-    //                 className="btn btn-dark w-100 py-2 fw-bold rounded-3"
-    //                 disabled={loading}
-    //               >
-    //                 {loading && (
-    //                   <span className="spinner-border spinner-border-sm me-2"></span>
-    //                 )}
-    //                 Login
-    //               </button>
-
-    //             </form>
-    //           </div>
-    //         </div>
-
-    //         {/* Footer */}
-    //         <div className="text-center mt-4">
-    //           <p className="text-muted small">
-    //             © {new Date().getFullYear()} ShopperBeats. All rights reserved.
-    //           </p>
-    //         </div>
-
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">
       {/* Left Side */}
       <div className="w-full lg:w-1/2 flex justify-center items-center px-4 sm:px-6 md:px-10 lg:px-16 py-8">
@@ -221,7 +114,7 @@ const LoginPage = () => {
                       if (loginError) setLoginError(false)
                     }}
                     placeholder="yogavvijaya@gmail.com"
-                    className={`w-full h-[48px] md:h-[52px] px-4 border rounded-[30px] focus:ring-2 focus:ring-red-500 ${loginError ? "border-red-500" : "border-gray-300"
+                    className={`w-full h-[48px] md:h-[52px] px-4 border rounded-[30px] focus:ring-2 focus:ring-blue-800 ${loginError ? "border-red-500" : "border-gray-300"
                       }`}
                   />
                 </div>
@@ -291,51 +184,7 @@ const LoginPage = () => {
 
       {/* Login Animation after click on button */}
 
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.div
-            className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="bg-white px-8 py-6 rounded-2xl shadow-xl flex flex-col items-center gap-3"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            >
-              {/* Animated Check */}
-              <motion.div
-                className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring" }}
-              >
-                <motion.span
-                  className="text-green-600 text-xl font-bold"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  ✓
-                </motion.span>
-              </motion.div>
-
-              {/* Text */}
-              <motion.p
-                className="text-gray-800 font-semibold text-sm"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                Login Successful
-              </motion.p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+     
     </div>
   );
 };
