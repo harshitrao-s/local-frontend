@@ -1,6 +1,13 @@
 import React, { Fragment } from "react";
 
-const CmnHeader = ({ title, subtitle, icon1,  icon = "iwl-add-btn", actionBtn, actionName }) => {
+const CmnHeader = ({
+    title,
+    subtitle,
+    icon1,
+    icon = "iwl-add-btn",
+    actionBtn,
+    actionName
+}) => {
     return (
         <Fragment>
             {/* Header */}
@@ -16,19 +23,18 @@ const CmnHeader = ({ title, subtitle, icon1,  icon = "iwl-add-btn", actionBtn, a
                         </p>
                     </div>
                 </div>
-{actionName && 
-                <button
-                    className={`${icon}`}
-                    onClick={() =>
-                        actionBtn()
-                    }
-                >
-                    + {actionName}
-                </button>}
+
+                {actionName && actionBtn && (
+                    <button
+                        className={`${icon}`}
+                        onClick={actionBtn}   // ✅ FIXED
+                    >
+                        + {actionName}
+                    </button>
+                )}
             </div>
-
         </Fragment>
-    )
-}
+    );
+};
 
-export default CmnHeader
+export default CmnHeader;

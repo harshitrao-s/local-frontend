@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-h1, h2, h3, h4, h5, h6 ,p , label {
+h1, h2, h3, h4, h5, h6 ,p , label{
   margin-bottom: unset !important;
   margin-top: unset !important;
 }
@@ -141,7 +141,7 @@ body {
   background: white;
   padding: 20px !important;
   border-radius: 12px;
-  height: calc(100vh - 92px);
+  height: calc(100vh - 100px);
   overflow-x: hidden;
   overflow-y: auto;
 }
