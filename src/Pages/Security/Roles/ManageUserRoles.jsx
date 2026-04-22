@@ -84,7 +84,7 @@ const ManageUserRoles = () => {
       field: "user_count",
       render: (val) => (
         <div>
-          <span className="badge bg-light text-dark border">
+          <span className="new_badge bg-light text-dark border">
             <i className="fas fa-users me-1"></i>
             {val} Users
           </span>
@@ -133,13 +133,12 @@ const ManageUserRoles = () => {
       />
 
       {/* ✅ Table Card */}
-      <div className="card shadow-sm border-0 p-3 rounded-3">
-        <CommonTable
-          config={tableConfig}
-          data={data}
-          isSearchable={true}
-        />
-      </div>
+      <CommonTable
+        config={tableConfig}
+        data={data}
+        isSearchable={true}
+      />
+
 
       {/* ✅ Modal */}
       {modalConfig.show && (

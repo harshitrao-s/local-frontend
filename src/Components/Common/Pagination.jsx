@@ -41,7 +41,7 @@ const Pagination = ({
         <button
           onClick={handlePrev}
           disabled={currentPage === 1}
-          className="pagination-select p-[8px]"
+          className="pagination-select p-[8px] radius-[8px]"
         >
           {SbAdminSvg.leftIconSvg}
         </button>
@@ -50,7 +50,7 @@ const Pagination = ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="pagination-select p-[8px]"
+          className="pagination-select p-[8px] radius-[8px]"
         >
           {SbAdminSvg.rightIconSvg}
         </button>

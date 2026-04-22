@@ -110,7 +110,7 @@ const BrandManagement = () => {
       title: "Actions",
       field: "actions",
       render: (_, row) => (
-        <div className="d-flex gap-2 justify-content-center">
+        <div className="d-flex gap-2 ">
           <button
             className="btn btn-sm btn-primary"
             onClick={() => openModal("edit", row)}

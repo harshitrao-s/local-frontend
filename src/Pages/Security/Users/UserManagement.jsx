@@ -108,15 +108,14 @@ const UserManagement = () => {
                 actionName="Add User"     // ✅ Fixed naming
             />
 
-            <div className="card shadow-sm border-0 rounded-3 p-3">
-                <CommonTable
-                    config={tableConfig}
-                    data={tableData}
-                    isSearchable={true}
-                // searchFromApi={true}
-                // onSearch={fetchUsers}
-                />
-            </div>
+            <CommonTable
+                config={tableConfig}
+                data={tableData}
+                isSearchable={true}
+            // searchFromApi={true}
+            // onSearch={fetchUsers}
+            />
+
 
             {modalConfig.type && (
                 <UserModals

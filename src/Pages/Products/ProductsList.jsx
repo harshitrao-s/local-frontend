@@ -58,7 +58,7 @@ const ProductsList = () => {
       title: "ACTIONS",
       field: "actions",
       render: (_, row) => (
-        <div className="d-flex gap-2 items-center justify-content-center">
+        <div className="d-flex gap-2 items-center ">
           <Link
             to={`/product/edit/${row.product_id}`}
             className="btn btn-outline-primary btn-sm"

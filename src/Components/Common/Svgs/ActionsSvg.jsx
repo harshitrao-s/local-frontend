@@ -70,5 +70,15 @@ export const SbAdminSvg = {
         <svg xmlns="http://www.w3.org/2000/svg" width="9" height="16" viewBox="0 0 9 16" fill="none">
             <path d="M7.66666 14.3333L0.99999 7.66667L7.66666 1" stroke="#D1D1D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
+    ),
+    arrowDownIconSvg: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+            <path d="M0.99998 1L7.66665 7.66667L14.3333 1" stroke="#454545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    ),
+    arrowUpIconSvg: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+            <path d="M14.3333 7.6665L7.66667 0.999837L1 7.6665" stroke="#454545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
     )
 };
