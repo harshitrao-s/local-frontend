@@ -5,40 +5,9 @@ import Swal from "sweetalert2";
 import { apiFetch } from "../../../Utils/apiFetch";
 import CommonTable from "../../../Components/Common/CmnTable";
 import CmnHeader from "../../../Components/Common/CmnHeader";
+import { SbAdminSvg } from "../../../Components/Common/Svgs/ActionsSvg";
 
-const CSS = `
-  .iwl-header {
-    display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:24px;
-  }
-  .iwl-title-wrap { display:flex;align-items:center;gap:14px; }
-  .iwl-icon {
-    width:38px;height:38px;border-radius:12px;
-    background:#f5f3ff;
-    display:flex;align-items:center;justify-content:center;
-    font-size:16px;
-    box-shadow:0 4px 16px rgba(0,0,0,.2);
-    color:#111827;
-  }
-  .iwl-title { font-size:22px;font-weight:800;color:#0f0f1a;margin:0; }
-  .iwl-subtitle { font-size:12px;color:#9ca3af;margin:0; }
 
-  .iwl-add-btn {
-    padding:10px 20px;border-radius:10px;
-    background:#0f0f1a;color:#fff;border:none;
-    font-size:13px;font-weight:700;cursor:pointer;
-  }
-
-  .iwl-search-wrap {
-    background:#fff;border-radius:12px;padding:14px;
-    border:1px solid #f0f0f5;margin-bottom:16px;
-    display:flex;gap:10px;
-  }
-  .iwl-search-input {
-    flex:1;border:1px solid #e5e7eb;border-radius:8px;
-    padding:8px 12px;font-size:13px;
-  }
-`;
 
 const InventoryWarehouseList = () => {
   const [modalConfig, setModalConfig] = useState({ type: null, data: null });
@@ -144,27 +113,23 @@ const InventoryWarehouseList = () => {
     },
     {
       title: "Actions",
-      type: "actions",
-      // align: "center",
-      actions: [
-        {
-          label: "Edit",
-          icon: "fas fa-pen",
-          onClick: (row) =>
-            setModalConfig({ type: "edit", data: row }),
-        },
-        {
-          label: "Delete",
-          icon: "fas fa-trash",
-          onClick: (row) => handleDelete(row.warehouse_id),
-        },
-      ],
+      field: "created_at",
+      render: (val, row) => (
+        <div className="d-flex gap-2">
+          <div onClick={() => {
+            setModalConfig({ type: "edit", data: row })
+          }} className="cursor-pointer" >{SbAdminSvg.edit}</div>
+          <div className="cursor-pointer" onClick={() => {
+            handleDelete(row.warehouse_id)
+          }}>{SbAdminSvg.delete}</div>
+        </div>
+      ),
     },
+
   ];
 
   return (
     <div>
-      <style>{CSS}</style>
 
       {/* Header */}
       <CmnHeader title="Inventory Warehouse" subtitle="Manage warehouse locations & inventory slots" icon1={"fas fa-warehouse"} icon="iwl-add-btn" actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Location" />

@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
+import "./CommonTable.css";
+import { SbAdminSvg } from "./Svgs/ActionsSvg";
+import SearchBar from "./ui/SearchBar";
+import Pagination from "./Pagination";
 
 const CommonTable = ({
   title = "",
@@ -8,17 +12,18 @@ const CommonTable = ({
   data = [],
   isSearchable = true,
   searchFromApi = false,
-  onSearch = () => {},
+  onSearch = () => { },
   debounceTime = 300,
   isSortable = true,
-  defaultSort = null, // { field: "name", dir: "asc" }
+  defaultSort = null,
+  isPaginated = true,
 }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [columnWidths, setColumnWidths] = useState({});
   const [sortConfig, setSortConfig] = useState(defaultSort);
 
-  // INIT WIDTH
+  // INIT COLUMN WIDTHS
   useEffect(() => {
     const widths = {};
     config.forEach((col, i) => {
@@ -27,11 +32,12 @@ const CommonTable = ({
     setColumnWidths(widths);
   }, [config]);
 
-  // DEBOUNCE
+  // DEBOUNCE SEARCH
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
     }, debounceTime);
+
     return () => clearTimeout(timer);
   }, [search, debounceTime]);
 
@@ -40,7 +46,7 @@ const CommonTable = ({
     if (searchFromApi) onSearch(debouncedSearch);
   }, [debouncedSearch, searchFromApi, onSearch]);
 
-  // LOCAL FILTER
+  // FILTER DATA
   const filteredData = useMemo(() => {
     if (searchFromApi) return data;
     if (!debouncedSearch) return data;
@@ -54,7 +60,7 @@ const CommonTable = ({
     );
   }, [data, debouncedSearch, searchFromApi]);
 
-  // SORTING
+  // SORT DATA
   const processedData = useMemo(() => {
     let result = [...filteredData];
 
@@ -81,7 +87,7 @@ const CommonTable = ({
     return result;
   }, [filteredData, sortConfig, isSortable]);
 
-  // RESIZE
+  // COLUMN RESIZE
   const startResizing = (index, e) => {
     e.preventDefault();
     const startX = e.clientX;
@@ -110,14 +116,18 @@ const CommonTable = ({
     if (!isSortable || col.type === "actions" || !col.field) return;
 
     setSortConfig((prev) => {
-      if (prev?.field === col.field) {
-        if (prev.dir === "asc") return { field: col.field, dir: "desc" };
-        if (prev.dir === "desc") return null;
+      if (prev?.field !== col.field) {
+        return { field: col.field, dir: "asc" };
       }
-      return { field: col.field, dir: "asc" };
+
+      return {
+        field: col.field,
+        dir: prev.dir === "asc" ? "desc" : "asc",
+      };
     });
   };
 
+  // SEARCH HANDLER
   const handleSearch = () => {
     if (searchFromApi) onSearch(search);
     else setDebouncedSearch(search);
@@ -130,18 +140,19 @@ const CommonTable = ({
   };
 
   return (
-    <div className="h-full flex flex-col w-full">
+    <div className="mainTable">
+
       {/* HEADER */}
       {(title || subtitle) && (
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-[38px] h-[38px] rounded-xl bg-purple-50 flex items-center justify-center shadow-md">
+        <div className="mainTable__header">
+          <div className="mainTable__titleBox">
+            <div className="mainTable__icon">
               <i className={icon} />
             </div>
 
             <div>
-              <h3 className="text-[22px] font-extrabold m-0">{title}</h3>
-              <p className="text-xs text-gray-400 m-0">{subtitle}</p>
+              <h3 className="mainTable__title">{title}</h3>
+              <p className="mainTable__subtitle">{subtitle}</p>
             </div>
           </div>
         </div>
@@ -149,141 +160,101 @@ const CommonTable = ({
 
       {/* SEARCH */}
       {isSearchable && (
-        <div className="bg-white rounded-xl p-3 border border-gray-100 mb-3 flex gap-2.5">
-          <div className="relative flex-1">
-            <i className="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
-              className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm outline-none"
-            />
-          </div>
-
-          <button
-            onClick={handleSearch}
-            className="px-4 py-2 rounded-lg bg-[#0f0f1a] text-white text-xs font-bold"
-          >
-            Search
-          </button>
-
-          {search && (
-            <button
-              onClick={clearSearch}
-              className="px-3 py-2 rounded-lg border border-gray-200 text-xs bg-white"
-            >
-              Clear
-            </button>
-          )}
+        <div className="mb-[24px]">
+          <SearchBar
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+          />
         </div>
       )}
 
       {/* TABLE */}
-      <div className="flex-1 min-h-0 bg-white rounded-xl border border-gray-100 overflow-hidden flex flex-col">
-        <div className="flex-1 overflow-auto">
-          <table className="w-full text-sm table-fixed border-collapse">
-            {/* HEADER */}
-            <thead className="bg-gray-50">
-              <tr>
-                {config.map((col, i) => (
-                  <th
-                    key={i}
-                    onClick={() => handleSort(col)}
-                    className="text-xs font-semibold text-gray-500 px-3 py-2 border-b border-gray-200 text-left relative cursor-pointer select-none"
-                    style={{ width: columnWidths[i] }}
-                  >
-                    <div className="flex items-center gap-1">
-                      {col.title}
+      <div className="mainTable__container">
+        <table>
+          <thead>
+            <tr>
+              {config.map((col, i) => (
+                <th
+                  key={i}
+                  onClick={() => handleSort(col)}
+                  style={{ width: columnWidths[i] }}
+                >
+                  <div className="mainTable__thContent">
+                    {col.title}
 
-                      {isSortable && col.field && (
-                        <span className="text-[10px]">
-                          {sortConfig?.field === col.field
-                            ? sortConfig.dir === "asc"
-                              ? "▲"
-                              : sortConfig.dir === "desc"
-                              ? "▼"
-                              : ""
-                            : ""}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* RESIZER */}
-                    <div
-                      onMouseDown={(e) => startResizing(i, e)}
-                      className="absolute right-0 top-0 h-full w-[6px] cursor-col-resize z-10"
-                    />
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            {/* BODY */}
-            <tbody>
-              {processedData.length > 0 ? (
-                processedData.map((row, i) => (
-                  <tr
-                    key={i}
-                    className={`h-[44px] transition ${
-                      i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    } hover:bg-indigo-50`}
-                  >
-                    {config.map((col, j) => (
-                      <td
-                        key={j}
-                        className="px-3 py-2 border-b border-gray-100 truncate"
-                        style={{ width: columnWidths[j] }}
-                      >
-                        {col.type === "actions" ? (
-                          <div className="flex items-center gap-1">
-                            {col.actions?.map((action, idx) => {
-                              const iconClass =
-                                typeof action.icon === "function"
-                                  ? action.icon(row)
-                                  : action.icon;
-
-                              return (
-                                <button
-                                  key={idx}
-                                  onClick={() => action.onClick(row)}
-                                  className={`px-2 py-1 text-[11px] rounded-md border flex items-center gap-1 cursor-pointer
-                                    ${
-                                      action.type === "delete"
-                                        ? "border-red-200 bg-red-50 text-red-700"
-                                        : "border-gray-200 bg-gray-50 text-gray-900"
-                                    }
-                                    ${action.className || ""}
-                                  `}
-                                >
-                                  {iconClass && <i className={iconClass} />}
-                                  {action.label && <span>{action.label}</span>}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : col.render ? (
-                          col.render(row[col.field], row)
+                    {isSortable && col.field && (
+                      <span className="mainTable__sortIcon single">
+                        {sortConfig?.field === col.field ? (
+                          <span>{SbAdminSvg.sortingIcon}</span>
                         ) : (
-                          row[col.field] ?? "—"
+                          <span className="inactive">
+                            {SbAdminSvg.sortingIcon}
+                          </span>
                         )}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={config.length}
-                    className="text-center py-10 text-gray-400"
-                  >
-                    No data found
-                  </td>
+                      </span>
+                    )}
+                  </div>
+
+                  <div
+                    className="mainTable__resizer"
+                    onMouseDown={(e) => startResizing(i, e)}
+                  />
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {processedData.length > 0 ? (
+              processedData.map((row, i) => (
+                <tr key={i}>
+                  {config.map((col, j) => (
+                    <td key={j} style={{ width: columnWidths[j] }}>
+
+                      {/* ✅ ACTIONS COLUMN */}
+                      {col.type === "actions" ? (
+                        col.render ? (
+                          col.render(row, i)
+                        ) : (
+                          <div className="mainTable__actions">
+                            {col.actions?.map((action, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => action.onClick(row)}
+                                className={`mainTable__actionBtn ${action.type === "delete" ? "delete" : ""}`}
+                              >
+                                {action.icon && <i className={action.icon} />}
+                                {action.label}
+                              </button>
+                            ))}
+                          </div>
+                        )
+                      ) : col.render ? (
+                        col.render(row[col.field], row)
+                      ) : (
+                        row[col.field] ?? "—"
+                      )}
+                    </td>
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={config.length} className="mainTable__empty">
+                  No data found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+
+
       </div>
+      {isPaginated && <div className="mt-[24px]">
+        <Pagination />
+
+      </div>}
     </div>
   );
 };
