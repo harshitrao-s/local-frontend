@@ -181,10 +181,6 @@ const LoginPage = () => {
           className="w-full h-full object-cover"
         />
       </div>
-
-      {/* Login Animation after click on button */}
-
-     
     </div>
   );
 };

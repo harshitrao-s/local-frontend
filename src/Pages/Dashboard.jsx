@@ -9,8 +9,6 @@ import TopProductList from "../Components/DashboardCharts/TopProductList";
 import { DollarSign, ShoppingCart, Package, Users, } from "lucide-react";
 import { Button } from "../Components/Common/ui/button";
 
-// ── Inter font (add this in index.html <head> if not already)
-// <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }) => {
   return (
@@ -108,13 +106,12 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Orders - Iska top alignment ab Right side ki tables ke sath match karega */}
+          {/* Recent Orders */}
           <div className="rounded-[20px]">
             <RecentPurchaseOrders />
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
         {/* RIGHT SIDE */}
         <div className="lg:col-span-4 flex flex-col gap-4">
 
@@ -126,7 +123,7 @@ const Dashboard = () => {
             <StatCard title="Vendors" value="125" change="+10.6%" icon={Users} />
           </div>
 
-          {/* Niche wala section ab hamesha Recent Purchase Orders ke parallel rahega */}
+          
           <div className="flex flex-col gap-4">
             <TopProductList />
           </div>
