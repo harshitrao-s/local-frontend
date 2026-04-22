@@ -5,6 +5,7 @@ import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CommonTable from "../../Components/Common/CmnTable";
+import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
 
 const CountriesList = () => {
   const navigate = useNavigate();
@@ -65,21 +66,19 @@ const CountriesList = () => {
     },
     {
       title: "Actions",
-      type: "actions",
-      actions: [
-        {
-          label: "Edit",
-          icon: "fas fa-pen",
-          onClick: (row) =>
-            navigate(`/settings/countries/${row.id}/edit`),
-        },
-        {
-          label: "Delete",
-          icon: "fas fa-trash",
-          onClick: (row) => handleDelete(row.id),
-        },
-      ],
+      field: "created_at",
+      render: (val, row) => (
+        <div className="d-flex gap-2">
+          <div onClick={() => {
+            navigate(`/settings/countries/${row.id}/edit`)
+          }} className="cursor-pointer" >{SbAdminSvg.edit}</div>
+          <div className="cursor-pointer" onClick={() => {
+            handleDelete(row.id)
+          }}>{SbAdminSvg.delete}</div>
+        </div>
+      ),
     },
+
   ];
 
   // Initial load

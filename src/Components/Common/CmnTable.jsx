@@ -198,7 +198,7 @@ const CommonTable = ({
                               : null
                             : col.render
                               ? col.render(row[col.field], row)
-                              : row[col.field] ?? "—"}
+                              : row[col.field] ?? "—"}  
                         </td>
                       ))}
                     </tr>

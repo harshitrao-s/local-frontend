@@ -7,8 +7,6 @@ import CommonTable from "../../../Components/Common/CmnTable";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import { SbAdminSvg } from "../../../Components/Common/Svgs/ActionsSvg";
 
-
-
 const InventoryWarehouseList = () => {
   const [modalConfig, setModalConfig] = useState({ type: null, data: null });
   const [warehouseLocations, setWarehouseLocations] = useState([]);
