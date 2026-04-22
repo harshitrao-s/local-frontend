@@ -1,7 +1,7 @@
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { useEffect, Suspense, lazy, useState } from "react";
 import Lottie from "lottie-react";
 import data from "./Assets/dist/img/sb_logo.json";
-
+import { IoIosArrowBack } from "react-icons/io";
 
 import "./Assets/dist/css/adminlte.min.css";
 import ROCKET_LOADER from "./Assets/dist/img/loading_rocket.gif";
@@ -141,24 +141,54 @@ const ProtectedLayout = ({ children }) => {
 
 // ---------------- Main Layout ----------------
 const MainLayout = ({ children }) => {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <div className="wrapper">
-      <Header />
-      <SideMenu />
+    <div className="flex h-screen bg-gray-100">
 
+      {/* Sidebar */}
       <div
-        className="content-wrapper  min-h-100vh"
-        style={{ minHeight: "auto", backgroundColor: "#f4f6f9" }}
+        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-[64px]" : "w-[250px]"
+          }`}
       >
-        <div className="content-header py-2 px-3">
-          <div className="container-fluid" />
-        </div>
-
-        <section className="content px-3 pb-4">
-          <div className="container-fluid background-wrapper">{children}</div>
-        </section>
+        <SideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
+      {/* Main Area */}
+      <div className="flex flex-col flex-1">
+
+        {/* Header */}
+        <div className="h-[60px] bg-white border-b flex items-center justify-between px-4 shadow-sm">
+          <IoIosArrowBack
+          onClick={() => setCollapsed(!collapsed)}
+          className={`cursor-pointer transition-transform duration-300 ${collapsed ? "rotate-180" : ""
+            }`}
+        />
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              placeholder="Search product"
+              className="px-4 py-1.5 border rounded-full text-sm outline-none"
+            />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <img
+              src="https://i.pravatar.cc/30"
+              alt="user"
+              className="w-8 h-8 rounded-full"
+            />
+            <span className="text-sm font-medium">Guy Hawkins</span>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 overflow-y-auto flex-1 bg-[#f3f4f6]">
+          {children}
+        </div>
+      </div>
+
+      {/* Toaster */}
       <Toaster
         position="top-center"
         gutter={12}
@@ -169,45 +199,31 @@ const MainLayout = ({ children }) => {
         theme="colored"
         toastOptions={{
           style: {
-            padding: "16px 20px",  // inner spacing
+            padding: "16px 20px",
             border: "2px solid #63e90a",
           },
           success: {
-            style: {
-              borderColor: "#22c55e", // green
-            },
+            style: { borderColor: "#22c55e" },
             iconTheme: {
               primary: "#22c55e",
               secondary: "white",
             },
           },
-
           error: {
-            style: {
-              borderColor: "#ef4444", // red
-            },
+            style: { borderColor: "#ef4444" },
             iconTheme: {
               primary: "#ef4444",
               secondary: "white",
             },
           },
-
           loading: {
-            style: {
-              borderColor: "#3b82f6", // blue
-            },
+            style: { borderColor: "#3b82f6" },
           },
-
           custom: {
-            style: {
-              borderColor: "#f59e0b", // orange
-            },
+            style: { borderColor: "#f59e0b" },
           },
         }}
-
       />
-{/* 
-      <Footer /> */}
     </div>
   );
 };

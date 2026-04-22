@@ -1,536 +1,261 @@
-import { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
-import apiFetch from "../../Utils/apiFetch";
-import { API_BASE } from "../../Config/api";
-import { useAuth } from "../../Context/AuthContext";
-import { useLayout } from "../../Context/LayoutContext";
+import React, { useState } from "react";
+import Logo from "../../Assets/dist/img/logo.png";
+import SmallLogo from "../../Assets/dist/img/smalllogo.png";
+import { IoIosArrowBack } from "react-icons/io";
+import {
+  MdKeyboardArrowDown,
 
-export default function Sidebar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  const isSuperAdmin = Boolean(user?.is_superuser);
+  // ICON PAIRS
+  MdOutlineSpaceDashboard,
+  MdDashboard,
+  MdOutlineStore,
+  MdStore,
+  MdOutlineShoppingCart,
+  MdShoppingCart,
+  MdOutlineAssignmentReturn,
+  MdAssignmentReturn,
+  MdOutlineLocalShipping,
+  MdLocalShipping,
+  MdOutlineAttachMoney,
+  MdAttachMoney,
+  MdOutlineInventory,
+  MdInventory,
+  MdOutlineSecurity,
+  MdSecurity,
+  MdOutlineSettings,
+  MdSettings,
+  MdOutlineBusiness,
+  MdBusiness,
+  MdOutlineLogout,
+  MdLogout,
+} from "react-icons/md";
+
+import { NavLink, useLocation } from "react-router-dom";
+
+const Sidebar = ({ collapsed, setCollapsed }) => {
   const [openMenu, setOpenMenu] = useState(null);
-  const [openGroup, setOpenGroup] = useState(null); // Purchases group-ku
-  const [loggingOut, setLoggingOut] = useState(false);
-  const toggleGroup = (key) => setOpenGroup(openGroup === key ? null : key);
-  const [creating, setCreating] = useState(false);
-  const isActive = (path) => location.pathname === path;
-  const isParentActive = (prefix) => location.pathname.startsWith(prefix);
-  const { logout } = useAuth();
-  const { toggleSidebar } = useLayout();
+  const location = useLocation();
 
-
-  // Sync openMenu state with current URL on load and navigation
-  useEffect(() => {
-    const path = location.pathname;
-
-    // =============================
-    // Finance Group — FIRST check பண்ணு
-    // =============================
-    if (
-      path.startsWith("/purchaseorder/invoices") ||
-      path.startsWith("/purchaseorder/invoicedue")
-    ) {
-      setOpenGroup("finance_group");
-      setOpenMenu(null);
-      return;
-    }
-
-    // =============================
-    // Purchases Group
-    // =============================
-    if (
-      path.startsWith("/purchaseorder") ||
-      path.startsWith("/supplier-return") ||
-      path.startsWith("/purchaseorder/shipments")
-    ) {
-      setOpenGroup("purchases_group");
-      if (path.startsWith("/purchaseorder")) setOpenMenu("purchase_orders");
-      else if (path.startsWith("/supplier-return")) setOpenMenu("supplier_returns");
-      return;
-    }
-
-    // =============================
-    // Standalone Menus
-    // =============================
-    setOpenGroup(null);
-
-    if (path.startsWith("/vendor")) setOpenMenu("vendors");
-    else if (path.startsWith("/product")) setOpenMenu("products");
-    else if (path.startsWith("/security")) setOpenMenu("security");
-    else if (path.startsWith("/organizations")) setOpenMenu("organizations");
-    else if (
-      path.startsWith("/settings") ||
-      path.includes("payment_terms") ||
-      path.includes("warehouses") ||
-      path.includes("shipping_providers")
-    ) setOpenMenu("settings");
-    else setOpenMenu(null);
-
-  }, [location.pathname]);
+  const menuItems = [
+    {
+      title: "Dashboard",
+      icon: MdOutlineSpaceDashboard,
+      activeIcon: MdDashboard,
+      path: "/dashboard",
+    },
+    {
+      title: "Vendor",
+      key: "vendor",
+      icon: MdOutlineStore,
+      activeIcon: MdStore,
+      submenu: [
+        { title: "Add Vendor", path: "/vendor/addnewvendor" },
+        { title: "View Vendor", path: "/vendor/vendors" },
+        { title: "Import/Export", path: "/vendor/import" },
+      ],
+    },
+    {
+      title: "Purchase",
+      key: "purchase",
+      icon: MdOutlineShoppingCart,
+      activeIcon: MdShoppingCart,
+      submenu: [
+        { title: "Add Purchase", path: "/purchaseorder/create/470/AddNew" },
+        { title: "View Purchases", path: "/purchaseorder/listing" },
+        { title: "Kanban", path: "/purchaseorder/kanbanlisting" },
+      ],
+    },
+    {
+      title: "Supplier Returns",
+      key: "supplier",
+      icon: MdOutlineAssignmentReturn,
+      activeIcon: MdAssignmentReturn,
+      submenu: [
+        { title: "Add Return", path: "/supplier-return/add" },
+        { title: "View Returns", path: "/supplier-return/listing" },
+      ],
+    },
+    {
+      title: "Track Status",
+      icon: MdOutlineLocalShipping,
+      activeIcon: MdLocalShipping,
+      path: "/purchaseorder/shipments",
+    },
+    {
+      title: "Finance",
+      key: "finance",
+      icon: MdOutlineAttachMoney,
+      activeIcon: MdAttachMoney,
+      submenu: [
+        { title: "Invoices", path: "/purchaseorder/invoices" },
+        { title: "Dues Today", path: "/purchaseorder/invoicedue" },
+      ],
+    },
+    {
+      title: "Products",
+      key: "products",
+      icon: MdOutlineInventory,
+      activeIcon: MdInventory,
+      submenu: [
+        { title: "All Products", path: "/product/allproducts" },
+        { title: "Brands", path: "/product/brands" },
+        { title: "Category", path: "/product/categories" },
+      ],
+    },
+    {
+      title: "Security",
+      key: "security",
+      icon: MdOutlineSecurity,
+      activeIcon: MdSecurity,
+      submenu: [
+        { title: "Users", path: "/security/users" },
+        { title: "Roles", path: "/security/roles" },
+      ],
+    },
+    {
+      title: "Settings",
+      key: "settings",
+      icon: MdOutlineSettings,
+      activeIcon: MdSettings,
+      submenu: [
+        { title: "Country", path: "/settings/countries" },
+        { title: "Warehouse", path: "/settings/warehouses" },
+      ],
+    },
+    {
+      title: "Organization",
+      icon: MdOutlineBusiness,
+      activeIcon: MdBusiness,
+      path: "/organizations/view",
+    },
+    {
+      title: "Logout",
+      icon: MdOutlineLogout,
+      activeIcon: MdLogout,
+      path: "/logout",
+    },
+  ];
 
   const toggleMenu = (key) => {
     setOpenMenu(openMenu === key ? null : key);
   };
 
-  const handleAddNew = async (e) => {
-    if (e) e.preventDefault();
-    if (creating) return;
-
-    try {
-      setCreating(true);
-
-      const res = await apiFetch(`${API_BASE}api/purchaseorder/api/create`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-type": "application/json" },
-      });
-
-      if (res?.data?.po_id) {
-        navigate(`/purchaseorder/create/${res.data.po_id}/AddNew`);
-      }
-    } catch (err) {
-      console.error("Failed to create PO", err);
-    } finally {
-      setCreating(false);
-    }
-  };
-
-
-  const handleLogout = async () => {
-    if (loggingOut) return; // 🔒 prevent double click
-    setLoggingOut(true);
-
-    // Close dropdown immediately (AdminLTE / Bootstrap fix)
-    document.activeElement?.blur();
-
-    await logout(); //  single source of truth
-  };
-
   return (
-    <aside className="main-sidebar sidebar-light-dark elevation-2">
-      <button
-        type="button"
-        className="sidebar-boundary-toggle"
-        onClick={toggleSidebar}
-        aria-label="Toggle sidebar"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"  fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-right-icon lucide-chevrons-left-right" style={{ color: "#f8f9fa" }}><path d="m9 7-5 5 5 5" /><path d="m15 7 5 5-5 5" /></svg>
-      </button>
+    <nav className="w-[250px] h-screen bg-gray-50 border-r px-3 py-4 overflow-y-auto">
 
-      {/* Brand */}
-      <Link to="/dashboard" className="brand-link navbar-light">
-        <img
-          src="http://admin.hansona.com/static/sbadmin/dist/img/sb_logo.png"
-          className="brand-image elevation-0"
-          alt="User"
-        />
-        <span className="brand-text font-weight-bold text-black ">SB Admin</span>
-      </Link>
+      {/* Logo */}
+      <div className="flex items-center justify-between mb-6">
+        {collapsed ? (
+          <img src={SmallLogo} alt="Small Logo" className="w-8" />
+        ) : (
+          <img src={Logo} alt="Logo" className="w-36" />
+        )}
 
-
-
-      <div className="user-panel mt-1 pt-2 pb-3 mb-2 d-flex">
-        <div className="image">
-          <img
-            src="http://admin.hansona.com/static/sbadmin/dist/img/profile-picture.png"
-            className="img-circle elevation-2"
-            alt="User Image"
-          />
-        </div>
-        <div className="info">
-          <a href="#" className="d-block text-dark">Admin User</a>
-        </div>
       </div>
 
-      <div className="sidebar clearfix" style={{ height: "calc(100vh - 120px)", overflowY: "auto", paddingBottom: '120px' }}>
-        <nav className="mt-2">
-          <ul className="nav nav-pills nav-sidebar flex-column" role="menu" style={{ paddingBottom: '20px' }}>
+      {/* Menu */}
+      <div className="space-y-1">
+        {menuItems.map((item, index) => {
+          const DefaultIcon = item.icon;
+          const ActiveIcon = item.activeIcon;
 
-            {/* Dashboard */}
-            <li className="nav-item">
-              <Link to="/dashboard" className={`nav-link ${isActive("/dashboard") ? "active" : ""}`}>
-                <i className="nav-icon fas fa-tachometer-alt"></i>
-                <p>Dashboard</p>
-              </Link>
-            </li>
+          const isSubmenuActive =
+            item.submenu &&
+            item.submenu.some((sub) =>
+              location.pathname.startsWith(sub.path)
+            );
 
-            {/* Vendors */}
-            <li className={`nav-item has-treeview ${openMenu === "vendors" ? "menu-open" : ""}`}>
-              <a
-                className={`nav-link ${isParentActive("/vendor") ? "active" : ""}`}
-                onClick={() => toggleMenu("vendors")}
-                style={{ cursor: 'pointer' }}
-              >
-                <i className="nav-icon fas fa-users"></i>
-                <p>
-                  Vendors
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
-              <ul className="nav nav-treeview" style={{ display: openMenu === "vendors" ? "block" : "none" }}>
-                <li className="nav-item">
-                  <Link
-                    to="/vendor/addnewvendor"
-                    className={`nav-link ${isActive("/vendor/addnewvendor") ? "active" : ""}`}
+          return (
+            <div key={index}>
+
+              {/* With Submenu */}
+              {item.submenu ? (
+                <>
+                  <div
+                    onClick={() => toggleMenu(item.key)}
+                    className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
+                      ${isSubmenuActive
+                        ? "bg-[#d9edff] text-black rounded-full"
+                        : "text-gray-600 hover:bg-[#d9edff] hover:text-black rounded-full"
+                      }`}
                   >
-                    <i className={`${isActive("/vendor/addnewvendor") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Add Vendor</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to="/vendor/vendors"
-                    className={`nav-link ${isActive("/vendor/vendors") ? "active" : ""}`}
-                  >
-                    <i className={`${location.pathname.startsWith("/vendor/editvendor/") ? "fas" : "far"} ${isActive("/vendor/vendors") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>View Vendors</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to="/vendor/import"
-                    className={`nav-link ${isActive("/vendor/import") ? "active" : ""}`}
-                  >
-                    <i className={`${isActive("/vendor/import") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Import/Export</p>
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li className={`nav-item has-treeview ${openGroup === "purchases_group" ? "menu-open" : ""}`}>
-              <a
-                className={`nav-link ${openGroup === "purchases_group" ? "active" : ""}`}
-                onClick={() => toggleGroup("purchases_group")}
-                style={{ cursor: 'pointer' }}
-              >
-                <i className="nav-icon fas fa-truck"></i>
-                <p>
-                  Purchases
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
+                    <div className="flex items-center gap-3">
+                      {/* ICON SWITCH */}
+                      {isSubmenuActive ? (
+                        <ActiveIcon className="text-lg" />
+                      ) : (
+                        <>
+                          <DefaultIcon className="text-lg group-hover:hidden" />
+                          <ActiveIcon className="text-lg hidden group-hover:block" />
+                        </>
+                      )}
+                      <span>{item.title}</span>
+                    </div>
 
-              <ul className="nav nav-treeview" style={{ display: openGroup === "purchases_group" ? "block" : "none" }}>
+                    <MdKeyboardArrowDown
+                      className={`transition-transform ${openMenu === item.key || isSubmenuActive
+                        ? "rotate-180"
+                        : ""
+                        }`}
+                    />
+                  </div>
 
-                {/* Level 2: Purchase Orders */}
-                <li className={`nav-item has-treeview ${openMenu === "purchase_orders" ? "menu-open" : ""}`}>
-                  <a
-                    className={`nav-link ${isParentActive("/purchaseorder") ? "active" : ""}`}
-                    onClick={(e) => { e.stopPropagation(); toggleMenu("purchase_orders"); }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <i className={`${isParentActive("/purchaseorder") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>
-                      Purchase Orders
-                      <i className="right fas fa-angle-right"></i>
-                    </p>
-                  </a>
-
-                  <ul className="nav nav-treeview" style={{ display: openMenu === "purchase_orders" ? "block" : "none" }}>
-                    <li className="nav-item">
-                      <a
-                        onClick={handleAddNew}
-                        className={`nav-link ${creating ? "disabled" : ""}`}
-
-                        style={{ cursor: creating ? "default" : "pointer", pointerEvents: creating ? "none" : "auto", opacity: creating ? 0.6 : 1, paddingLeft: '50px' }}
-                      >
-                        <i className={`${location.pathname.startsWith("/purchaseorder/create/") ? "fas" : "far"} nav-icon ${creating ? "fas fa-spinner fa-spin" : " fa-dot-circle"}`}></i>
-                        <p>{creating ? "Creating..." : "Add Purchase"}</p>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/purchaseorder/listing" className="nav-link" style={{ paddingLeft: '50px' }}>
-                        <i className={`${isActive("/purchaseorder/listing") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                        <p>View Purchases</p>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/purchaseorder/kanbanlisting" className="nav-link" style={{ paddingLeft: '50px' }}>
-                        <i className={`${isActive("/purchaseorder/kanbanlisting") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                        <p>Purchase Order Kanban</p>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/purchaseorder/importexport" className="nav-link" style={{ paddingLeft: '50px' }}>
-                        <i className="far fa-dot-circle nav-icon"></i>
-                        <p>Import/Export</p>
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-
-                {/* Level 2: Supplier Returns */}
-                <li className={`nav-item has-treeview ${openMenu === "supplier_returns" ? "menu-open" : ""}`}>
-                  <a
-                    className={`nav-link ${isParentActive("/supplier-return") ? "active" : ""}`}
-                    onClick={(e) => { e.stopPropagation(); toggleMenu("supplier_returns"); }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <i className={`${isParentActive("/supplier-return") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>
-                      Supplier Returns
-                      <i className="right fas fa-angle-right"></i>
-                    </p>
-                  </a>
-
-                  <ul className="nav nav-treeview" style={{ display: openMenu === "supplier_returns" ? "block" : "none" }}>
-                    <li className="nav-item">
-                      <Link className="nav-link" style={{ paddingLeft: '50px' }}>
-                        <i className={`${isActive("/supplier-return/add") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                        <p>Add Supplier Return</p>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" style={{ paddingLeft: '50px' }}>
-                        <i className={`${isActive("/supplier-return/listing") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                        <p>View Returns</p>
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-
-
-                {/* Payment Tracking */}
-                <li className="nav-item">
-                  <Link
-                    to="/purchaseorder/shipments"
-                    className={`nav-link ${location.pathname.startsWith("/purchaseorder/shipments") ? "active" : ""}`}
-                  >
-                    <i className={`${location.pathname.startsWith("/purchaseorder/shipments") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                    <p>Track Status</p>
-                  </Link>
-                </li>
-
-              </ul>
-            </li>
-
-            {/* ── Finance ── */}
-            <li className={`nav-item has-treeview ${openGroup === "finance_group" ? "menu-open" : ""}`}>
-
-              <a className={`nav-link ${openGroup === "finance_group" ? "active" : ""}`}
-                onClick={() => toggleGroup("finance_group")}
-                style={{ cursor: "pointer" }}
-              >
-                <i className="nav-icon fas fa-landmark"></i>
-                <p>
-                  Finance
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
-
-              <ul className="nav nav-treeview" style={{ display: openGroup === "finance_group" ? "block" : "none" }}>
-
-                {/* All Invoices */}
-                <li className="nav-item">
-                  <Link
-                    to="/purchaseorder/invoices"
-                    className={`nav-link ${location.pathname.startsWith("/purchaseorder/invoices") ? "active" : ""}`}
-                  >
-                    <i className={`${location.pathname.startsWith("/purchaseorder/invoices") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                    <p>All Invoices</p>
-                  </Link>
-                </li>
-
-                {/* Dues Today */}
-                <li className="nav-item">
-                  <Link
-                    to="/purchaseorder/invoicedue"
-                    className={`nav-link ${location.pathname.startsWith("/purchaseorder/invoicedue") ? "active" : ""}`}
-                  >
-                    <i className={`${location.pathname.startsWith("/purchaseorder/invoicedue") ? "fas" : "far"} fa-dot-circle nav-icon`}></i>
-                    <p>Dues Today</p>
-                  </Link>
-                </li>
-
-
-
-              </ul>
-            </li>
-            {/* Products Treeview */}
-            <li className={`nav-item has-treeview ${openMenu === "products" ? "menu-open" : ""}`}>
-              <a
-                className={`nav-link ${isParentActive("/product") ? "active" : ""}`}
-                onClick={() => toggleMenu("products")}
-                style={{ cursor: 'pointer' }}
-              >
-                <i className="nav-icon fas fa-shopping-bag"></i>
-                <p>
-                  Products
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
-
-              <ul className="nav nav-treeview" style={{ display: openMenu === "products" ? "block" : "none" }}>
-                <li className="nav-item">
-                  <Link to="/product/allproducts" className={`nav-link ${isActive("/product/allproducts") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/allproducts") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>All Products</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/product/brands" className={`nav-link ${isActive("/product/brands") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/brands") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Brands</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/product/categories" className={`nav-link ${isActive("/product/categories") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/categories") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Category</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/product/manufacturers" className={`nav-link ${isActive("/product/manufacturers") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/manufacturers") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Manufacturers</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/product/attributes" className={`nav-link ${isActive("/product/attributes") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/attributes") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Attributes</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/product/unit_of_measurements" className={`nav-link ${isActive("/product/unit_of_measurements") ? "active" : ""}`}>
-                    <i className={`${isActive("/product/unit_of_measurements") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Unit Of Measurement</p>
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            {/* Security Treeview */}
-            <li className={`nav-item has-treeview ${openMenu === "security" ? "menu-open" : ""}`}>
-              <a
-                className={`nav-link ${isParentActive("/security") && !location.pathname.includes("countries") ? "active" : ""}`}
-                onClick={() => toggleMenu("security")}
-                style={{ cursor: 'pointer' }}
-              >
-                <i className="nav-icon fas fa-shield-alt"></i>
-                <p>
-                  Security
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
-
-              <ul className="nav nav-treeview" style={{ display: openMenu === "security" ? "block" : "none" }}>
-                <li className="nav-item">
-                  <Link to="/security/users" className={`nav-link ${isActive("/security/users") ? "active" : ""}`}>
-                    <i className={`${isActive("/security/users") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Users</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/security/roles" className={`nav-link ${isActive("/security/roles") ? "active" : ""}`}>
-                    <i className={`${isActive("/security/roles") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Roles</p>
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            {/* Settings Treeview */}
-            <li className={`nav-item has-treeview ${openMenu === "settings" ? "menu-open" : ""}`}>
-              <a
-                className={`nav-link ${location.pathname.includes("countries") || location.pathname.includes("payment_terms") || location.pathname.includes("warehouses") || location.pathname.includes("shipping_providers") || location.pathname.includes("vendor_login_credentials") ? "active" : ""}`}
-                onClick={() => toggleMenu("settings")}
-                style={{ cursor: 'pointer' }}
-              >
-                <i className="nav-icon fas fa-cog"></i>
-                <p>
-                  Settings
-                  <i className="right fas fa-angle-right"></i>
-                </p>
-              </a>
-
-              <ul className="nav nav-treeview" style={{ display: openMenu === "settings" ? "block" : "none" }}>
-                <li className="nav-item">
-                  <Link to="/settings/countries" className={`nav-link ${isActive("/settings/countries") ? "active" : ""}`}>
-                    <i className={`${isActive("/settings/countries") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Country</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/settings/payment_terms" className={`nav-link ${isActive("/settings/payment_terms") ? "active" : ""}`}>
-                    <i className={`${isActive("/settings/payment_terms") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Payment Terms</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/settings/warehouses" className={`nav-link ${isActive("/settings/warehouses") ? "active" : ""}`}>
-                    <i className={`${isActive("/settings/warehouses") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Warehouse</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/settings/shipping_providers" className={`nav-link ${isActive("/settings/shipping_providers") ? "active" : ""}`}>
-                    <i className={`${isActive("/settings/shipping_providers") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                    <p>Shipping Providers</p>
-                  </Link>
-                </li>
-                {isSuperAdmin && (
-                  <li className="nav-item">
-                    <Link
-                      to="/settings/vendor_login_credentials"
-                      className={`nav-link ${isActive("/settings/vendor_login_credentials") ? "active" : ""}`}
-                    >
-                      <i className={`${isActive("/settings/vendor_login_credentials") ? "fas" : "far"} fa-circle nav-icon`}></i>
-                      <p>Vendor Login Credentials</p>
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </li>
-
-            {/* Organization */}
-            <li className="nav-item">
-              <Link to="/organizations/view" className={`nav-link ${isParentActive("/organizations") ? "active" : ""}`}>
-                <i className="nav-icon fas fa-university"></i>
-                <p>Organization</p>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link
-                onClick={handleLogout}
-                className={`nav-link d-flex align-items-center ${isParentActive("/logout") ? "active" : ""}`}
-              >
-                <span className="nav-icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m16 17 5-5-5-5" />
-                    <path d="M21 12H9" />
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  </svg>
-                </span>
-
-                <span className="nav-text">
-                  {loggingOut ? "Logging out..." : "Logout"}
-                </span>
-              </Link>
-            </li>
-
-          </ul>
-        </nav>
+                  {/* Submenu */}
+                  {(openMenu === item.key || isSubmenuActive) && (
+                    <div className="ml-6 mt-1 border-l pl-4 space-y-1 text-sm">
+                      {item.submenu.map((sub, i) => (
+                        <NavLink
+                          key={i}
+                          to={sub.path}
+                          className={({ isActive }) =>
+                            `block px-2 py-1 rounded-md transition-all duration-200
+   no-underline hover:no-underline focus:no-underline active:no-underline
+                             ${isActive
+                              ? "bg-[#d9edff] text-black rounded-full"
+                              : "text-gray-500 hover:bg-[#d9edff] hover:text-black rounded-full"
+                            }`
+                          }
+                        >
+                          {sub.title}
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* Simple Menu */
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
+   no-underline hover:no-underline focus:no-underline active:no-underline
+                     ${isActive
+                      ? "bg-[#d9edff] text-black rounded-full"
+                      : "text-gray-600 hover:bg-[#d9edff] hover:text-black rounded-full"
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive ? (
+                        <ActiveIcon className="text-lg" />
+                      ) : (
+                        <>
+                          <DefaultIcon className="text-lg group-hover:hidden" />
+                          <ActiveIcon className="text-lg hidden group-hover:block" />
+                        </>
+                      )}
+                      <span>{item.title}</span>
+                    </>
+                  )}
+                </NavLink>
+              )}
+            </div>
+          );
+        })}
       </div>
-      <div className="sidebar-footer d-flex align-items-center">
-        <div className="sidebar-footer-meta ms-2">
-          <div className="sidebar-footer-name">© SB Admin <span className="sidebar-footer-dim">- All rights reserved</span></div>
-        </div>
-        <div className="sidebar-footer-version ms-auto">v1.0</div>
-      </div>
-    </aside>
+    </nav>
   );
-}
+};
+
+export default Sidebar;
