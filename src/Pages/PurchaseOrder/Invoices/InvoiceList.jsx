@@ -324,9 +324,8 @@ const InvoiceList = () => {
   return (
     <>
       <CmnHeader
-        title="All Invoices" IconC={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
-      >
-      </CmnHeader>
+        title="All Invoices" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
+      />
 
       <DashboardOverview summary={summary} />
       <div className="mt-3 mb-3 p-3 bg-white rounded-[20px]">

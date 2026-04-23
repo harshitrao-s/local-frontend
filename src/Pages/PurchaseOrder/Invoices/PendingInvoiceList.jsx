@@ -11,6 +11,8 @@ import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import toast from "react-hot-toast";
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import { FileSpreadsheet } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /* ═══════════════════════════════════════════════════════════
@@ -249,6 +251,7 @@ const SortArrow = ({ field, sortBy, sortDir }) => {
   return <span style={{ opacity: on ? 1 : .3, marginLeft: 3, fontSize: 9, color: on ? "#4f46e5" : "inherit" }}>{on ? (sortDir === "asc" ? "▲" : "▼") : "⇅"}</span>;
 };
 
+
 /* ═══════════════════════════════════════════════════════════
    STAT CARDS
 ═══════════════════════════════════════════════════════════ */
@@ -258,38 +261,55 @@ const STAT_CFG = [
   { key: "total_invoices", label: "Total Invoices", icon: "fas fa-file-invoice-dollar", bg: "#fee2e2", col: "#b91c1c", isCurrency: false, showSub: false },
   { key: "overdue", label: "Overdue", icon: "fas fa-clock", bg: "#fef9c3", col: "#a16207", isCurrency: false, showSub: true },
 ];
-function StatCard({ cfg, summary }) {
-  const val = summary?.[cfg.key];
+
+
+
+const StatCard = ({
+  label,
+  amount,
+  icon,
+  col,
+  bg,
+  isFirst = false,
+  isCurrency = false,
+}) => {
   return (
-    <div className="card pil-stat shadow-sm h-100" style={{ padding: "16px 18px" }}>
-      <div className="d-flex justify-content-between align-items-start">
-        <div style={{ minWidth: 0 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#9ca3af", marginBottom: 6 }}>{cfg.label}</p>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#111827", marginBottom: 4, fontVariantNumeric: "tabular-nums" }}>
-            {cfg.isCurrency ? formatCurrency(val?.amount ?? 0) : (val?.count ?? val ?? 0)}
-          </div>
-          {cfg.showSub && (
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {cfg.isCurrency && (
-                <span style={{ fontSize: 11, background: "#f3f4f6", color: "#6b7280", padding: "2px 8px", borderRadius: 20, fontWeight: 500 }}>
-                  {val?.count ?? 0} invoices
-                </span>
-              )}
-              {!cfg.isCurrency && val?.amount != null && (
-                <span style={{ fontSize: 11, background: "#f3f4f6", color: "#6b7280", padding: "2px 8px", borderRadius: 20, fontWeight: 500 }}>
-                  {formatCurrency(val.amount)}
-                </span>
-              )}
-            </div>
-          )}
+    <div
+      className={`rounded-[20px] p-3 h-full
+      ${isFirst ? "bg-[#002B5B] text-white" : "bg-white"}`}
+    >
+      {/* TOP ROW */}
+      <div className="flex justify-between items-center mb-2">
+        <p
+          className={`text-[10px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+        >
+          {label}
+        </p>
+
+        <div
+          className="w-[34px] h-[34px] flex items-center justify-center rounded-full"
+          style={{
+            background: isFirst ? "rgba(255,255,255,0.2)" : bg,
+          }}
+        >
+          <i
+            className={`${icon} text-[14px]`}
+            style={{ color: isFirst ? "#fff" : col }}
+          ></i>
         </div>
-        <div className="pil-icon-box" style={{ background: cfg.bg }}>
-          <i className={cfg.icon} style={{ color: cfg.col }} />
-        </div>
+      </div>
+
+      {/* AMOUNT + COUNT */}
+      <div className="flex justify-between items-center">
+        <h4 className="font-bold text-lg truncate">
+          {isCurrency ? formatCurrency(amount) : amount || 0}
+        </h4>
       </div>
     </div>
   );
-}
+};
+
 
 /* ═══════════════════════════════════════════════════════════
    PAYMENT MODAL
@@ -943,57 +963,19 @@ export default function PendingInvoiceList() {
       <style>{CSS}</style>
 
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-3 ps-1">
-        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2" style={{ color: "#111827" }}>
-          <span style={{ width: 32, height: 32, borderRadius: 10, background: "#ede9fe", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-            <FontAwesomeIcon icon={faListUl} style={{ fontSize: 13, color: "#7c3aed" }} />
-          </span>
-          Due Invoices
-        </h5>
-        <Link
-          to="/purchaseorder/invoices"
-          style={{
-            background: "#c8efff",
-            color: "#0ca9ed",
-            border: "1.5px solid #0ca9ed",
-            fontWeight: 700,
-            fontSize: 14,
-            padding: "8px 18px",
-            borderRadius: 9,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            transition: "all .2s ease",
-            boxShadow: "0 2px 8px rgba(12,169,237,.15)",
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = "#0ca9ed";
-            e.currentTarget.style.color = "#fff";
-            e.currentTarget.style.boxShadow = "0 4px 14px rgba(12,169,237,.35)";
-            e.currentTarget.style.transform = "translateY(-1px)";
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = "#c8efff";
-            e.currentTarget.style.color = "#0ca9ed";
-            e.currentTarget.style.boxShadow = "0 2px 8px rgba(12,169,237,.15)";
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
-        >
-          All Invoices
-        </Link>
-      </div>
+      <CmnHeader
+        title="Due Invoices" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="All Invoices" actionLink="/purchaseorder/invoices"
+      />
 
       {/* Stat cards */}
-      <div className="row g-2 mb-3">
-        {STAT_CFG.map(c => (
-          <div key={c.key} className="col-xl col-lg-4 col-md-6">
-            <StatCard cfg={c} summary={summary} />
-          </div>
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {STAT_CFG.map((stat, index) => (
+          <StatCard key={index} {...stat} isFirst={index === 0} isCurrency={stat.isCurrency} />
         ))}
       </div>
 
       {/* Filters */}
-      <div className="pil-card bg-white mb-3 p-3">
+      <div className="pil-card bg-white mt-3  mb-3 p-3">
         <div className="row g-2 align-items-end">
           <div className="col-md-5">
             <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Search Vendor</label>
