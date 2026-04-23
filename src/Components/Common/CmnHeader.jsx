@@ -1,22 +1,23 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 
 const CmnHeader = ({
     title,
     subtitle,
-    icon1:Icon,
+    icon1,
+    IconC,
     icon = "iwl-add-btn",
     actionBtn,
-    actionName,
-    actionLink
+    actionName
 }) => {
+
+   
     return (
         <Fragment>
             {/* Header */}
-            <div className="flex align-items-center justify-between mb-4">
+            <div className="iwl-header">
                 <div className="iwl-title-wrap">
                     <div className="iwl-icon">
-                    {Icon && <Icon size={18} />}
+                       {IconC  ?  <IconC size={18} />  :  <i className={`${icon1}`} />}
                     </div>
                     <div>
                         <h3 className="iwl-title">{title}</h3>
@@ -26,14 +27,13 @@ const CmnHeader = ({
                     </div>
                 </div>
 
-                {actionName && (
-                    <Link
-                        to={actionLink || "#"}
-                        className={`${icon} no-underline text-white`}
-                        onClick={actionBtn}
+                {actionName && actionBtn && (
+                    <button
+                        className={`${icon}`}
+                        onClick={actionBtn}   // ✅ FIXED
                     >
                         + {actionName}
-                    </Link>
+                    </button>
                 )}
             </div>
         </Fragment>

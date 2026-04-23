@@ -324,7 +324,7 @@ const InvoiceList = () => {
   return (
     <>
       <CmnHeader
-        title="All Invoices" icon1={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
+        title="All Invoices" IconC={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
       >
       </CmnHeader>
 
