@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { apiFetch } from "../../Utils/apiFetch";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CommonTable from "../../Components/Common/CmnTable";
+import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
 
 const BrandManagement = () => {
   const [data, setData] = useState([]);
@@ -101,29 +102,23 @@ const BrandManagement = () => {
       field: "status",
       render: (val) =>
         val === 1 ? (
-          <span className="new_badge badge-success fw-bold">Active</span>
+          <span className="new_badge badge-success ">Active</span>
         ) : (
-          <span className="new_badge badge-secondary fw-bold">In-active</span>
+          <span className="new_badge badge-secondary ">In-active</span>
         ),
     },
+
     {
       title: "Actions",
-      field: "actions",
-      render: (_, row) => (
-        <div className="d-flex gap-2 ">
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={() => openModal("edit", row)}
-          >
-            <i className="fas fa-edit"></i>
-          </button>
-
-          <button
-            className="btn btn-sm btn-outline-danger"
-            onClick={() => handleDelete(row.brand_id)}
-          >
-            <i className="fas fa-trash"></i>
-          </button>
+      field: "created_at",
+      render: (val, row) => (
+        <div className="d-flex gap-2">
+          <div onClick={() => {
+            openModal("edit", row)
+          }} className="cursor-pointer" >{SbAdminSvg.edit}</div>
+          <div className="cursor-pointer" onClick={() => {
+            handleDelete(row.brand_id)
+          }}>{SbAdminSvg.delete}</div>
         </div>
       ),
     },
@@ -153,7 +148,7 @@ const BrandManagement = () => {
         actionBtn={() => openModal("add")}
       />
 
-  
+
 
       {/* TABLE */}
       <CommonTable
@@ -172,7 +167,7 @@ const BrandManagement = () => {
         totalPages={totalPages}
       />
 
-      
+
 
       {/* MODAL */}
       {modalConfig.show && (

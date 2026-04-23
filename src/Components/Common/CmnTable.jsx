@@ -223,7 +223,7 @@ const CommonTable = ({
                     key={i}
                     onClick={() => handleSort(col)}
                     style={{
-                      width: columnWidths[i],
+                      width:  col?.columnWidths ?? columnWidths[i],
                       position: "sticky",
                       top: 0,
                       zIndex: 2,
