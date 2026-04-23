@@ -17,6 +17,7 @@ const CommonTable = ({
   isSortable = true,
   defaultSort = null,
   isPaginated = false,
+  MainContainerCssClases,
   searchAPi = "",
   SearchPlaceHolder = "Search...",
   bodyHeight = "calc(100vh - 350px)", // ✅ NEW PROP
@@ -178,7 +179,8 @@ const CommonTable = ({
   }, []);
 
   return (
-    <div className="mainTable">
+    <div className={`mainTable ${MainContainerCssClases}`}>
+
       {(title || subtitle) && (
         <div className="mainTable__header">
           <div className="mainTable__titleBox">

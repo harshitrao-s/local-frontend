@@ -26,7 +26,7 @@ const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }
 
       {/* Bottom Content */}
       <div className="flex items-end justify-between w-full lg:flex-col lg:items-start lg:gap-2 xl:flex-row xl:items-end">
-        <h2 className="text-[20px] 2xl:text-[30px] font-bold leading-none">{value}</h2>
+        <h2 className="text-[20px] xl:text-[30px] font-bold leading-none">{value}</h2>
         {change && (
          <div className="flex flex-col items-end lg:items-start xl:items-end">
             <div className="flex items-center gap-1 text-[#04910C] font-semibold leading-none text-[14px]">
@@ -107,7 +107,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Orders */}
-          <div className="rounded-[20px]">
+          <div className="">
             <RecentPurchaseOrders />
             
           </div>
@@ -126,7 +126,7 @@ const Dashboard = () => {
 
           
           <div className="flex flex-col gap-4">
-          <POStatusPieChart />
+          <POStatusPieChart change="3.6%" />
           </div>
         </div>
       </div>
