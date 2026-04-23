@@ -86,14 +86,6 @@ const CountriesList = () => {
     fetchCountries();
   }, []);
 
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchCountries(search);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [search]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -103,28 +95,14 @@ const CountriesList = () => {
         icon1={"fas fa-globe"}
       />
 
-      <div className="cl-search-wrap">
-        <div className="cl-search-inner">
-          <i className="fas fa-search cl-search-icon" />
-          <input
-            className="cl-search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-          />
-        </div>
 
-        {search && (
-          <button className="cl-clear-btn" onClick={() => setSearch("")}>
-            Clear
-          </button>
-        )}
-      </div>
 
       <CommonTable
         config={tableConfig}
         data={countriesdata}
-        isSearchable={false}
+        isSearchable={true}
+        searchFromApi={true}
+        searchAPi={`${API_BASE}api/countries?`}
       />
     </div>
   );

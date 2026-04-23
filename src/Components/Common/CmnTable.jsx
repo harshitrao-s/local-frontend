@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./CommonTable.css";
 import { SbAdminSvg } from "./Svgs/ActionsSvg";
 import SearchBar from "./ui/SearchBar";
 import Pagination from "./Pagination";
+import apiFetch from "../../Utils/apiFetch";
 
 const CommonTable = ({
   title = "",
@@ -12,19 +13,28 @@ const CommonTable = ({
   data = [],
   isSearchable = true,
   searchFromApi = false,
-  onSearch = () => { },
   debounceTime = 300,
   isSortable = true,
   defaultSort = null,
   isPaginated = false,
+  searchAPi = "",
 }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [tableData, setTableData] = useState(data || []);
   const [columnWidths, setColumnWidths] = useState({});
   const [sortConfig, setSortConfig] = useState(defaultSort);
   const [expandedRows, setExpandedRows] = useState({});
 
+  // ✅ Sync data safely
   useEffect(() => {
+    setTableData(data || []);
+  }, [data]);
+
+  // ✅ Set default column widths (only when config actually changes)
+  useEffect(() => {
+    if (!config.length) return;
+
     const widths = {};
     config.forEach((col, i) => {
       widths[i] = col.width || 150;
@@ -32,71 +42,101 @@ const CommonTable = ({
     setColumnWidths(widths);
   }, [config]);
 
+  // ✅ Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
     }, debounceTime);
+
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, debounceTime]);
 
+  // ✅ API Search (fixed deps)
   useEffect(() => {
-    if (searchFromApi) onSearch(debouncedSearch);
-  }, [debouncedSearch]);
+    if (!searchFromApi) return;
 
+    let ignore = false;
+
+    (async () => {
+      try {
+        const q = new URLSearchParams({ q: debouncedSearch }).toString();
+        const result = await apiFetch(`${searchAPi}${q}`);
+
+        if (!ignore) {
+          setTableData((prev) => {
+            const newData = result.data || [];
+            return JSON.stringify(prev) === JSON.stringify(newData)
+              ? prev
+              : newData;
+          });
+        }
+      } catch (e) {
+        console.error("Search API error:", e);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [debouncedSearch, searchFromApi, searchAPi]);
+
+  // ✅ Filter (client side)
   const filteredData = useMemo(() => {
-    if (searchFromApi) return data;
-    if (!debouncedSearch) return data;
+    if (searchFromApi) return tableData;
+    if (!debouncedSearch) return tableData;
 
     const lower = debouncedSearch.toLowerCase();
 
-    return data.filter((row) =>
+    return tableData.filter((row) =>
       Object.values(row).some((val) =>
         String(val ?? "").toLowerCase().includes(lower)
       )
     );
-  }, [data, debouncedSearch]);
+  }, [tableData, debouncedSearch, searchFromApi]);
 
+  // ✅ Sort
   const processedData = useMemo(() => {
-    let result = [...filteredData];
+    if (!isSortable || !sortConfig?.field) return filteredData;
 
-    if (isSortable && sortConfig?.field) {
-      result.sort((a, b) => {
-        const aVal = a[sortConfig.field];
-        const bVal = b[sortConfig.field];
+    const sorted = [...filteredData];
 
-        if (aVal == null) return 1;
-        if (bVal == null) return -1;
+    sorted.sort((a, b) => {
+      const aVal = a[sortConfig.field];
+      const bVal = b[sortConfig.field];
 
-        if (typeof aVal === "number" && typeof bVal === "number") {
-          return sortConfig.dir === "asc"
-            ? aVal - bVal
-            : bVal - aVal;
-        }
+      if (aVal == null) return 1;
+      if (bVal == null) return -1;
 
+      if (typeof aVal === "number" && typeof bVal === "number") {
         return sortConfig.dir === "asc"
-          ? String(aVal).localeCompare(String(aVal))
-          : String(bVal).localeCompare(String(aVal));
-      });
-    }
+          ? aVal - bVal
+          : bVal - aVal;
+      }
 
-    return result;
-  }, [filteredData, sortConfig]);
+      return sortConfig.dir === "asc"
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    });
 
-  const handleSort = (col) => {
+    return sorted;
+  }, [filteredData, sortConfig, isSortable]);
+
+  // ✅ Sort handler (memoized)
+  const handleSort = useCallback((col) => {
     if (!isSortable || col.type === "actions" || !col.field) return;
 
     setSortConfig((prev) => {
       if (prev?.field !== col.field) {
         return { field: col.field, dir: "asc" };
       }
-
       return {
         field: col.field,
         dir: prev.dir === "asc" ? "desc" : "asc",
       };
     });
-  };
+  }, [isSortable]);
 
+  // ✅ Resize
   const startResizing = (index, e) => {
     e.preventDefault();
     const startX = e.clientX;
@@ -120,16 +160,16 @@ const CommonTable = ({
     document.addEventListener("mouseup", onMouseUp);
   };
 
-  const toggleRow = (index) => {
+  // ✅ Mobile toggle (memoized)
+  const toggleRow = useCallback((index) => {
     setExpandedRows((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
-  };
+  }, []);
 
   return (
     <div className="mainTable">
-
       {(title || subtitle) && (
         <div className="mainTable__header">
           <div className="mainTable__titleBox">
@@ -188,51 +228,45 @@ const CommonTable = ({
 
                 return (
                   <React.Fragment key={i}>
-
+                    {/* Desktop */}
                     <tr className="desktopRow">
                       {config.map((col, j) => (
                         <td key={j} style={{ width: columnWidths[j] }}>
                           {col.type === "actions"
-                            ? col.render
-                              ? col.render(row, i)
-                              : null
+                            ? col.render?.(row, i)
                             : col.render
                               ? col.render(row[col.field], row)
-                              : row[col.field] ?? "—"}  
+                              : row[col.field] ?? "—"}
                         </td>
                       ))}
                     </tr>
 
+                    {/* Mobile */}
                     <tr className="mobileRow">
                       <td colSpan={config.length}>
-
                         <div
                           className="mainTable__mobileHeader"
                           onClick={() => toggleRow(i)}
                         >
-                          <div className="left">
-                            <span className="title">
-                              {row[config[0]?.field]}
-                            </span>
-                          </div>
+                          <span className="title">
+                            {row[config[0]?.field]}
+                          </span>
 
                           <div className="arrow-style">
-                            {isOpen ? SbAdminSvg.arrowDownIconSvg : SbAdminSvg.arrowUpIconSvg}
+                            {isOpen
+                              ? SbAdminSvg.arrowDownIconSvg
+                              : SbAdminSvg.arrowUpIconSvg}
                           </div>
                         </div>
 
-                        {/* ✅ ANIMATED CONTENT */}
                         <div className={`mobileContentWrapper ${isOpen ? "open" : ""}`}>
-                          <div className="mainTable__mobileContent grid gap-[12px] mb-[12px]">
+                          <div className="mainTable__mobileContent">
                             {config.slice(1).map((col, j) => (
                               <div key={j} className="mainTable__mobileItem">
                                 <span className="label">{col.title}</span>
-
                                 <span className="value">
                                   {col.type === "actions"
-                                    ? col.render
-                                      ? col.render(row, i)
-                                      : null
+                                    ? col.render?.(row, i)
                                     : col.render
                                       ? col.render(row[col.field], row)
                                       : row[col.field] ?? "—"}
@@ -241,10 +275,8 @@ const CommonTable = ({
                             ))}
                           </div>
                         </div>
-
                       </td>
                     </tr>
-
                   </React.Fragment>
                 );
               })
