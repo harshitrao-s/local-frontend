@@ -131,7 +131,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       title: "Logout",
       icon: MdOutlineLogout,
       activeIcon: MdLogout,
-      path: "/logout",
+      path: "/login",
     },
   ];
 

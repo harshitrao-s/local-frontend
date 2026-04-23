@@ -1,43 +1,60 @@
-import React, { useEffect, useRef } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
-import Swal from "sweetalert2";
+import React, { useEffect, useRef, useState } from "react";
 import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl, faTableColumns, faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
-import { getVendorStatusName } from "../../../Constants/vendorStatus";
-import { Link } from "react-router-dom";
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import { FileSpreadsheet } from "lucide-react";
+import CmnTable from "../../../Components/Common/CmnTable";
 
-const StatCard = ({ title, amount, count, icon, colorClass, iconBg }) => {
+const StatCard = ({
+  title,
+  amount,
+  count,
+  icon,
+  colorClass,
+  iconBg,
+  isFirst = false,
+}) => {
   return (
-    /* 1. Changed col-xl-3 to col-xl (auto-layout for 5 cards).
-       2. col-lg-4 (3 per row), col-md-6 (2 per row) for smaller screens.
-    */
-    <div className="col-xl col-lg-4 col-md-6 col-sm-12 mb-3">
-      <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '20px' }}>
-        <div className="card-body ps-3 pt-3 pe-3 pb-1">
-          <div className="d-flex justify-content-between align-items-start">
-            <div style={{ minWidth: '0' }}>
-              <p className="text-uppercase fw-bold text-muted mb-1" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>
-                {title}
-              </p>
-              {/* Reduced h2 to h4 for better fitting of 5 cards */}
-              <h4 className="fw-bold mb-2 text-truncate">{amount}</h4>
-              <span className="badge rounded-pill bg-light text-dark px-2 py-1 border small">
-                {count} Invoices
-              </span>
-            </div>
-            <div
-              className={`rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ${iconBg}`}
-              style={{ width: '40px', height: '40px' }}
-            >
-              <i className={`${icon} ${colorClass}`} style={{ fontSize: '14px' }}></i>
-            </div>
-          </div>
+    <div
+      className={`rounded-[20px]  p-3 h-full
+      ${isFirst ? "bg-[#002B5B] text-white" : "bg-white"}`}
+    >
+      {/* TOP ROW (Title + Icon) */}
+      <div className="flex justify-between items-center mb-2">
+        <p
+          className={`text-[10px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+        >
+          {title}
+        </p>
+
+        <div
+          className={`w-[34px] h-[34px] flex items-center justify-center rounded-full
+          ${isFirst ? "bg-white/20" : iconBg}`}
+        >
+          <i
+            className={`${icon} text-[14px] ${isFirst ? "text-white" : colorClass
+              }`}
+          ></i>
         </div>
+      </div>
+
+      {/* AMOUNT + INVOICE (same row) */}
+      <div className="flex justify-between items-center">
+        <h4 className="font-bold text-lg truncate">{amount}</h4>
+
+        <span
+          className={`px-2 py-1 text-xs rounded-full border whitespace-nowrap
+          ${isFirst
+              ? "bg-white/20 text-white border-white/30"
+              : "bg-gray-100 text-gray-700 border-gray-200"
+            }`}
+        >
+          {count} Invoices
+        </span>
       </div>
     </div>
   );
@@ -54,28 +71,10 @@ const DashboardOverview = ({ summary }) => {
 
   return (
     /* Limit the stretch on high-res screens by using a wrapper with max-width */
-    <div className="w-100 mx-auto" style={{ maxWidth: '1620px' }}>
-      <div className="row g-2 justify-content-center">
-        {stats.map((stat, index) => (
-          <StatCard key={index} {...stat} />
-        ))}
-      </div>
-      <style>
-        {`
-          .bg-primary-light { background-color: #e3f2fd; }
-          .bg-success-light { background-color: #e8f5e9; }
-          .bg-danger-light { background-color: #ffebee; }
-          .bg-warning-light { background-color: #fff3e0; }
-          
-          /* Force exactly 20% width for 5 cards on screens wider than 1200px */
-          @media (min-width: 1200px) {
-            .col-xl {
-              flex: 0 0 20% !important;
-              max-width: 20% !important;
-            }
-          }
-        `}
-      </style>
+    <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      {stats.map((stat, index) => (
+        <StatCard key={index} {...stat} isFirst={index === 0} />
+      ))}
     </div>
   );
 };
@@ -101,6 +100,7 @@ const InvoiceList = () => {
     invoice_date_from: "",
     invoice_date_to: ""
   });
+  const [tableData, setTableData] = useState([]);
 
   const [paymentTerm, setPaymentTerm] = React.useState("");
 
@@ -168,125 +168,116 @@ const InvoiceList = () => {
     setSearchValue(vendor.vendor_code); // Only set vendor code
     setShowDropdown(false);
     setVendors([]);
+  };
 
-    // trigger tabulator refresh
-    if (tabulatorRef.current) {
-      tabulatorRef.current.setPage(1);
+  const fetchInvoices = async () => {
+    try {
+      const params = new URLSearchParams({
+        status: invoice_status,
+        vendor: searchValue,
+        payment_term: paymentTerm,
+        due_date_from: filters.due_date_from,
+        due_date_to: filters.due_date_to,
+        invoice_date_from: invoiceDateFilters.invoice_date_from,
+        invoice_date_to: invoiceDateFilters.invoice_date_to,
+      });
+  
+      const result = await apiFetch(
+        `${API_BASE}api/purchaseorder/api/purchase-order/invoices/listing?${params}`
+      );
+  
+      setTableData(result?.data || []);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleDeleteInvoice = async (rowData) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `You are about to delete vendor. This action cannot be undone!`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#000000', // ShopperBeats Black
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel',
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          // Show loading state
-          Swal.fire({
-            title: 'Deleting...',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-          });
+  useEffect(() => {
+    fetchInvoices();
+  }, [
+    invoice_status,
+    paymentTerm,
+    filters.due_date_from,
+    filters.due_date_to,
+    invoiceDateFilters.invoice_date_from,
+    invoiceDateFilters.invoice_date_to,
+    searchValue
+  ]);
 
-          // Backend Call
-          const del_resp = await apiFetch(`${API_BASE}api/vendor/api/delete/${rowData.id}`, {
-            method: 'DELETE',
-          });
-
-          // Success: Refresh Tabulator data instead of page reload
-          if (del_resp.status)
-            Swal.fire({
-              title: 'Deleted!',
-              text: 'The vendor has been removed.',
-              icon: 'success',
-              confirmButtonColor: '#000000'
-            });
-          else
-            Swal.fire({
-              title: 'Not Deleted!',
-              text: del_resp.message || 'Failed in delete.',
-              icon: 'failure',
-              confirmButtonColor: '#000000'
-            });
-
-          // Trigger Tabulator refresh
-          if (tabulatorRef.current) {
-            tabulatorRef.current.setData();
-          }
-
-        } catch (error) {
-          console.error("Delete failed:", error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Failed to delete vendor. Please try again.',
-            icon: 'error',
-            confirmButtonColor: '#000000'
-          });
-        }
-      }
-    });
+  const applyFilter = () => {
+    fetchInvoices();   // 👈 actual API call
   };
-  const ALL_COLUMNS = [
-    // FIXED COLUMNS (cannot be hidden)
+
+  const clearDateRange = () => {
+    // Only reset date-related states
+    setDateRangeDisplay("");
+    setFilters({ due_date_from: "", due_date_to: "" });
+  };
+
+  const clearFilter = () => {
+    setSearchValue("");
+    setInvoiceStatus("");
+    setDateRangeDisplay("");
+    setFilters({ due_date_from: "", due_date_to: "" });
+    setInvoiceDateDisplay("");
+    setInvoiceDateFilters({
+      invoice_date_from: "",
+      invoice_date_to: ""
+    });
+    setPaymentTerm("");
+  
+    fetchInvoices(); 
+  };
+
+  const tableConfig = [
     {
       title: "SB PO",
       field: "sb_po_number",
-      width: 140,
-      fixed: true, formatter: (cell) => {
-        const id = cell.getRow().getData().po_id;
-        return `
-          <a target="_blank" href="/purchaseorder/details/${id}" class=" link" title="Edit">
-              ${cell.getValue()}
-        </a>`;
-      }
+      render: (val, row) => (
+        <a
+          target="_blank"
+          href={`/purchaseorder/details/${row.po_id}`}
+          className="link"
+        >
+          {val}
+        </a>
+      )
     },
     {
       title: "Vendor PO",
       field: "vendor_po_number",
-      width: 100,
-      fixed: true, headerSort: false
     },
     {
       title: "VENDOR NAME",
       field: "vendor_name",
-      headerHozAlign: "center",
-      hozAlign: "center",
-      Width: 80,
-      formatter: (cell) => {
-        const id = cell.getRow().getData().vendor_id;
-        return `
-          <a target="_blank" href="/vendor/editvendor/${id}" class=" link" title="Edit">
-              ${cell.getValue()}
-        </a>`;
-      }
+      columnWidths: "250px",
+      render: (val, row) => (
+        <a
+          target="_blank"
+          href={`/vendor/editvendor/${row.vendor_id}`}
+          className="link"
+          title="Edit"
+        >
+          {val}
+        </a>
+      )
     },
     {
       title: "INVOICE NO",
       field: "invoice_number",
-      width: 200,
-      headerHozAlign: "center",
-      hozAlign: "center",
-      fixed: true, headerSort: true,
-      formatter: (cell) => {
-        const id = cell.getRow().getData().po_invoice_id;
-        return `
-          <a  href="purchaseorder/invoicedetails/${id}" class=" link" title="View">${cell.getValue()}</a>`;
-      }
+      render: (val, row) => (
+        <a
+          target="_blank"
+          href={`purchaseorder/invoicedetails/${row.invoice_number}`}
+          className="link"
+        >
+          {val}
+        </a>
+      )
     },
     {
       title: "INVOICE DATE",
       field: "invoice_date",
-      width: 170,
-      fixed: true,
-      headerSort: false,
       formatter: (cell) => {
         return formattedDate(cell.getValue());
       }
@@ -294,17 +285,13 @@ const InvoiceList = () => {
     {
       title: " DUE DATE",
       field: "due_date",
-      width: 170,
-      headerSort: false,
       formatter: (cell) => {
         return formattedDate(cell.getValue());
       }
     },
     {
       title: "INVOICE AMOUNT",
-      field: "invoice_total", width: 170, headerSort: false,
-      headerHozAlign: "center",
-      hozAlign: "center",
+      field: "invoice_total",
       formatter: (cell) => {
         return formatCurrency(cell.getValue());
       }
@@ -312,298 +299,163 @@ const InvoiceList = () => {
     {
       title: " STATUS",
       field: "status_display",
-      width: 160, headerSort: false, hozAlign: "center",
-      headerHozAlign: "center",
-      fixed: true,
-      formatter: (cell) => {
-        const status = cell.getValue();
-        let color = "secondary";
-        if (status === "Paid") color = "success";
-        if (status === "Unpaid") color = "danger";
-        if (status === "On Hold") color = "warning";
-
-        return `<span class="new_badge bg-${color}" style="min-width: 70px;">${status}</span>`;
+      render: (val) => {
+        let color = "bg-gray-400";
+        if (val === "Paid") color = "bg-green-500";
+        if (val === "Unpaid") color = "bg-red-500";
+        if (val === "On Hold") color = "bg-yellow-500";
+        return (
+          <span
+            className={`new_badge ${color} w-[80px] text-center text-[12px] font-medium text-white inline-block`}
+          >
+            {val}
+          </span>
+        );
       }
     },
 
     {
       title: "PAYMENT TERM",
       field: "payment_term_name",
-      headerHozAlign: "center",
-      hozAlign: "center",
-      width: 160, headerSort: false,
-      fixed: true
     },
-
 
   ];
 
-  useEffect(() => {
-
-    tabulatorRef.current = new Tabulator(tableRef.current, {
-      layout: "fitColumns",
-      height: "calc(100vh - 510px)",
-      placeholder: "No records found",
-      pagination: true,
-      paginationMode: "remote",
-      paginationSize: 20,
-      paginationSizeSelector: [20, 30, 40, 50],
-      sortMode: "remote",
-      ajaxURL: `${API_BASE}api/purchaseorder/api/purchase-order/invoices/listing`,
-
-      ajaxParams: function () {
-        return {
-          status: invoice_status || "",
-          vendor_search: searchValue || "",
-          due_date_from: filters.due_date_from || "",
-          due_date_to: filters.due_date_to || "",
-          invoice_date_from: invoiceDateFilters.invoice_date_from || "",
-          invoice_date_to: invoiceDateFilters.invoice_date_to || "",
-          payment_term_id: paymentTerm || ""
-        };
-      },
-
-      ajaxRequestFunc: async (url, config, params) => {
-        const sorter = params.sort && params.sort.length > 0 ? params.sort[0] : null;
-
-        const requestParams = {
-          page: params.page || 1,
-          size: params.size || 20,
-          status: params.status || "",
-          vendor_search: params.vendor_search || "",
-          due_date_from: params.due_date_from || "",
-          due_date_to: params.due_date_to || "",
-          invoice_date_from: params.invoice_date_from || "",
-          invoice_date_to: params.invoice_date_to || "",
-          payment_term_id: params.payment_term_id || "",
-          sort_by: sorter ? sorter.field : "", // Extracts the field name
-          sort_dir: sorter ? sorter.dir : ""    // Extracts 'asc' or 'desc'
-        };
-
-        const query = new URLSearchParams(requestParams).toString();
-        // ---------------------------------------
-        const response = await apiFetch(`${url}?${query}`);
-        return response;
-      },
-
-      ajaxResponse: function (url, params, response) {
-        if (response.summary) {
-          setSummary(response.summary || []);
-        }
-        return {
-          data: response.data || [],
-          last_page: response.last_page || 1,
-        };
-      },
-
-      columns: ALL_COLUMNS.map((col) => {
-        return col;
-      }),
-    });
-
-    return () => tabulatorRef.current?.destroy();
-  }, [searchValue, invoice_status, filters, invoiceDateFilters, paymentTerm]);
-
-  const applyFilter = () => {
-    if (tabulatorRef.current) {
-      tabulatorRef.current.replaceData();
-    }
-  };
-  const clearDateRange = () => {
-    // Only reset date-related states
-    setDateRangeDisplay("");
-    setFilters({ due_date_from: "", due_date_to: "" });
-  };
-  const clearFilter = () => {
-    setSearchValue("");
-    setInvoiceStatus("");
-    setDateRangeDisplay("");
-    setVendors([]);
-    setFilters({ due_date_from: "", due_date_to: "" });
-    setShowDropdown(false);
-    setInvoiceDateDisplay("");
-    setInvoiceDateFilters({
-      invoice_date_from: "",
-      invoice_date_to: ""
-    });
-    setPaymentTerm("");
-    if (tabulatorRef.current) {
-      tabulatorRef.current.replaceData();
-    }
-  };
-
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-3 ps-1">
-        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2" style={{ color: "#111827" }}>
-          <span style={{ width: 32, height: 32, borderRadius: 10, background: "#ede9fe", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-            <FontAwesomeIcon icon={faListUl} style={{ fontSize: 13, color: "#7c3aed" }} />
-          </span>
-          All Invoices
-        </h5>
-        <Link
-          to="/purchaseorder/invoicedue"
-          style={{
-            background: "#fef3c7",
-            color: "#d97706",
-            border: "1.5px solid #d97706",
-            fontWeight: 700,
-            fontSize: 12,
-            padding: "7px 14px",
-            borderRadius: 9,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            transition: "all .2s ease",
-            boxShadow: "0 2px 8px rgba(217,119,6,.15)",
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = "#d97706";
-            e.currentTarget.style.color = "#fff";
-            e.currentTarget.style.boxShadow = "0 4px 14px rgba(217,119,6,.35)";
-            e.currentTarget.style.transform = "translateY(-1px)";
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = "#fef3c7";
-            e.currentTarget.style.color = "#d97706";
-            e.currentTarget.style.boxShadow = "0 2px 8px rgba(217,119,6,.15)";
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
-        >
-          Due Payments
-        </Link>
-      </div>
+      <CmnHeader
+        title="All Invoices" icon1={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
+      >
+      </CmnHeader>
+
       <DashboardOverview summary={summary} />
-      <div className="card mb-3">
-        <div className="p-3">
-          <div className="">
-            <div className="row mb-3">
-              {/* Order Number */}
-              <div className="col-md-3">
-                <label className="form-label">Search</label>
-                <div className="position-relative">
-                  <input
-                    id="filter_vendor"
-                    name="vendor_search"          // important
-                    type="text"
-                    autoComplete="off"            // disable browser autocomplete
-                    className="form-control"
-                    placeholder="Vendor Name or Vendor Code"
-                    value={searchValue}
-                    onChange={(e) => {
-                      handleVendorSearch(e.target.value);
-                      if (tabulatorRef.current) {
-                        tabulatorRef.current.setPage(1);
-                      }
-                    }}
-                    onFocus={() => vendors.length && setShowDropdown(true)}
-                  />
-
-                  {showDropdown && vendors.length > 0 && (
-                    <ul
-                      className="list-group position-absolute w-100 shadow"
-                      style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
-                    >
-                      {vendors.map((vendor) => (
-                        <li
-                          key={vendor.id}
-                          className="list-group-item list-group-item-action"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => handleSelectVendor(vendor)}
-                        >
-                          <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Invoice Status</label>
-                <select
-                  name="status"
-                  className="form-control form-select"
-                  value={invoice_status}
+      <div className="mt-3 mb-3 p-3 bg-white rounded-[20px]">
+        <div className="">
+          <div className="row mb-3">
+            <div className="col-md-3">
+              <label className="form-label">Search</label>
+              <div className="position-relative">
+                <input
+                  id="filter_vendor"
+                  name="vendor_search"
+                  type="text"
+                  autoComplete="off"
+                  className="form-control"
+                  placeholder="Vendor Name or Vendor Code"
+                  value={searchValue}
                   onChange={(e) => {
-                    setInvoiceStatus(e.target.value);
+                    handleVendorSearch(e.target.value);
                     if (tabulatorRef.current) {
                       tabulatorRef.current.setPage(1);
                     }
                   }}
-                >
-                  <option value="">All</option>
-                  {[{ "id": 1, "name": "Paid" }, { "id": 2, "name": "Unpaid" }, { "id": 3, "name": "Cancelled" }, { "id": 4, "name": "On Hold" }]?.map(pt => (
-                    <option key={pt.id} value={pt.id}>{pt.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-3">
-                <label className="form-label"> Due Date</label>
-                <DateRangeInput isRange={true}
-                  value={dateRangeDisplay}
-                  onChange={handleDateChange} onCancel={clearDateRange}
-                  placeholder="Select date range" className="bg-white"
+                  onFocus={() => vendors.length && setShowDropdown(true)}
                 />
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Payment Term</label>
-                <select
-                  className="form-control form-select"
-                  value={paymentTerm}
-                  onChange={(e) => {
-                    setPaymentTerm(e.target.value);
-                    if (tabulatorRef.current) {
-                      tabulatorRef.current.setPage(1);
-                    }
-                  }}
-                >
-                  <option value="">All</option>
-                  {paymentTerms?.map((term) => (
-                    <option key={term.id} value={term.id}>
-                      {term.name}
-                    </option>
-                  ))}
-                </select>
+
+                {showDropdown && vendors.length > 0 && (
+                  <ul
+                    className="list-group position-absolute w-100 shadow"
+                    style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
+                  >
+                    {vendors.map((vendor) => (
+                      <li
+                        key={vendor.id}
+                        className="list-group-item list-group-item-action"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleSelectVendor(vendor)}
+                      >
+                        <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
-            <div className="row d-none">
-              <div className="col-md-3">
-                <label className="form-label">Invoice Date</label>
-                <DateRangeInput isRange={true}
-                  value={invoiceDateDisplay}
-                  onChange={handleInvoiceDateChange}
-                  onCancel={() => {
-                    setInvoiceDateDisplay("");
-                    setInvoiceDateFilters({
-                      invoice_date_from: "",
-                      invoice_date_to: ""
-                    });
-                  }}
-                  placeholder="Select invoice date range"
-                  className="bg-white"
-                />
-              </div>
-
+            <div className="col-md-3">
+              <label className="form-label">Invoice Status</label>
+              <select
+                name="status"
+                className="form-control form-select"
+                value={invoice_status}
+                onChange={(e) => {
+                  setInvoiceStatus(e.target.value);
+                  if (tabulatorRef.current) {
+                    tabulatorRef.current.setPage(1);
+                  }
+                }}
+              >
+                <option value="">All</option>
+                {[{ "id": 1, "name": "Paid" }, { "id": 2, "name": "Unpaid" }, { "id": 3, "name": "Cancelled" }, { "id": 4, "name": "On Hold" }]?.map(pt => (
+                  <option key={pt.id} value={pt.id}>{pt.name}</option>
+                ))}
+              </select>
             </div>
-            {/* FILTER ACTIONS */}
-            <div className="mt-3 d-flex gap-2">
-              <button type="button" className="btn btn-primary" onClick={applyFilter}>
-                <i className="fas fa-search" style={{ fontSize: "13px", marginRight: "5px" }}></i>
-                Search
-              </button>
-
-              <button type="button" className="btn btn-light" onClick={clearFilter}>
-                Clear
-              </button>
+            <div className="col-md-3">
+              <label className="form-label"> Due Date</label>
+              <DateRangeInput isRange={true}
+                value={dateRangeDisplay}
+                onChange={handleDateChange} onCancel={clearDateRange}
+                placeholder="Select date range" className="bg-white"
+              />
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Payment Term</label>
+              <select
+                className="form-control form-select"
+                value={paymentTerm}
+                onChange={(e) => {
+                  setPaymentTerm(e.target.value);
+                  if (tabulatorRef.current) {
+                    tabulatorRef.current.setPage(1);
+                  }
+                }}
+              >
+                <option value="">All</option>
+                {paymentTerms?.map((term) => (
+                  <option key={term.id} value={term.id}>
+                    {term.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-        </div></div>
-      <div className="card ">
-        <div className="card-body p-1 pt-0 pb-0 mt-0 mb-0 ">
-          <div ref={tableRef} />
+          <div className="row d-none">
+            <div className="col-md-3">
+              <label className="form-label">Invoice Date</label>
+              <DateRangeInput isRange={true}
+                value={invoiceDateDisplay}
+                onChange={handleInvoiceDateChange}
+                onCancel={() => {
+                  setInvoiceDateDisplay("");
+                  setInvoiceDateFilters({
+                    invoice_date_from: "",
+                    invoice_date_to: ""
+                  });
+                }}
+                placeholder="Select invoice date range"
+                className="bg-white"
+              />
+            </div>
+
+          </div>
+          <div className="mt-3 d-flex gap-2">
+            <button type="button" className="btn btn-primary" onClick={applyFilter}>
+              <i className="fas fa-search" style={{ fontSize: "13px", marginRight: "5px" }}></i>
+              Search
+            </button>
+
+            <button type="button" className="btn btn-light" onClick={clearFilter}>
+              Clear
+            </button>
+          </div>
         </div>
       </div>
+
+      <CmnTable
+        config={tableConfig}
+        data={tableData}
+        isSearchable={false}
+      />
     </>
   );
 };
