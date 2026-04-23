@@ -5,7 +5,7 @@ import { ArrowUpRight, Box, Users } from 'lucide-react';
 const ListCard = ({ title, data, type }) => {
   return (
     <div 
-      className="flex flex-col w-full xl:max-w-[513px] min-h-[100px] rounded-[20px] p-[16px] border border-gray-200 bg-white"
+      className="flex flex-col w-full  min-h-[100px] rounded-[20px] p-[16px] border border-gray-200 bg-white"
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
@@ -16,7 +16,7 @@ const ListCard = ({ title, data, type }) => {
       </div>
 
       {/* List Body */}
-      <div className="flex flex-col gap-3 overflow-hidden">
+      <div className="flex flex-col gap-2 overflow-hidden">
         {data.map((item, index) => (
           <div key={index} className="flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -41,15 +41,19 @@ const ListCard = ({ title, data, type }) => {
     const topProducts = [
       { name: "Vitamin C 500mg", count: 1200 },
       { name: "Organic Protein Power", count: 850 },
+      { name: "Organic Protein Power", count: 850 },
+      { name: "Organic Protein Power", count: 850 },
     ];
   
     const topVendors = [
       { name: "GreenLeaf Supplies", count: 287 },
+      { name: "Wellness International", count: 198 }, 
+      { name: "Wellness International", count: 198 },
       { name: "Wellness International", count: 198 },
     ];
   
     return (
-      <div className='flex flex-col gap-4 '>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4'>
         <ListCard title="Top Products" data={topProducts} type="product" />
         <ListCard title="Top Vendors" data={topVendors} type="vendor" />
         </div>

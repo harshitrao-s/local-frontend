@@ -13,7 +13,7 @@ import { Button } from "../Components/Common/ui/button";
 const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }) => {
   return (
     <div
-      className={`rounded-[20px] border-1 h-[170px] w-full p-[16px] flex flex-col justify-between ${dark ? "bg-[#002B5B] text-white" : "bg-white border shadow-sm"
+      className={`rounded-[20px] border-1 h-[170px] w-full p-[16px] flex flex-col justify-between ${dark ? "bg-[#002B5B] text-white" : "bg-white border"
         }`}
     >
       {/* Top Content */}
@@ -25,10 +25,10 @@ const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }
       </div>
 
       {/* Bottom Content */}
-      <div className="flex items-end justify-between w-full">
-        <h2 className="text-[24px] 2xl:text-[30px] font-bold leading-none">{value}</h2>
+      <div className="flex items-end justify-between w-full lg:flex-col lg:items-start lg:gap-2 xl:flex-row xl:items-end">
+        <h2 className="text-[20px] 2xl:text-[30px] font-bold leading-none">{value}</h2>
         {change && (
-          <div className="flex flex-col items-end">
+         <div className="flex flex-col items-end lg:items-start xl:items-end">
             <div className="flex items-center gap-1 text-[#04910C] font-semibold leading-none text-[14px]">
               <span>↗</span> {change}
             </div>
@@ -68,7 +68,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="w-full font-roboto bg-[#f5f6f8]  sm:px-4">
+    <div className="w-full font-roboto bg-[#f5f6f8]">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
@@ -98,17 +98,18 @@ const Dashboard = () => {
         <div className="lg:col-span-8 flex flex-col gap-4">
           {/* Charts */}
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="rounded-[20px] w-full md:w-[50%] lg:w-[558px] h-[357px]">
+            <div className="rounded-[20px] w-full md:flex-1 h-[357px]">
               <SalesChart />
             </div>
-            <div className="rounded-[20px] w-full md:w-[50%] h-[357px]">
-              <POStatusPieChart />
+            <div className="rounded-[20px] w-full md:flex-1 h-[357px]">
+              <TopProductList />
             </div>
           </div>
 
           {/* Recent Orders */}
           <div className="rounded-[20px]">
             <RecentPurchaseOrders />
+            
           </div>
         </div>
 
@@ -117,7 +118,7 @@ const Dashboard = () => {
 
           {/* Cards Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:h-[357px] content-between">
-            <StatCard title="Total Sales" value="$81,000" change="+10.6%" icon={DollarSign} dark />
+            <StatCard title="Total Sales" value="$8100" change="+10.6%" icon={DollarSign} dark />
             <StatCard title="Purchase Orders" value="1258" change="+10.6%" icon={ShoppingCart} />
             <StatCard title="Products" value="2654" change="+10.6%" icon={Package} />
             <StatCard title="Vendors" value="125" change="+10.6%" icon={Users} />
@@ -125,7 +126,7 @@ const Dashboard = () => {
 
           
           <div className="flex flex-col gap-4">
-            <TopProductList />
+          <POStatusPieChart />
           </div>
         </div>
       </div>
