@@ -17,6 +17,7 @@ const CommonTable = ({
   isSortable = true,
   defaultSort = null,
   isPaginated = false,
+  MainContainerCssClases,
   searchAPi = "",
 }) => {
   const [search, setSearch] = useState("");
@@ -169,7 +170,8 @@ const CommonTable = ({
   }, []);
 
   return (
-    <div className="mainTable">
+    <div className={`mainTable ${MainContainerCssClases}`}>
+
       {(title || subtitle) && (
         <div className="mainTable__header">
           <div className="mainTable__titleBox">
@@ -202,18 +204,23 @@ const CommonTable = ({
                   key={i}
                   onClick={() => handleSort(col)}
                   style={{ width: columnWidths[i] }}
+                  className="relative px-4 py-2" // border-r hata diya yahan se
                 >
-                  <div className="mainTable__thContent">
-                    {col.title}
+                  <div className="mainTable__thContent flex items-center justify-between">
+                    <span className="truncate">{col.title}</span>
+
                     {isSortable && col.field && (
-                      <span className="mainTable__sortIcon">
+                      <span className="mainTable__sortIcon ml-2 shrink-0">
                         {SbAdminSvg.sortingIcon}
                       </span>
                     )}
                   </div>
-
+                  {/* Line SEPARATOR */}
+                  {i !== config.length - 1 && (
+                    <div className="absolute right-0 top-[25%] h-[50%] w-[1px] bg-gray-300" />
+                  )}
                   <div
-                    className="mainTable__resizer"
+                    className="mainTable__resizer absolute right-0 top-0 h-full w-2 cursor-col-resize z-10"
                     onMouseDown={(e) => startResizing(i, e)}
                   />
                 </th>
