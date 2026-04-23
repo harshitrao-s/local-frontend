@@ -227,14 +227,14 @@ const CommonTable = ({
                       zIndex: 2,
                     }}
                   >
-                    <div className="mainTable__thContent">
+                    <span className="mainTable__thContent">
                       {col.title}
                       {isSortable && col.field && (
                         <span className="mainTable__sortIcon">
                           {SbAdminSvg.sortingIcon}
                         </span>
                       )}
-                    </div>
+                    </span>
 
                     <div
                       className="mainTable__resizer"
