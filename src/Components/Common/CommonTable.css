@@ -69,8 +69,13 @@
     color: #454545;
 }
 
+.thin-scroll {
+        scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 transparent;
+}
+
 .mainTable tr:hover {
-    /* background: #eef2ff; */
+    background: #eef2ff;
 }
 
 .mainTable__thContent {

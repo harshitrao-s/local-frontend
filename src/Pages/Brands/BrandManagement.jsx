@@ -153,77 +153,26 @@ const BrandManagement = () => {
         actionBtn={() => openModal("add")}
       />
 
-      {/* FILTER */}
-      <div className="card mb-3">
-        <div className="card-body">
-          <div className="row g-3 align-items-end">
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Brand Name</label>
-              <input
-                id="filter_brand_name"
-                className="form-control"
-                placeholder="Search..."
-                onKeyDown={(e) => e.key === "Enter" && applyFilter()}
-              />
-            </div>
-            <div className="col-md-4 d-flex gap-2">
-              <button className="btn btn-primary" onClick={applyFilter}>
-                Filter
-              </button>
-              <button className="btn btn-light" onClick={clearFilter}>
-                Clear
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  
 
       {/* TABLE */}
       <CommonTable
         config={tableConfig}
         data={data}
-        isSearchable={false}
+        isSearchable={true}
+        searchFromApi={true}
+        searchAPi={`${API_BASE}api/product_api/api/brands?page=${page}&size=${size}&`}
+        //${API_BASE}api/product_api/api/brands?page=${page}&size=${size}&brand_name=${brand_name}
+        searchParamKey={'brand_name'}
+        isPaginated={true}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        currentPage={page}
+        totalPages={totalPages}
       />
 
-      {/* PAGINATION */}
-      <div className="d-flex justify-content-between align-items-center mt-3">
-        <span>
-          Page {page} of {totalPages}
-        </span>
-
-        <div className="d-flex gap-2">
-          <button
-            className="btn btn-sm btn-outline-secondary"
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-          >
-            <i className="fas fa-chevron-left"></i>
-          </button>
-
-          <button
-            className="btn btn-sm btn-outline-secondary"
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            <i className="fas fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <select
-          className="form-select form-select-sm"
-          style={{ width: "100px" }}
-          value={size}
-          onChange={(e) => {
-            setSize(Number(e.target.value));
-            setPage(1);
-          }}
-        >
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
-      </div>
+      
 
       {/* MODAL */}
       {modalConfig.show && (

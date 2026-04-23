@@ -18,6 +18,12 @@ const CommonTable = ({
   defaultSort = null,
   isPaginated = false,
   searchAPi = "",
+  SearchPlaceHolder = "Search...",
+  bodyHeight = "calc(100vh - 350px)", // ✅ NEW PROP
+  onPageChange,
+  currentPage = 1,
+  totalPages = 1,
+  searchParamKey = "q",
 }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -26,12 +32,12 @@ const CommonTable = ({
   const [sortConfig, setSortConfig] = useState(defaultSort);
   const [expandedRows, setExpandedRows] = useState({});
 
-  // ✅ Sync data safely
+  // ✅ Sync data
   useEffect(() => {
     setTableData(data || []);
   }, [data]);
 
-  // ✅ Set default column widths (only when config actually changes)
+  // ✅ Column widths
   useEffect(() => {
     if (!config.length) return;
 
@@ -51,7 +57,7 @@ const CommonTable = ({
     return () => clearTimeout(timer);
   }, [search, debounceTime]);
 
-  // ✅ API Search (fixed deps)
+  // ✅ API Search
   useEffect(() => {
     if (!searchFromApi) return;
 
@@ -59,16 +65,16 @@ const CommonTable = ({
 
     (async () => {
       try {
-        const q = new URLSearchParams({ q: debouncedSearch }).toString();
+        const q = new URLSearchParams({ [searchParamKey]: debouncedSearch }).toString();
         const result = await apiFetch(`${searchAPi}${q}`);
 
         if (!ignore) {
-          setTableData((prev) => {
-            const newData = result.data || [];
-            return JSON.stringify(prev) === JSON.stringify(newData)
+          const newData = result.data || [];
+          setTableData((prev) =>
+            JSON.stringify(prev) === JSON.stringify(newData)
               ? prev
-              : newData;
-          });
+              : newData
+          );
         }
       } catch (e) {
         console.error("Search API error:", e);
@@ -80,7 +86,7 @@ const CommonTable = ({
     };
   }, [debouncedSearch, searchFromApi, searchAPi]);
 
-  // ✅ Filter (client side)
+  // ✅ Filter
   const filteredData = useMemo(() => {
     if (searchFromApi) return tableData;
     if (!debouncedSearch) return tableData;
@@ -121,20 +127,23 @@ const CommonTable = ({
     return sorted;
   }, [filteredData, sortConfig, isSortable]);
 
-  // ✅ Sort handler (memoized)
-  const handleSort = useCallback((col) => {
-    if (!isSortable || col.type === "actions" || !col.field) return;
+  // ✅ Sort handler
+  const handleSort = useCallback(
+    (col) => {
+      if (!isSortable || col.type === "actions" || !col.field) return;
 
-    setSortConfig((prev) => {
-      if (prev?.field !== col.field) {
-        return { field: col.field, dir: "asc" };
-      }
-      return {
-        field: col.field,
-        dir: prev.dir === "asc" ? "desc" : "asc",
-      };
-    });
-  }, [isSortable]);
+      setSortConfig((prev) => {
+        if (prev?.field !== col.field) {
+          return { field: col.field, dir: "asc" };
+        }
+        return {
+          field: col.field,
+          dir: prev.dir === "asc" ? "desc" : "asc",
+        };
+      });
+    },
+    [isSortable]
+  );
 
   // ✅ Resize
   const startResizing = (index, e) => {
@@ -160,7 +169,7 @@ const CommonTable = ({
     document.addEventListener("mouseup", onMouseUp);
   };
 
-  // ✅ Mobile toggle (memoized)
+  // ✅ Mobile toggle
   const toggleRow = useCallback((index) => {
     setExpandedRows((prev) => ({
       ...prev,
@@ -189,111 +198,133 @@ const CommonTable = ({
           <SearchBar
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            placeholder={SearchPlaceHolder}
           />
         </div>
       )}
 
+      {/* ✅ SCROLLABLE BODY */}
       <div className="mainTable__container">
-        <table>
-          <thead>
-            <tr>
-              {config.map((col, i) => (
-                <th
-                  key={i}
-                  onClick={() => handleSort(col)}
-                  style={{ width: columnWidths[i] }}
-                >
-                  <div className="mainTable__thContent">
-                    {col.title}
-                    {isSortable && col.field && (
-                      <span className="mainTable__sortIcon">
-                        {SbAdminSvg.sortingIcon}
-                      </span>
-                    )}
-                  </div>
-
-                  <div
-                    className="mainTable__resizer"
-                    onMouseDown={(e) => startResizing(i, e)}
-                  />
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {processedData.length > 0 ? (
-              processedData.map((row, i) => {
-                const isOpen = expandedRows[i];
-
-                return (
-                  <React.Fragment key={i}>
-                    {/* Desktop */}
-                    <tr className="desktopRow">
-                      {config.map((col, j) => (
-                        <td key={j} style={{ width: columnWidths[j] }}>
-                          {col.type === "actions"
-                            ? col.render?.(row, i)
-                            : col.render
-                              ? col.render(row[col.field], row)
-                              : row[col.field] ?? "—"}
-                        </td>
-                      ))}
-                    </tr>
-
-                    {/* Mobile */}
-                    <tr className="mobileRow">
-                      <td colSpan={config.length}>
-                        <div
-                          className="mainTable__mobileHeader"
-                          onClick={() => toggleRow(i)}
-                        >
-                          <span className="title">
-                            {row[config[0]?.field]}
-                          </span>
-
-                          <div className="arrow-style">
-                            {isOpen
-                              ? SbAdminSvg.arrowDownIconSvg
-                              : SbAdminSvg.arrowUpIconSvg}
-                          </div>
-                        </div>
-
-                        <div className={`mobileContentWrapper ${isOpen ? "open" : ""}`}>
-                          <div className="mainTable__mobileContent">
-                            {config.slice(1).map((col, j) => (
-                              <div key={j} className="mainTable__mobileItem">
-                                <span className="label">{col.title}</span>
-                                <span className="value">
-                                  {col.type === "actions"
-                                    ? col.render?.(row, i)
-                                    : col.render
-                                      ? col.render(row[col.field], row)
-                                      : row[col.field] ?? "—"}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })
-            ) : (
+        <div
+          style={{
+            maxHeight: bodyHeight,
+            overflowY: "auto",
+            scrollBehavior: "smooth",
+          }}
+          className="thin-scroll mainTable__container"
+        >
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
               <tr>
-                <td colSpan={config.length} className="mainTable__empty">
-                  No data found
-                </td>
+                {config.map((col, i) => (
+                  <th
+                    key={i}
+                    onClick={() => handleSort(col)}
+                    style={{
+                      width: columnWidths[i],
+                      position: "sticky",
+                      top: 0,
+                      zIndex: 2,
+                    }}
+                  >
+                    <div className="mainTable__thContent">
+                      {col.title}
+                      {isSortable && col.field && (
+                        <span className="mainTable__sortIcon">
+                          {SbAdminSvg.sortingIcon}
+                        </span>
+                      )}
+                    </div>
+
+                    <div
+                      className="mainTable__resizer"
+                      onMouseDown={(e) => startResizing(i, e)}
+                    />
+                  </th>
+                ))}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {processedData.length > 0 ? (
+                processedData.map((row, i) => {
+                  const isOpen = expandedRows[i];
+
+                  return (
+                    <React.Fragment key={i}>
+                      {/* Desktop */}
+                      <tr className="desktopRow">
+                        {config.map((col, j) => (
+                          <td key={j} style={{ width: columnWidths[j] }}>
+                            {col.type === "actions"
+                              ? col.render?.(row, i)
+                              : col.render
+                                ? col.render(row[col.field], row)
+                                : row[col.field] ?? "—"}
+                          </td>
+                        ))}
+                      </tr>
+
+                      {/* Mobile */}
+                      <tr className="mobileRow">
+                        <td colSpan={config.length}>
+                          <div
+                            className="mainTable__mobileHeader"
+                            onClick={() => toggleRow(i)}
+                          >
+                            <span className="title">
+                              {row[config[0]?.field]}
+                            </span>
+
+                            <div className="arrow-style">
+                              {isOpen
+                                ? SbAdminSvg.arrowDownIconSvg
+                                : SbAdminSvg.arrowUpIconSvg}
+                            </div>
+                          </div>
+
+                          <div
+                            className={`mobileContentWrapper ${isOpen ? "open" : ""
+                              }`}
+                          >
+                            <div className="mainTable__mobileContent">
+                              {config.slice(1).map((col, j) => (
+                                <div
+                                  key={j}
+                                  className="mainTable__mobileItem"
+                                >
+                                  <span className="label">{col.title}</span>
+                                  <span className="value">
+                                    {col.type === "actions"
+                                      ? col.render?.(row, i)
+                                      : col.render
+                                        ? col.render(row[col.field], row)
+                                        : row[col.field] ?? "—"}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={config.length} className="mainTable__empty">
+                    No data found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {isPaginated && (
         <div style={{ marginTop: "16px" }}>
-          <Pagination />
+          <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} currentPageSize={tableData.length} />
         </div>
       )}
     </div>
