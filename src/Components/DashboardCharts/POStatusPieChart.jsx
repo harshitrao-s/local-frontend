@@ -162,7 +162,7 @@ export const POStatusPieChart = ({ change = "3.6%", dark = false }) => {
   // toh check kar ki Recharts version 2.x+ hai.
 
   return (
-    <div className="w-full lg:h-[432px] xl:h-[380px] rounded-[20px] bg-white border p-6 flex flex-col justify-between mask-scroll overflow-x-auto ">
+    <div className="w-full lg:h-[448px] xl:h-[394px] rounded-[20px] bg-white border p-6 flex flex-col justify-between mask-scroll overflow-x-auto ">
       <h3 className="text-[16px] font-semibold text-[#454545] mb-4">
         Purchase Order Status
       </h3>
