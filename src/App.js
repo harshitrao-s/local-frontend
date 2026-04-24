@@ -149,7 +149,7 @@ const MainLayout = ({ children }) => {
 
       {/* Sidebar */}
       <div
-        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-0" : "w-[250px] hidden sm:block"
+        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-[64px]" : "w-[250px] hidden sm:block"
           }`}
       >
         <SideMenu collapsed={collapsed} setCollapsed={setCollapsed} />

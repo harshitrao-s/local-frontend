@@ -117,21 +117,21 @@ const AllVendors = () => {
 
   const handleVendorSearch = (value) => {
     setSearchValue(value);
-  
+
     if (debounceRef.current) clearTimeout(debounceRef.current);
-  
+
     if (!value.trim()) {
       setVendors([]);
       setShowDropdown(false);
       return;
     }
-  
+
     debounceRef.current = setTimeout(async () => {
       try {
         const res = await apiFetch(
           `${API_BASE}api/vendor_api/lists?search=${value}`
         );
-  
+
         if (res?.data) {
           setVendors(res.data);
           setShowDropdown(true);
@@ -146,7 +146,7 @@ const AllVendors = () => {
     setSearchValue(vendor.vendor_code);
     setShowDropdown(false);
     setVendors([]);
-  };  
+  };
 
 
   const tableConfig = [
@@ -245,9 +245,13 @@ const AllVendors = () => {
       <CmnHeader
         title="All Vendors" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Add New" actionLink="/vendor/addnewvendor"
       />
-       {/* <Input icon={Search} />    */}
+      {/* <Input icon={Search} />
+      <div>
+        <Select />
 
-      
+      </div> */}
+
+
       {/* FILTERS */}
       <div className="card p-2">
         <div className="row p-2">
