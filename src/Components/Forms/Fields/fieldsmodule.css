@@ -1,0 +1,8 @@
+.sb-form-field-input  {
+    all: unset;
+    border-radius: 12px;
+    border: 1px solid #d1d1d1;
+    height: 40px;
+    width: 100%;
+    padding: 0px 12px;
+}

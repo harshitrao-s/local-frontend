@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef, } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
-import { getVendorStatus, getVendorStatusName } from "../../Constants/vendorStatus";
+import { getVendorStatus } from "../../Constants/vendorStatus";
 import CmnHeader from "../../Components/Common/CmnHeader";
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, Search } from "lucide-react";
 import CmnTable from "../../Components/Common/CmnTable";
 import { Link } from "react-router-dom";
-const STORAGE_KEY = "purchase_order_columns";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import Input from "../../Components/Forms/Fields/input";
+import { Select } from "../../Components/Common/ui/select";
+const STORAGE_KEY = "purchase_order_columns";
 
 
 /* ----------------------------------------
@@ -243,7 +245,9 @@ const AllVendors = () => {
       <CmnHeader
         title="All Vendors" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Add New" actionLink="/vendor/addnewvendor"
       />
+       {/* <Input icon={Search} />    */}
 
+      
       {/* FILTERS */}
       <div className="card p-2">
         <div className="row p-2">
