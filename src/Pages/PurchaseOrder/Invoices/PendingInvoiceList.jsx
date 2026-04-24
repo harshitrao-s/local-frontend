@@ -969,9 +969,16 @@ export default function PendingInvoiceList() {
 
       {/* Stat cards */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {STAT_CFG.map((stat, index) => (
-          <StatCard key={index} {...stat} isFirst={index === 0} isCurrency={stat.isCurrency} />
-        ))}
+        {STAT_CFG.map((stat, index) => {
+          const { key, ...rest } = stat; 
+          return (
+            <StatCard
+              key={key || index}   
+              {...rest}
+              isFirst={index === 0}
+            />
+          );
+        })}
       </div>
 
       {/* Filters */}

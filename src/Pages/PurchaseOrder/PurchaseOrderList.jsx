@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
-//import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css"; 
 import useMasterData from "../../Context/MasterDataProvider";
 import { API_BASE, API_ENDPOINTS } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
 import Swal from "sweetalert2";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTableColumns, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { formatAUD, formattedDate } from "../../Utils/utilFunctions";
 import { PO_STATUS } from "../../Constants/PO_Status";
 import { INVOICE_STATUS } from "../../Constants/InvoiceStatus";
-import { Link } from "react-router-dom";
+import { CreditCard } from 'lucide-react'
+import CmnHeader from "../../Components/Common/CmnHeader";
+import CmnTable from "../../Components/Common/CmnTable";
+import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
 /* ----------------------------------------
    CONSTANTS & HELPERS
 ---------------------------------------- */
@@ -35,254 +34,193 @@ const deletePO = async (po_id, e) => {
   }
 };
 
-const ALL_COLUMNS = [
-  // FIXED COLUMNS (cannot be hidden)
+const tableConfig = [
   {
-    title: "SB PO", field: "po_number", width: 170, headerHozAlign: "center", headerHozAlign: "left",
-    hozAlign: "left",
-
-    formatter: (cell) =>
-      `<a href="/purchaseorder/details/${cell.getRow().getData().po_id}"
-         className="fw-bold text-primary">${cell.getValue()}</a>`,
+    title: "SB PO",
+    field: "po_number",
+    render: (val, row) => (
+      <a
+        target="_blank"
+        href={`/purchaseorder/details/${row.po_id}`}
+        className="link"
+      >
+        {val}
+      </a>
+    )
   },
   {
-    title: "Vendor PO", hozAlign: "center", field: "master_vendor_po_number", width: 170, headerHozAlign: "left",
-    hozAlign: "left", headerSort: false,
+    title: "Vendor PO",
+    field: "master_vendor_po_number",
   },
   {
     title: "Order Date",
-    field: "order_date", width: 170,
-    headerSort: false,
-    fixed: true, formatter: function (cell) {
-      const dateValue = cell.getValue();
-      if (!dateValue) return "-";
+    field: "order_date",
+    render: (val) => {
+      if (!val) return "-";
+
       try {
-        return formattedDate(dateValue);
+        return formattedDate(val);
       } catch (e) {
-        return dateValue;
+        return val;
       }
     }
   },
-  { title: "Vendor Name", Width: 220, field: "vendor_name", headerSort: false, optional: true },
+  {
+    title: "Vendor Name",
+    field: "vendor_name",
+    // render: (val,row) => {
+    //   if (det === "0") return "Local";
+    //   else if (det === "1") return "International";
+    //   else return "";
+    // },
+  },
   {
     title: "PO Status",
-    headerSort: false,
-    headerHozAlign: "center",
-    hozAlign: "center",
     field: "status_id",
-    width: 150,
-    fixed: true,
-    formatter: function (cell) {
-      const status = cell.getValue();
+    render: (val) => {
       let text = "Unknown";
       let badge = "badge-info";
 
-      if (status === -1) { text = "Draft"; badge = "badge-secondary"; }
-      else if (status === 0) { text = "Parked"; badge = "badge-warning"; }
-      else if ([1].includes(status)) { text = "Placed"; badge = "badge-primary"; }
-      else if (status === 2) { text = "Costed"; badge = "badge-info"; }
-      else if (status === 3) { text = "Receipted"; badge = "badge-success"; }
-      else if (status === 4) { text = "Completed"; badge = "badge-warning"; }
-      else if (status === 5) { text = "Partially Delivered"; badge = "badge-danger"; }
-      else if (status === 6) { text = "Delivered"; badge = "badge-danger"; }
-      else if (status === 7) { text = "Closed"; badge = "badge-danger"; }
-      else if (status === 8) { text = "Cancelled"; badge = "badge-danger"; }
+      if (val === -1) { text = "Draft"; badge = "badge-secondary"; }
+      else if (val === 0) { text = "Parked"; badge = "badge-warning"; }
+      else if ([1].includes(val)) { text = "Placed"; badge = "badge-primary"; }
+      else if (val === 2) { text = "Costed"; badge = "badge-info"; }
+      else if (val === 3) { text = "Receipted"; badge = "badge-success"; }
+      else if (val === 4) { text = "Completed"; badge = "badge-warning"; }
+      else if (val === 5) { text = "Partially Delivered"; badge = "badge-danger"; }
+      else if (val === 6) { text = "Delivered"; badge = "badge-danger"; }
+      else if (val === 7) { text = "Closed"; badge = "badge-danger"; }
+      else if (val === 8) { text = "Cancelled"; badge = "badge-danger"; }
 
-      return `<span class="new_badge ${badge}" style="min-width:80px;">${text.toUpperCase()}</span>`;
-    },
+      return (
+        <span
+          className={`new_badge ${badge} text-center`}
+        // style={{ minWidth: "80px", display: "inline-block", textAlign: "center" }}
+        >
+          {text.toUpperCase()}
+        </span>
+      );
+    }
   },
-  /* {
-     title: "Shipping Status",
-     field: "",
-     //shipping_status
-     fixed: true,headerSort: false, width:150,
-     formatter: function (cell) {
-       return <></>
-         const status = cell.getValue();
-         let text = "Unknown";
-         let badge = "badge-info";
-         return `<span class="px-3 py-2 fs-7 badge badge-pill ${badge}">${status.toUpperCase()}</span>`;
-     },
-   },*/
-  { title: "Currency", field: "currency_code", width: 170, hozAlign: "center", headerHozAlign: "center", headerSort: false },
-  //  OPTIONAL COLUMNS (hide / show)
+  {
+    title: "Currency",
+    field: "currency_code",
+  },
   {
     title: "Total Amount",
     field: "summary_total",
-    //optional: true,
-    hozAlign: "center", width: 150,
-    headerSort: false
   },
-  {
-    title: "Ordered QTY",
-    field: "product_total_qty",
-    optional: true,
-    hozAlign: "center", width: 170,
-    headerSort: false
-  },
-  /*{
-    title: "Received QTY",
-    field: "product_total_received_qty",
-    //optional: true,
-    hozAlign: "right",minWidth: 120,
-                headerSort: false
-  },*/
+
   {
     title: "ACTION",
-    width: 170,
-    hozAlign: "center",
-    headerSort: false,
-    formatter: function (cell) {
-      const d = cell.getRow().getData();
+    field: "actions",
+    render: (val, row) => {
+      if (!row) return null;
 
-      const wrapper = document.createElement("div");
-      wrapper.style.display = "flex";
-      wrapper.style.gap = "6px";
+      const isDeleteDisabled = ![0, -1].includes(row?.status_id);
 
-      // ✏️ EDIT BUTTON (always visible)
-      const editBtn = document.createElement("button");
-      editBtn.type = "button";
-      editBtn.className = "btn btn-sm btn-outline-primary";
-      editBtn.title = "Edit Purchase Order";
-      editBtn.innerHTML = `<i class="fas fa-pen"></i>`;
+      return (
+        <div className="flex items-center justify-center gap-2">
 
-      editBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        window.open(`/purchaseorder/create/${d.po_id}`, "_blank");
-      });
+          {/* ✏️ EDIT */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(`/purchaseorder/create/${row.po_id}`, "_blank");
+            }}
+            className="cursor-pointer text-blue-600 hover:scale-110 transition"
+            title="Edit Purchase Order"
+          >
+            {SbAdminSvg.edit}
+          </div>
 
-      // 🗑️ DELETE BUTTON
-      const deleteBtn = document.createElement("button");
-      deleteBtn.type = "button";
-      deleteBtn.className = "btn btn-sm btn-outline-danger";
-      deleteBtn.title = "Delete Purchase Order";
-      deleteBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+          {/* 🗑️ DELETE */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!isDeleteDisabled) {
+                deletePO(row.po_id, e);
+              }
+            }}
+            className={`cursor-pointer transition ${isDeleteDisabled
+                ? "opacity-50 cursor-not-allowed"
+                : "text-red-600 hover:scale-110"
+              }`}
+            title="Delete Purchase Order"
+          >
+            {SbAdminSvg.delete}
+          </div>
 
-      // Disable delete for other statuses
-      if (![0, -1].includes(d.status_id)) {
-        deleteBtn.disabled = true;
-        deleteBtn.style.opacity = "0.5";
-        deleteBtn.style.cursor = "not-allowed";
-      } else {
-        deleteBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          deletePO(d.po_id, e);
-        });
-      }
-
-      wrapper.appendChild(editBtn);
-      wrapper.appendChild(deleteBtn);
-
-      return wrapper;
+        </div>
+      );
     },
-    // cellClick here acts as a backup safety to stop propagation
-    cellClick: (e) => e.stopPropagation()
-  }
+  },
 
-];
+]
 
 /* ----------------------------------------
    localStorage helpers
 ---------------------------------------- */
-const getSavedColumns = () => {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) {
-    return ALL_COLUMNS
-      .filter((c) => c.optional)
-      .map((c) => c.field);
-  }
-  return JSON.parse(saved);
-};
+// const getSavedColumns = () => {
+//   const saved = localStorage.getItem(STORAGE_KEY);
+//   if (!saved) {
+//     return ALL_COLUMNS
+//       .filter((c) => c.optional)
+//       .map((c) => c.field);
+//   }
+//   return JSON.parse(saved);
+// };
 
-const saveColumns = (fields) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(fields));
-};
+// const saveColumns = (fields) => {
+//   localStorage.setItem(STORAGE_KEY, JSON.stringify(fields));
+// };
 
 /* ----------------------------------------
    MAIN COMPONENT
 ---------------------------------------- */
 const PurchaseOrderList = () => {
   const tableRef = useRef(null);
-  const tabulatorRef = useRef(null);
   const { vendors, warehouses } = useMasterData();
+  const [tableData, setTableData] = useState([]);
   const [poTotalValue, setPOTotalValue] = useState(0);
+  const [filters, setFilters] = useState({
+    status: "",
+    order_no: "",
+    vendor_id: "",
+    delivery_ref: "",
+    warehouse: "",
+    vendor_payment_status: "",
+  });
+
+  const fetchPOs = async () => {
+    try {
+      const params = new URLSearchParams({
+        status: filters.status || "",
+        order_no: filters.order_no || "",
+        vendor_id: filters.vendor_id || "",
+        delivery_ref: filters.delivery_ref || "",
+        warehouse: filters.warehouse || "",
+        vendor_payment_status: filters.vendor_payment_status || "",
+      });
+
+      const url = `${API_ENDPOINTS.PO_LISTING}?${params}`;
+
+      const res = await apiFetch(url);
+
+      setTableData(res?.data || []);
+
+      if (res?.grand_total !== undefined) {
+        setPOTotalValue(res.grand_total);
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const visibleOptionalCols = getSavedColumns();
-    tabulatorRef.current = new Tabulator(tableRef.current, {
-    placeholder: "No records found",
-  
-    layout: "fitColumns",
-    height: "calc(100vh - 490px)",
-    pagination: true,
-    paginationMode: "remote",
-    paginationSize: 20,
-    paginationSizeSelector: [20, 30, 40, 50],
-    sortMode: "remote",
-    ajaxURL: API_ENDPOINTS.PO_LISTING,
-
-      ajaxParams: function () {
-        return {
-          status: document.getElementById("filter_status")?.value || "",
-          order_no: document.getElementById("filter_order_no")?.value || "",
-          vendor_id: document.getElementById("filter_vendor")?.value || "",
-          delivery_ref: document.getElementById("filter_delivery_ref")?.value || "",
-          warehouse: document.getElementById("filter_warehouse")?.value || "",
-          vendor_payment_status:
-            document.getElementById("filter_vendor_payment_status")?.value || "",
-        };
-      },
-
-      ajaxRequestFunc: async function (url, config, params) {
-        // Extract sorting if you decide to add it later
-        const sorter = params.sort && params.sort.length > 0 ? params.sort[0] : null;
-        const requestParams = {
-          page: params.page || 1,
-          size: params.size || 20,
-          // Ensure filters are pulled from the DOM or the params object
-          status: document.getElementById("filter_status")?.value || "",
-          order_no: document.getElementById("filter_order_no")?.value || "",
-          vendor_id: document.getElementById("filter_vendor")?.value || "",
-          delivery_ref: document.getElementById("filter_delivery_ref")?.value || "",
-          warehouse: document.getElementById("filter_warehouse")?.value || "",
-          vendor_payment_status: document.getElementById("filter_vendor_payment_status")?.value || "",
-        };
-
-        if (sorter) {
-          requestParams.sort_by = sorter.field;
-          requestParams.sort_dir = sorter.dir;
-        }
-
-        const query = new URLSearchParams(requestParams).toString();
-        const res = await apiFetch(`${url}?${query}`);
-        return res;
-      },
-
-      ajaxResponse: function (url, params, response) {
-        if (response?.grand_total !== undefined) {
-          setPOTotalValue(response.grand_total);
-        }
-        return {
-          data: response.data || [],
-          last_page: response.last_page || 1,
-        };
-      },
-
-      columns: ALL_COLUMNS.map((col) => {
-        if (col.fixed) {
-          return { ...col, visible: true };
-        }
-        if (col.optional) {
-          return {
-            ...col,
-            visible: visibleOptionalCols.includes(col.field),
-          };
-        }
-        return col;
-      }),
-    });
-
-    return () => tabulatorRef.current?.destroy();
-  }, []);
+    fetchPOs();
+  }, [filters]);
 
   const handleAddNew = async () => {
     try {
@@ -294,109 +232,42 @@ const PurchaseOrderList = () => {
         },
       });
 
-      const data = res;
-
-      if (data?.data?.po_id) {
-        // redirect to SAME create page with po_id
-        window.location.href = `/purchaseorder/create/${data?.data?.po_id}/AddNew`;
+      if (res?.data?.po_id) {
+        window.location.href = `/purchaseorder/create/${res.data.po_id}/AddNew`;
       }
+
     } catch (err) {
       console.error("Failed to create PO", err);
     }
   };
 
   const applyFilter = () => {
-    if (!tabulatorRef.current) return;
-    tabulatorRef.current.setPage(1); // triggers ajax reload
+    fetchPOs();
   };
 
   const clearFilter = () => {
-    [
-      "filter_status",
-      "filter_order_no",
-      "filter_vendor",
-      "filter_delivery_ref",
-      "filter_warehouse",
-      "filter_vendor_payment_status",
-    ].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.value = "";
+    setFilters({
+      status: "",
+      order_no: "",
+      vendor_id: "",
+      delivery_ref: "",
+      warehouse: "",
+      vendor_payment_status: "",
     });
 
-    tabulatorRef.current.setPage(1);
+    fetchPOs();
   };
-
   return (
     <>
       {/* HEADER */}
-      <div className="d-flex justify-content-between ps-1 mb-2">
-        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
-          <span className="header-left-badge"><FontAwesomeIcon icon={faListUl} style={{ fontSize: 13, color: "#7c3aed" }} /></span>
-          All Purchases</h5>
-        <div className="d-flex gap-1">
-          {/* In-transit */}
-          <Link
-          to="/purchaseorder/kanbanlisting"
-            className="btn btn-outline-primary"
-          >
-            <FontAwesomeIcon className="me-1 ps-0" icon={faTableColumns} />
-            Kanban View
-          </Link>
 
-          <Link 
-          to= "/purchaseorder/intransit/listing"
-          disabled={true}
-            className="btn btn-outline-primary"
-          >
-            <i className="fas fa-truck me-2"></i>
-            In-transit
-          </Link>
+      <CmnHeader
+        title="All Purchases" IconLucide={CreditCard} Icon="iwl-add-btn" actionName="Kanban View" actionLink="/purchaseorder/kanbanlisting" actions={[
+          { name: "In-transit", link: "/purchaseorder/intransit/listing" },
+          { name: "Add New ", onClick: handleAddNew }
+        ]}
+      />
 
-          {/* Actions dropdown */}
-          <div className="btn-group">
-            <button className="btn btn-outline-dark" data-bs-toggle="dropdown" // Add this
-              aria-expanded="false" style={{ height: "42px" }}>
-              <i className="fas fa-bars me-2"></i>
-              Action
-            </button>
-            <button
-              className="btn btn-dark dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown" style={{ height: "42px" }}
-            ></button>
-
-            <ul className="dropdown-menu dropdown-menu-end">
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={handleAddNew}
-                >
-                  <i className="fas fa-plus me-2"></i>
-                  Add New
-                </button>
-              </li>
-              {/* <li>
-                <button disabled={true} 
-                    className="dropdown-item"
-                    onClick={() => window.location.href = "/purchaseorder/import"}
-                >
-                    <i className="fas fa-upload me-2"></i>
-                    Import
-                </button>
-                </li>
-
-                <li>
-                <button disabled={true} 
-                    className="dropdown-item"
-                    onClick={() => window.location.href = "/purchaseorder/export"}
-                >
-                    <i className="fas fa-download me-2"></i>
-                    Export
-                </button>
-                </li>*/}
-            </ul>
-          </div>
-        </div>
-      </div>
 
       {/* FILTERS */}
       <div className="card mb-3">
@@ -406,15 +277,24 @@ const PurchaseOrderList = () => {
             <div className="col-md-4">
               <label className="form-label">Search</label>
               <input
-                id="filter_order_no"
                 className="form-control"
                 placeholder="Vendor Order# or PO#"
+                value={filters.order_no}
+                onChange={(e) =>
+                  setFilters({ ...filters, order_no: e.target.value })
+                }
               />
             </div>
             {/* Purchase Status */}
             <div className="col-md-2">
               <label className="form-label">Purchase Status</label>
-              <select id="filter_status" className="form-control form-select">
+              <select
+                className="form-control form-select"
+                value={filters.status}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
+              >
                 <option value="">All</option>
                 {PO_STATUS.map((status) => (
                   <option key={status.id} value={status.id}>
@@ -422,11 +302,18 @@ const PurchaseOrderList = () => {
                   </option>
                 ))}
               </select>
+
             </div>
             {/* Vendor */}
             <div className="col-md-2">
               <label className="form-label">Vendor</label>
-              <select id="filter_vendor" className="form-control form-select">
+              <select
+                className="form-control form-select"
+                value={filters.vendor_id}
+                onChange={(e) =>
+                  setFilters({ ...filters, vendor_id: e.target.value })
+                }
+              >
                 <option value="">All</option>
                 {vendors.map((vendor) => (
                   <option key={vendor.id} value={vendor.id}>
@@ -438,7 +325,13 @@ const PurchaseOrderList = () => {
 
             <div className="col-md-2">
               <label className="form-label">Warehouse</label>
-              <select id="filter_warehouse" className="form-control form-select">
+              <select
+                className="form-control form-select"
+                value={filters.warehouse}
+                onChange={(e) =>
+                  setFilters({ ...filters, warehouse: e.target.value })
+                }
+              >
                 <option value="">All</option>
                 {warehouses.map((wh) => (
                   <option key={wh.id} value={wh.id}>
@@ -451,11 +344,19 @@ const PurchaseOrderList = () => {
             {/* Vendor Invoice Status */}
             <div className="col-md-2">
               <label className="form-label">Vendor Invoice Status</label>
-              <select id="filter_vendor_payment_status" className="form-control form-select"
+              <select
+                className="form-control form-select"
+                value={filters.vendor_payment_status}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    vendor_payment_status: e.target.value,
+                  })
+                }
               >
                 <option value="">All</option>
                 {INVOICE_STATUS.map((status) => (
-                  <option key={status.id} disabled value={status.id}>
+                  <option key={status.id} value={status.id}>
                     {status.value}
                   </option>
                 ))}
@@ -486,23 +387,33 @@ const PurchaseOrderList = () => {
         </div>
       </div>
 
-    {/* TABLE */}
-    <div className="card">
-      <div className="p-0 mt-0">
-        <div ref={tableRef} />
-      </div>
-      <div className="row clearfix py-2 px-2 ">
-        <div className="d-flex justify-content-end">
-          <div className="text-end">
+      {/* TABLE */}
+
+
+
+      <CmnTable
+        config={tableConfig}
+        data={tableData}
+        isSearchable={false}
+      />
+      <div className="card">
+        <div className="p-0 mt-0">
+          <div ref={tableRef} />
+        </div>
+        <div className="row clearfix py-2 px-2 ">
+          <div className="d-flex justify-content-end">
+            <div className="text-end">
+              <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
               <p className="text-uppercase mb-0">
                 <span className="text-uppercase text-muted mb-0">Purchase Orders Total</span>
-                <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
               </p>
             </div>
           </div>
         </div>
       </div>
-      <ColumnModal />
+
+
+      {/* <ColumnModal /> */}
     </>
   );
 };
@@ -510,51 +421,51 @@ const PurchaseOrderList = () => {
 /* ----------------------------------------
    COLUMN CUSTOMIZE MODAL
 ---------------------------------------- */
-const ColumnModal = () => {
-  const saved = getSavedColumns();
+// const ColumnModal = () => {
+//   const saved = getSavedColumns();
 
-  const toggleColumn = (field) => {
-    const set = new Set(getSavedColumns());
-    set.has(field) ? set.delete(field) : set.add(field);
-    saveColumns([...set]);
-  };
+//   const toggleColumn = (field) => {
+//     const set = new Set(getSavedColumns());
+//     set.has(field) ? set.delete(field) : set.add(field);
+//     saveColumns([...set]);
+//   };
 
-  return (
-    <div className="modal fade" id="columnModal">
-      <div className="modal-dialog modal-sm">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Show / Hide Columns</h5>
-            <button className="btn-close" data-bs-dismiss="modal" />
-          </div>
+//   return (
+//     <div className="modal fade" id="columnModal">
+//       <div className="modal-dialog modal-sm">
+//         <div className="modal-content">
+//           <div className="modal-header">
+//             <h5 className="modal-title">Show / Hide Columns</h5>
+//             <button className="btn-close" data-bs-dismiss="modal" />
+//           </div>
 
-          <div className="modal-body">
-            {ALL_COLUMNS.filter((c) => c.optional).map((col) => (
-              <div className="form-check" key={col.field}>
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  defaultChecked={saved.includes(col.field)}
-                  onChange={() => toggleColumn(col.field)}
-                />
-                <label className="form-check-label">{col.title}</label>
-              </div>
-            ))}
-          </div>
+//           <div className="modal-body">
+//             {ALL_COLUMNS.filter((c) => c.optional).map((col) => (
+//               <div className="form-check" key={col.field}>
+//                 <input
+//                   type="checkbox"
+//                   className="form-check-input"
+//                   defaultChecked={saved.includes(col.field)}
+//                   onChange={() => toggleColumn(col.field)}
+//                 />
+//                 <label className="form-check-label">{col.title}</label>
+//               </div>
+//             ))}
+//           </div>
 
-          <div className="modal-footer">
-            <button
-              className="btn btn-primary"
-              data-bs-dismiss="modal"
-              onClick={() => window.location.reload()}
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//           <div className="modal-footer">
+//             <button
+//               className="btn btn-primary"
+//               data-bs-dismiss="modal"
+//               onClick={() => window.location.reload()}
+//             >
+//               Apply
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default PurchaseOrderList;

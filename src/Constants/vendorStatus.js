@@ -6,9 +6,6 @@ export const VENDOR_STATUS = [
   { id: 4, name: "On Hold", color: "warning" },
 ];
 
-export const getVendorStatusName = (id) => {
-  const status = VENDOR_STATUS.find(s => s.id === Number(id));
-  return status 
-    ? `<span class="new_badge bg-${status.color}" style="min-width:65px;">${status.name}</span>` 
-    : "";
+export const getVendorStatus = (id) => {
+  return VENDOR_STATUS.find(s => s.id === Number(id));
 };

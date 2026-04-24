@@ -1,13 +1,21 @@
+
+
 import React, { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import OrganizationLocations from "./OrganizationLocations";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
+import { Input } from "../../Components/Common/ui/input";
+import { Button } from "../../Components/Common/ui/button";
+import { Textarea } from "../../Components/Common/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+import CmnHeader from "../../Components/Common/CmnHeader";
+import { Building } from "lucide-react"
 
 const OrganizationProfile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     company_name: "",
     email: "",
@@ -53,7 +61,7 @@ const OrganizationProfile = () => {
         });
       }
     } catch (err) {
-      console.error("Failed to load organization data:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -68,16 +76,13 @@ const OrganizationProfile = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // --------------------------------------------------
-  // SAVE DATA: multipart/form-data implementation
-  // --------------------------------------------------
   const handleSave = async () => {
     if (!formData.company_name) {
       return Swal.fire("Required", "Company Name is mandatory.", "info");
     }
 
     setSaving(true);
-    
+
     const dataToSend = new FormData();
     Object.keys(formData).forEach(key => {
       dataToSend.append(key, formData[key]);
@@ -92,149 +97,142 @@ const OrganizationProfile = () => {
       const res = await apiFetch(`${API_BASE}api/organizations/update`, {
         method: "PUT",
         body: dataToSend,
-        isFormData: true 
+        isFormData: true
       });
 
       if (res.status) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: res.message || 'Profile updated successfully!',
-          timer: 1500, // Reduced timer slightly for snappier feel
-          showConfirmButton: false,
-        }).then(() => {
-          // --- PAGE REFRESH IMPLEMENTATION ---
-         // window.location.reload(); 
-        });
+        Swal.fire({ icon: 'success', title: 'Success', text: res.message, timer: 1500, showConfirmButton: false });
       } else {
-        Swal.fire("Error", res.message || "Failed to update profile", "error");
+        Swal.fire("Error", res.message, "error");
       }
     } catch (err) {
-      Swal.fire("Error", "A server error occurred.", "error");
+      Swal.fire("Error", "Server error", "error");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <div className="p-5 text-center">Loading Profile...</div>;
+  if (loading) return <div className="p-6 text-center text-[16px]">Loading...</div>;
 
   return (
-    <div className="">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className="mb-0 fw-600">Organization Profile</h4>
-        <button className="btn btn-sm btn-primary px-4" onClick={handleSave} disabled={saving}>
-          <i className={`fas ${saving ? 'fa-spinner fa-spin' : 'fa-save'} me-1`}></i> 
-          {saving ? 'Saving...' : 'Save'}
-        </button>
-      </div>
+    <>
+      <CmnHeader
+        title="Organization Profile" IconLucide={Building} Icon="iwl-add-btn" actionName="Save" actionBtn={handleSave}
+      />
 
-      <div className="row mb-2">
-        <div className="col-md-3">
-          <div className="card shadow-sm border-0 d-flex flex-row align-items-center p-3 rounded-6">
-            <div className="bg-primary text-white rounded-6 p-3 me-3"><i className="fas fa-users fa-lg"></i></div>
+      {/* Stats */}
+      <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* Active Users */}
+          <div className="p-4 bg-white rounded-[20px] flex items-center gap-4">
+            <div className="bg-blue-500 text-white p-3 rounded-[20px]">
+              <i className="fas fa-users text-lg"></i>
+            </div>
             <div>
-              <small className="text-muted d-block fw-bold" style={{ fontSize: '10px' }}>ACTIVE USERS</small>
-              <h5 className="mb-0 fw-bold">{metaData.stats.active_users}</h5>
+              <p className="text-sm text-gray-500 font-semibold">ACTIVE USERS</p>
+              <h4 className="font-bold">{metaData.stats.active_users}</h4>
             </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card shadow-sm border-0 d-flex flex-row align-items-center p-3 rounded-6">
-            <div className="bg-info text-white rounded-6 p-3 me-3"><i className="fas fa-user-shield fa-lg"></i></div>
+
+          {/* Total Roles */}
+          <div className="p-4 bg-white rounded-[20px] flex items-center gap-4">
+            <div className="bg-cyan-500 text-white p-3 rounded-[20px]">
+              <i className="fas fa-user-shield text-lg"></i>
+            </div>
             <div>
-              <small className="text-muted d-block fw-bold" style={{ fontSize: '10px' }}>TOTAL ROLES</small>
-              <h5 className="mb-0 fw-bold">{metaData.stats.total_roles}</h5>
+              <p className="text-sm text-gray-500 font-semibold">TOTAL ROLES</p>
+              <h4 className="font-bold">{metaData.stats.total_roles}</h4>
             </div>
           </div>
+
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+          {/* LEFT */}
+          <div className="lg:col-span-8 space-y-4">
+
+            {/* General */}
+            <div className="p-4 rounded-[20px] bg-white space-y-4">
+
+              <div className="">
+                <label>Company Name *</label>
+                <Input name="company_name" value={formData.company_name} onChange={handleChange} />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label>Email</label>
+                  <Input name="email" value={formData.email} onChange={handleChange} />
+                </div>
+                <div>
+                  <label>Website</label>
+                  <Input name="website_url" value={formData.website_url} onChange={handleChange} />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Address */}
+            <div className=" rounded-[20px] bg-white p-4 space-y-4">
+
+              <div>
+                <label>Country</label>
+                <Select disabled value={formData.country_id} >
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {metaData.countries.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label>Street</label>
+                <Textarea name="street_address" value={formData.street_address} onChange={handleChange} />
+              </div>
+
+              <div className="grid md:grid-cols-12 gap-4">
+                <Input className="md:col-span-6" name="city" value={formData.city} onChange={handleChange} />
+
+                <Select value={formData.state_id} onValueChange={(val) => handleChange({ target: { name: 'state_id', value: val } })}>
+                  <SelectTrigger className="md:col-span-3">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {metaData.states.map(s => (
+                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Input className="md:col-span-3" name="zip_code" value={formData.zip_code} onChange={handleChange} />
+              </div>
+
+              <Input name="phone" value={formData.phone} onChange={handleChange} />
+
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div className="lg:col-span-4">
+            <div className=" rounded-[20px] p-4 text-center bg-white">
+              <img src={metaData.logo_url || "http://admin.hansona.com/static/sbadmin/dist/img/sb_logo.png"} className="h-[80px] mx-auto object-contain" />
+              <Input type="file" id="logoUpload" className="mt-3" />
+            </div>
+          </div>
+
+        </div>
+
+        <OrganizationLocations locations={metaData.locations} />
       </div>
 
-      <div className="row">
-        <div className="col-lg-8">
-          <div className="card shadow-sm border-0 mb-3 rounded-6">
-            <div className="card-header bg-white border-bottom fw-bold">
-               <i className="fas fa-pen me-2 text-primary"></i> General Details
-            </div>
-            <div className="card-body p-4">
-              <div className="mb-3">
-                <label className="form-label fw-bold">Company Name <span className="text-danger">*</span></label>
-                <input type="text" name="company_name" className="form-control" value={formData.company_name} onChange={handleChange} />
-              </div>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label fw-bold">Contact Email</label>
-                  <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-bold">Website URL</label>
-                  <input type="text" name="website_url" className="form-control" value={formData.website_url} onChange={handleChange} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card shadow-sm border-0 mb-4 rounded-6">
-            <div className="card-header bg-white py-3 border-bottom fw-bold">
-               <i className="fas fa-map-marker-alt me-2 text-primary"></i> Contact Address
-            </div>
-            <div className="card-body p-4">
-              <div className="mb-3">
-                <label className="form-label fw-bold">Country / Region</label>
-                <select name="country_id" disabled className="form-select" value={formData.country_id} onChange={handleChange}>
-                  <option value="">Select Country</option>
-                  {metaData.countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
-              </div>
-              <div className="mb-3">
-                <label className="form-label fw-bold">Street Address</label>
-                <textarea name="street_address" className="form-control" rows="2" value={formData.street_address} onChange={handleChange}></textarea>
-              </div>
-              <div className="row g-3 mb-3">
-                <div className="col-md-6">
-                  <label className="form-label fw-bold">City</label>
-                  <input type="text" name="city" className="form-control" value={formData.city} onChange={handleChange} />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label fw-bold">State</label>
-                  <select name="state_id" className="form-select" value={formData.state_id} onChange={handleChange}>
-                    <option value="">Select State</option>
-                    {metaData.states.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                  </select>
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label fw-bold">ZIP Code</label>
-                  <input type="text" name="zip_code" className="form-control" value={formData.zip_code} onChange={handleChange} />
-                </div>
-              </div>
-              <div className="col-md-6">
-                  <label className="form-label fw-bold">Contact Phone</label>
-                  <input type="text" name="phone" className="form-control" value={formData.phone} onChange={handleChange} />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-lg-4">
-          <div className="card shadow-sm border-0 mb-4 rounded-6">
-             <div className="card-header bg-white py-2 border-bottom text-center fw-bold">Company Logo</div>
-             <div className="card-body text-center py-4">
-               <div className="mb-3 border rounded p-2 d-inline-block">
-                 <img 
-                    src={metaData.logo_url || "http://admin.hansona.com/static/sbadmin/dist/img/sb_logo.png"} 
-                    alt="Logo" 
-                    style={{ height: '80px', width: '100%', objectFit: 'contain' }} 
-                 />
-               </div>
-               <div className="input-group input-group-sm">
-                 <input type="file" className="form-control" id="logoUpload" accept="image/*" />
-               </div>
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <OrganizationLocations locations={metaData.locations} />
-    </div>
+    </>
   );
 };
 

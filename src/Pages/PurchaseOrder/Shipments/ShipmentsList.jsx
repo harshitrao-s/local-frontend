@@ -1,110 +1,87 @@
-import React, { useEffect, useRef } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
-import Swal from "sweetalert2";
+import React, { useEffect, useRef, useState } from "react";
 import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
-import { useMasterData } from "../../../Context/MasterDataProvider";
-// import { getVendorStatusName } from "../../../Constants/vendorStatus";
 import { SHIPPING_STATUS } from "../../../Constants/shippingStatus";
 import { Truck, Package, PackageCheck, CheckCircle, RotateCcw } from "lucide-react";
-// import { Search,X } from "lucide-react"; 
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import { Ship } from "lucide-react";
+import CmnTable from "../../../Components/Common/CmnTable";
 
-const StatCard = ({ title, amount, count, icon, colorClass, iconBg, lucid }) => {
-  
+
+
+const StatCard = ({
+  title,
+  count,
+  icon,
+  colorClass,
+  iconBg,
+  isFirst = false,
+}) => {
   return (
-    <div className="col-xl col-lg-4 col-md-6 col-sm-12 mb-3">
-      <div className="card stat-card border-0 h-100" style={{ borderRadius: '20px' }}>
-        <div className="card-body ps-3 pt-3 pe-3 pb-1">
-          <div className="d-flex justify-content-between align-items-start">
-            <div style={{ minWidth: '0' }}>
-              <p className="text-uppercase fw-bold text-muted mb-1" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>
-                {title}
-              </p>
-              {/* Reduced h2 to h4 for better fitting of 5 cards */}
-              <h2 className="fw-bold mb-2 stat-count">{count}</h2>
-              <span className="badge rounded-pill bg-light text-dark border small px-3 py-1">
-                 Items
-              </span>
-            </div>
-            <div 
-              className={`rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 ${iconBg}`} 
-              style={{ width: '40px', height: '40px' }}
-            >
-               <i className={`${colorClass}`} style={{ fontSize: '14px' }}>{lucid}</i>
-             
-            </div>
-          </div>
+    <div
+      className={`rounded-[20px]  p-3 h-full
+      ${isFirst ? "bg-[#002B5B] text-white" : "bg-white"}`}
+    >
+      {/* TOP ROW (Title + Icon) */}
+      <div className="flex justify-between items-center mb-2">
+        <p
+          className={`text-[10px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+        >
+          {title}
+        </p>
+
+        <div
+          className={`w-[34px] h-[34px] flex items-center justify-center rounded-full
+          ${isFirst ? "bg-white/20" : iconBg}`}
+        >
+          <i
+            className={`${icon} text-[14px] ${isFirst ? "text-white" : colorClass
+              }`}
+          ></i>
         </div>
+      </div>
+
+      {/* AMOUNT + INVOICE (same row) */}
+      <div className="flex justify-between items-center">
+        <h4 className="font-bold text-lg truncate">{count}</h4>
+
+        <span
+          className={`px-2 py-1 text-xs rounded-full border whitespace-nowrap
+          ${isFirst
+              ? "bg-white/20 text-white border-white/30"
+              : "bg-gray-100 text-gray-700 border-gray-200"
+            }`}
+        >
+          Items
+        </span>
       </div>
     </div>
   );
 };
-
 const DashboardOverview = ({ summary }) => {
   const stats = [
-    { title: 'Total ', 
-      amount: formatCurrency(summary?.total?.amount), 
-      count: summary?.total?.count, icon: 'fas fa-shipping-fast', 
-      colorClass: 'text-primary', iconBg: 'bg-primary-light', "lucid":<Truck size={22} strokeWidth={2} /> },
-    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, icon: 'fas fa-hourglass-start', colorClass: 'text-success', iconBg: 'bg-success-light',  "lucid":<Package size={22} strokeWidth={2} /> },
-    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, icon: 'fas fa-box-open', colorClass: 'text-danger', iconBg: 'bg-danger-light',  "lucid":<PackageCheck size={22} strokeWidth={2} /> },
-    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, icon: 'fas fa-check-circle', colorClass: 'text-warning', iconBg: 'bg-warning-light', "lucid":<CheckCircle size={22} strokeWidth={2} /> },
-    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count, icon: 'fas fa-undo', colorClass: 'text-secondary', iconBg: 'bg-light',  "lucid":<RotateCcw size={22} strokeWidth={2} /> },
+    {
+      title: 'Total ',
+      count: summary?.total?.count, icon: 'fas fa-shipping-fast',
+      colorClass: 'text-primary', iconBg: 'bg-primary-light', "lucid": <Truck size={22} strokeWidth={2} />
+    },
+    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, icon: 'fas fa-hourglass-start', colorClass: 'text-success', iconBg: 'bg-success-light', "lucid": <Package size={22} strokeWidth={2} /> },
+    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, icon: 'fas fa-box-open', colorClass: 'text-danger', iconBg: 'bg-danger-light', "lucid": <PackageCheck size={22} strokeWidth={2} /> },
+    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, icon: 'fas fa-check-circle', colorClass: 'text-warning', iconBg: 'bg-warning-light', "lucid": <CheckCircle size={22} strokeWidth={2} /> },
+    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count, icon: 'fas fa-undo', colorClass: 'text-secondary', iconBg: 'bg-light', "lucid": <RotateCcw size={22} strokeWidth={2} /> },
 
     //{ title: 'Cancelled', amount: formatCurrency(summary?.cancelled?.amount), count: summary?.cancelled?.count, icon: 'fas fa-times-circle', colorClass: 'text-secondary', iconBg: 'bg-light' },
   ];
 
   return (
-    /* Limit the stretch on high-res screens by using a wrapper with max-width */
-    <div className="w-100 px-1 mx-auto" style={{ maxWidth: '1600px' }}>
-      <div className="row g-2 justify-content-center"> 
-        {stats.map((stat, index) => (
-          <StatCard key={index} {...stat} />
-        ))}
-      </div>
-      <style>
-        {`
-          .stat-card {
-            border-radius: 18px;
-            background: #ffffff;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-            transition: all 0.25s ease;
-          }
 
-          // .stat-card:hover {
-          //   transform: translateY(-4px);
-          //   box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-          // }
-
-          .stat-count {
-            font-size: 28px;
-            letter-spacing: 0.5px;
-          }
-
-          .stat-icon {
-            width: 52px;
-            height: 52px;
-            font-size: 18px;
-          }
-
-          .bg-primary-light { background: linear-gradient(135deg,#e3f2fd,#bbdefb); }
-          .bg-success-light { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); }
-          .bg-danger-light { background: linear-gradient(135deg,#ffebee,#ffcdd2); }
-          .bg-warning-light { background: linear-gradient(135deg,#fff3e0,#ffe0b2); }
-          .bg-light { background: linear-gradient(135deg,#f5f5f5,#e0e0e0); }
-
-          @media (min-width: 1200px) {
-            .col-xl {
-              flex: 0 0 20% !important;
-              max-width: 20% !important;
-            }
-          }
-        `}
-      </style>
+    <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      {stats.map((stat, index) => (
+        <StatCard key={index} {...stat} isFirst={index === 0} />
+      ))}
     </div>
   );
 };
@@ -117,15 +94,15 @@ const ShipmentsList = () => {
   const [vendors, setVendors] = React.useState([]);
   const [summary, setSummary] = React.useState(null);
   const [showDropdown, setShowDropdown] = React.useState(false);
-  const [dueDate, setDueDate] = React.useState("");
+  // const [dueDate, setDueDate] = React.useState("");
   const debounceRef = useRef(null);
-  const {paymentTerms } = useMasterData();
-  const [deliveryDateDisplay, setDeliveryDateDisplay] = React.useState("");
+  // const { paymentTerms } = useMasterData();
+  // const [deliveryDateDisplay, setDeliveryDateDisplay] = React.useState("");
   const [shippingDateDisplay, setShippingDateDisplay] = React.useState("");
-  const [deliveryFilters, setDeliveryFilters] = React.useState({
-    delivery_date_from: "",
-    delivery_date_to: ""
-  });
+  // const [deliveryFilters, setDeliveryFilters] = React.useState({
+    // delivery_date_from: "",
+    // delivery_date_to: ""
+  // });
 
   const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
@@ -142,6 +119,7 @@ const ShipmentsList = () => {
     shipping_date_from: "",
     shipping_date_to: ""
   });
+  const [tableData, setTableData] = useState([]);
 
   const handleShippingDateChange = (start, end) => {
     const fromStr = start.format("YYYY-MM-DD");
@@ -160,31 +138,31 @@ const ShipmentsList = () => {
       tabulatorRef.current.setPage(1);
     }
   };
-  const handleInvoiceDateChange = (start, end) => {
-    const fromStr = start.format("YYYY-MM-DD");
-    const toStr = end.format("YYYY-MM-DD");
+  // const handleInvoiceDateChange = (start, end) => {
+  //   const fromStr = start.format("YYYY-MM-DD");
+  //   const toStr = end.format("YYYY-MM-DD");
 
-    setInvoiceDateDisplay(
-      `${start.format("DD/MM/YYYY")} - ${end.format("DD/MM/YYYY")}`
-    );
+  //   setInvoiceDateDisplay(
+  //     `${start.format("DD/MM/YYYY")} - ${end.format("DD/MM/YYYY")}`
+  //   );
 
-    setInvoiceDateFilters({
-      invoice_date_from: fromStr,
-      invoice_date_to: toStr
-    });
+  //   setInvoiceDateFilters({
+  //     invoice_date_from: fromStr,
+  //     invoice_date_to: toStr
+  //   });
 
-    if (tabulatorRef.current) {
-      tabulatorRef.current.setPage(1);
-    }
-  };
+  //   if (tabulatorRef.current) {
+  //     tabulatorRef.current.setPage(1);
+  //   }
+  // };
   const handleDateChange = (start, end) => {
     // Format dates to ISO strings for the backend
     const fromStr = start.format('YYYY-MM-DD');
     const toStr = end.format('YYYY-MM-DD');
-    
+
     // Update the visual input field
     setDateRangeDisplay(`${start.format('DD/MM/YYYY')} - ${end.format('DD/MM/YYYY')}`);
-    
+
     // Store specifically as from/to for the API request
     setFilters({ due_date_from: fromStr, due_date_to: toStr });
 
@@ -231,354 +209,264 @@ const ShipmentsList = () => {
     }
   };
 
-  const handleDeleteInvoice = async (rowData) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `You are about to delete vendor. This action cannot be undone!`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#000000', // ShopperBeats Black
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel',
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          // Show loading state
-          Swal.fire({
-            title: 'Deleting...',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-          });
 
-          // Backend Call
-          const del_resp = await apiFetch(`${API_BASE}api/vendor/api/delete/${rowData.id}`, {
-            method: 'DELETE',
-          });
-
-          // Success: Refresh Tabulator data instead of page reload
-          if(del_resp.status)
-            Swal.fire({
-              title: 'Deleted!',
-              text: 'The vendor has been removed.',
-              icon: 'success',
-              confirmButtonColor: '#000000'
-            });
-          else
-            Swal.fire({
-              title: 'Not Deleted!',
-              text: del_resp.message || 'Failed in delete.',
-              icon: 'failure',
-              confirmButtonColor: '#000000'
-            });
-
-          // Trigger Tabulator refresh
-          if (tabulatorRef.current) {
-              tabulatorRef.current.setData(); 
-            }
-
-        } catch (error) {
-          console.error("Delete failed:", error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Failed to delete vendor. Please try again.',
-            icon: 'error',
-            confirmButtonColor: '#000000'
-          });
-        }
-      }
-    });
-  };
-
-  const ALL_COLUMNS = [
+  const tableConfig = [
     {
       title: "Vendor PO",
       field: "vendor_po",
-      width: 140,
-      fixed: true, headerSort:false
     },
     {
       title: "Vendor PO Order No.",
       field: "vendor_po_order_no",
-      width: 190,
-      fixed: true, headerSort:false
     },
     {
       title: "Vendor PO Order Date",
       field: "vendor_po_order_date",
-      minWidth: 180, headerSort:false , formatter: (cell) => formattedDate(cell.getValue()) 
+      // columnWidths: "250px",
+    },
+    {
+      title: "Tracking Ref",
+      field: "tracking_link",
+      render: (val, row) => (
+        <a
+          target="_blank"
+          href={row.tracking_link}
+          className="link"
+        >
+          {row.tracking_number}
+        </a>
+      )
     },
     {
       title: "Shipping Company",
-      field: "carrier_name", headerHozAlign  :"left", vertAlign :"left", 
-      minWidth: 230, headerSort:false
+      field: "carrier_name",
     },
-      {
-      title: "Tracking Ref",
-      field: "tracking_link",
-      width: 140,
-      fixed: true, headerSort:false,
-      formatter: (cell) => {
-        const link = cell.getRow().getData().tracking_link;
-        const tracking_number = cell.getRow().getData().tracking_number;
-        return `<a href="${link}" target="_blank" class="link">${tracking_number}</a>`;
-      } 
-    },
+
     {
       title: "Status",
       field: "status",
       width: 140,
-      fixed: true, headerSort:false,
-      formatter: (cell) =>{ 
-          const statsId =  cell.getData().status;
-          const statusObj = SHIPPING_STATUS.find(
-            (item) => String(item.id) === String(statsId)
-          );
-         
-          if (!statusObj) return null;
- 
-          // Remove spaces from class name safely
-          const statusClass = statusObj.value.replace(/\s+/g, '');
-         
-          return `<span class="shipment-status ${statusClass}" style="min-width: 80px;">
-  ${statusObj.value}
-</span>`;
-       } 
+      render: (val, row) => {
+        const statusObj = SHIPPING_STATUS.find(
+          (item) => String(item.id) === String(val)
+        );
+
+        if (!statusObj) return null;
+
+        const statusClass = statusObj.value.replace(/\s+/g, "");
+
+        return (
+          <span
+            className={`shipment-status ${statusClass}`}
+            style={{ minWidth: "80px" }}
+          >
+            {statusObj.value}
+          </span>
+        );
+      }
     },
     {
       title: "Shipping Date",
       field: "shipping_date",
-      width: 140,
-      fixed: true, headerSort:false,
-      formatter: (cell) => formattedDate(cell.getValue()) 
     },
-    {     
+    {
       title: "Delivery Date",
       field: "delivery_date",
-      minWidth:160, headerSort:false,formatter: (cell) => formattedDate(cell.getValue())
     },
     {
       title: "Delivery Days Avg",
       field: "delivery_date_avg",
-      width: 190,
-      fixed: true,headerSort:false,formatter: (cell) => formattedDate(cell.getValue())
     },
   ];
-  
-  useEffect(() => {
-    tabulatorRef.current = new Tabulator(tableRef.current, {
-      layout: "fitColumns",
-      height: "calc(100vh - 520px)",
-      placeholder: "No records found",
-      pagination: true,
-      paginationMode: "remote",
-      paginationSize: 20,
-      paginationSizeSelector: [20, 30, 40, 50],
-      sortMode: "remote",
-      ajaxURL: `${API_BASE}api/purchaseorder/api/purchase-order/shipments/listing`,
 
-      ajaxParams: function () {
-        return {
-          search: searchValue || "",
-          shipping_status: invoice_status || "",
-          shipping_date_from: shippingFilters.shipping_date_from  || "",
-          shipping_date_to: shippingFilters.shipping_date_to  || "",
-        };
-      },
+  const fetchShipments = async () => {
+    try {
+      const params = new URLSearchParams({
+        search: searchValue,
+        shipping_status: invoice_status,
+        shipping_date_from: shippingFilters.shipping_date_from,
+        shipping_date_to: shippingFilters.shipping_date_to,
+        payment_term: paymentTerm,
+      });
 
-      ajaxRequestFunc:  async (url, config, params) => {
-        const sorter = params.sort && params.sort.length > 0 ? params.sort[0] : null;
+      const url = `${API_BASE}api/purchaseorder/api/purchase-order/shipments/listing?${params}`;
+      const result = await apiFetch(url);
+      setTableData(result?.data || []);
 
-        const requestParams = {
-          page: params.page || 1,
-          size: params.size || 20,
-          search: params.search || "",
-          shipping_status: params.shipping_status || "",
-          shipping_date_from: params.shipping_date_from || "",
-          shipping_date_to: params.shipping_date_to || "",
-          //delivery_date_from: params.delivery_date_from || "",
-          //delivery_date_to: params.delivery_date_to || "",
-          sort_by: sorter ? sorter.field : "",
-          sort_dir: sorter ? sorter.dir : ""
-        };
+      if (result?.summary) {
+        setSummary(result.summary);
+      }
 
-        const query = new URLSearchParams(requestParams).toString();
-        // ---------------------------------------
-        const response = await apiFetch(`${url}?${query}`);
-        return response;
-      },
-
-      ajaxResponse: function (url, params, response) {
-        if (response.summary) {
-          setSummary(response.summary || []);
-        }
-        return {
-          data: response.data || [],
-          last_page: response.last_page || 1,
-        };
-      },
-
-      columns: ALL_COLUMNS.map((col) => {
-        return col;
-      }),
-    });
-
-    return () => tabulatorRef.current?.destroy();
-  }, [searchValue, invoice_status, filters, invoiceDateFilters,shippingFilters, paymentTerm]);
-
-  const applyFilter = () => {
-    if (tabulatorRef.current) {
-      tabulatorRef.current.replaceData();
+    } catch (err) {
+      console.error("❌ API ERROR:", err);
     }
   };
-  const clearDateRange = () => {
-    // Only reset date-related states
-    setDateRangeDisplay(""); 
 
-    setShippingDateDisplay(""); 
-    setFilters({ due_date_from: "", due_date_to: "" });
-    setShippingFilters({shipping_date_from:"", shipping_date_to:""});
-    
+  useEffect(() => {
+    fetchShipments();
+  }, [
+    searchValue,
+    invoice_status,
+    shippingFilters.shipping_date_from,
+    shippingFilters.shipping_date_to,
+    paymentTerm
+  ]);
 
+
+  const applyFilter = () => {
+    fetchShipments();
   };
+
+  const clearDateRange = () => {
+    setShippingDateDisplay("");
+    setShippingFilters({
+      shipping_date_from: "",
+      shipping_date_to: "",
+    });
+
+    // optional: auto reload
+    fetchShipments();
+  };
+
   const clearFilter = () => {
-    setSearchValue("");setShippingDateDisplay(""); 
-    setFilters({ due_date_from: "", due_date_to: "" });
+    setSearchValue("");
     setInvoiceStatus("");
+    setPaymentTerm("");
+
+    setShippingDateDisplay("");
+    setShippingFilters({
+      shipping_date_from: "",
+      shipping_date_to: "",
+    });
+
     setDateRangeDisplay("");
-    setVendors([]);
-    setFilters({ due_date_from: "", due_date_to: "" });
-    setShowDropdown(false);
+    setFilters({
+      due_date_from: "",
+      due_date_to: "",
+    });
+
     setInvoiceDateDisplay("");
     setInvoiceDateFilters({
       invoice_date_from: "",
-      invoice_date_to: ""
+      invoice_date_to: "",
     });
-    setPaymentTerm("");
-    if (tabulatorRef.current) {
-      tabulatorRef.current.replaceData();
-    }
+
+    setVendors([]);
+    setShowDropdown(false);
+
+    // ❌ ye hata do
+    // tabulatorRef.current.setData();
+
+    // ✅ ye lagao
+    fetchShipments();
   };
 
   return (
     <>
-      <div className="d-flex justify-content-between ps-1 mb-2">
-          <h5 className="mt-2 pb-1 fw-bold"><FontAwesomeIcon icon={faListUl} className="me-2 text-primary" />All Shipments</h5>
-          <div className="d-flex gap-2 align-items-center">
-              <div className="d-flex gap-2">
-            </div>
-          </div>
-      </div>
+      <CmnHeader title="All Shipments" IconLucide={Ship} />
       <DashboardOverview summary={summary} />
-      <div className="card mb-3">
+      <div className="card mt-3 mb-3">
         <div className="p-3">
           <div className="">
-        <div className="row mb-3">
-        {/* Order Number */}
-        <div className="col-md-3">
-            <label className="form-label">Search</label>
-            <div className="position-relative">
-              <input
-                id="filter_vendor"
-                name="vendor_search"          // important
-                type="text"
-                autoComplete="off"            // disable browser autocomplete
-                className="form-control"
-                placeholder="Vendor PO or Order# or Shipping Company"
-                value={searchValue}
-                onChange={(e) => {
-                  handleVendorSearch(e.target.value);
-                  if (tabulatorRef.current) {
-                    tabulatorRef.current.setPage(1);
-                  }
-                }}
-                onFocus={() => vendors.length && setShowDropdown(true)}
-              />
+            <div className="row mb-3">
+              {/* Order Number */}
+              <div className="col-md-3">
+                <label className="form-label">Search</label>
+                <div className="position-relative">
+                  <input
+                    id="filter_vendor"
+                    name="vendor_search"          // important
+                    type="text"
+                    autoComplete="off"            // disable browser autocomplete
+                    className="form-control"
+                    placeholder="Vendor PO or Order# or Shipping Company"
+                    value={searchValue}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSearchValue(value);
+                      handleVendorSearch(value);
+                    }}
+                    onFocus={() => vendors.length && setShowDropdown(true)}
+                  />
 
-              {showDropdown && vendors.length > 0 && (
-                <ul
-                  className="list-group position-absolute w-100 shadow"
-                  style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
-                >
-                  {vendors.map((vendor) => (
-                    <li
-                      key={vendor.id}
-                      className="list-group-item list-group-item-action"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleSelectVendor(vendor)}
+                  {showDropdown && vendors.length > 0 && (
+                    <ul
+                      className="list-group position-absolute w-100 shadow"
+                      style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
                     >
-                      <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
-                    </li>
+                      {vendors.map((vendor) => (
+                        <li
+                          key={vendor.id}
+                          className="list-group-item list-group-item-action"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleSelectVendor(vendor)}
+                        >
+                          <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Shipping Status</label>
+                <select
+                  name="status"
+                  className="form-control form-select"
+                  value={invoice_status}
+                  onChange={(e) => {
+                    setInvoiceStatus(e.target.value);
+                    if (tabulatorRef.current) {
+                      tabulatorRef.current.setPage(1);
+                    }
+                  }}
+                >
+                  <option value="">All</option>
+                  {SHIPPING_STATUS?.map(pt => (
+                    <option key={pt.id} value={pt.id}>{pt.value}</option>
                   ))}
-                </ul>
-              )}
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Shipping Date</label>
+                <DateRangeInput isRange={true}
+                  value={shippingDateDisplay}
+                  onChange={handleShippingDateChange} onCancel={clearDateRange}
+                  placeholder="Select date range" className="bg-white"
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label text-muted">Delivery Date</label>
+                <DateRangeInput disabled={true} isRange={true}
+                  value={dateRangeDisplay}
+                  onChange={handleDateChange} onCancel={clearDateRange}
+                  placeholder="Select date range" className="bg-white"
+                />
+              </div>
             </div>
-        </div>
-        <div className="col-md-3">
-            <label className="form-label">Shipping Status</label>
-        <select
-            name="status"
-            className="form-control form-select"
-            value={invoice_status}
-            onChange={(e) => {
-              setInvoiceStatus(e.target.value);
-              if (tabulatorRef.current) {
-                tabulatorRef.current.setPage(1);
-              }
-            }}
-        >
-            <option value="">All</option>
-            {SHIPPING_STATUS?.map(pt => (
-                <option key={pt.id} value={pt.id}>{pt.value}</option>
-            ))}
-        </select>
-        </div>
-        <div className="col-md-3">
-            <label className="form-label">Shipping Date</label>
-            <DateRangeInput isRange={true}
-              value={shippingDateDisplay}
-  onChange={handleShippingDateChange} onCancel={clearDateRange} 
-              placeholder="Select date range" className="bg-white" 
-            />
-        </div>
-        <div className="col-md-3">
-            <label className="form-label text-muted">Delivery Date</label>
-            <DateRangeInput disabled={true} isRange={true}
-              value={dateRangeDisplay}
-              onChange={handleDateChange} onCancel={clearDateRange} 
-              placeholder="Select date range" className="bg-white" 
-            />
-        </div>
-      </div>
-    
-      {/* FILTER ACTIONS */}
-      <div className="mt-3 d-flex gap-2">
-        <button type="button" className="btn btn-primary" onClick={applyFilter}>
-            <i className="fas fa-search me-2"></i>
-            Search
-        </button>
 
-        <button
-          type="button"
-          className="btn btn-light"
-          onClick={clearFilter}
-        >
-          Clear
-        </button>
-        </div>
-    </div>
-    </div></div>
+            {/* FILTER ACTIONS */}
+            <div className="mt-3 d-flex gap-2">
+              <button type="button" className="btn btn-primary" onClick={applyFilter}>
+                <i className="fas fa-search me-2"></i>
+                Search
+              </button>
 
-
-
-
-
-    <div className="card ">
-        <div className="card-body  p-1 pt-0 pb-0 mt-0 mb-0 ">
-          <div ref={tableRef} />
-        </div>
-      </div>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={clearFilter}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div></div>
+      <CmnTable
+        config={tableConfig}
+        data={tableData}
+        isSearchable={false}
+      />
     </>
   );
 };
