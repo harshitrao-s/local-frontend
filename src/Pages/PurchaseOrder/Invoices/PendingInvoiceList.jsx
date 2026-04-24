@@ -881,7 +881,6 @@ export default function PendingInvoiceList() {
         payment_term_id: paymentTerm,
         sort_by: sortBy, sort_dir: sortDir,
       }).toString();
-      //const res = await apiFetch(`${API_BASE}api/purchaseorder/api/purchase-order/invoices/listing?${qs}`);
       const res = await apiFetch(`${API_BASE}api/purchaseorder/api/purchase-order/invoices/pending_lists?${qs}`);
       setRows(res?.data ?? []);
       setLastPage(res?.last_page ?? 1);

@@ -216,7 +216,7 @@ const AllVendors = () => {
     {
       title: "Actions",
       field: "actions",
-      render: (val, row) => (
+      render: ( row) => (
         <div className="flex items-center justify-center gap-2">
           {console.log(row)}
           {/* EDIT */}
