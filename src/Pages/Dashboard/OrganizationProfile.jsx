@@ -180,7 +180,7 @@ const OrganizationProfile = () => {
               <div>
                 <label>Country</label>
                 <Select disabled value={formData.country_id} >
-                  <SelectTrigger className='w-full'>
+                  <SelectTrigger>
                     <SelectValue placeholder="Select Country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -222,7 +222,7 @@ const OrganizationProfile = () => {
           {/* RIGHT */}
           <div className="lg:col-span-4">
             <div className=" rounded-[20px] p-4 text-center bg-white">
-              <img src={metaData.logo_url || "http://admin.hansona.com/static/sbadmin/dist/img/sb_logo.png"} className="h-[80px] mx-auto object-contain" />
+              <img src="/Logo.svg" className="h-[80px] mx-auto object-contain" />
               <Input type="file" id="logoUpload" className="mt-3" />
             </div>
           </div>

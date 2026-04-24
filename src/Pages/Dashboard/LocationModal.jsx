@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
 import Swal from 'sweetalert2';
+import { Input } from "../../Components/Common/ui/input";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
 
 const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
   const [loading, setLoading] = useState(false);
@@ -142,34 +144,45 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
               <div className="row g-3">
                 <div className="col-md-6">
                   <label className="form-label fw-bold small">Location Name *</label>
-                  <input name="name" className="form-control shadow-sm" value={formData.name} onChange={handleChange} />
+                  {/* <input name="name" className="form-control shadow-sm" value={formData.name} onChange={handleChange} /> */}
+                  <Input  name="name"  value={formData.name} onChange={handleChange}/>
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-bold small">Attention</label>
-                  <input name="attention" className="form-control shadow-sm" value={formData.attention} onChange={handleChange} />
+                  <Input  name="attention"  value={formData.attention} onChange={handleChange}/>
                 </div>
                 <div className="col-md-12">
                   <label className="form-label fw-bold small">Address Line 1</label>
-                  <input name="address_line1" className="form-control shadow-sm" value={formData.address_line1} onChange={handleChange} />
+                  <Input   name="address_line1"  value={formData.address_line1} onChange={handleChange}/>
                 </div>
                 <div className="col-md-12">
                   <label className="form-label fw-bold small">Address Line 2</label>
-                  <input name="address_line2" className="form-control shadow-sm" value={formData.address_line2} onChange={handleChange} />
+                  <Input  name="address_line2"  value={formData.address_line2} onChange={handleChange}/>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">City</label>
-                  <input name="city" className="form-control shadow-sm" value={formData.city} onChange={handleChange} />
+                  <Input  name="city" value={formData.city} onChange={handleChange}/>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">Country</label>
-                  <select name="country_id" className="form-select shadow-sm" value={formData.country_id} onChange={handleChange}>
+                  {/* <select name="country_id" className="form-select shadow-sm" value={formData.country_id} onChange={handleChange}>
                     <option value="">Select Country</option>
                     {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
-                  </select>
+                  </select> */}
+
+                  <Select name="country_id" value={formData.country_id} onChange={handleChange}>
+                  <SelectTrigger className="md:col-span-3">
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
+                  </SelectContent>
+                </Select>
+
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">State</label>
-                  <select 
+                  {/* <select 
                     name="state_name" 
                     className="form-select shadow-sm" 
                     value={formData.state_name} 
@@ -178,19 +191,34 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
                   >
                     <option value="">Select State</option>
                     {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
-                  </select>
+                  </select> */}
+
+                  <Select name="state_name" 
+                    className="form-select shadow-sm" 
+                    value={formData.state_name} 
+                    onChange={handleChange}
+                    disabled={!formData.country_id}>
+
+                  <SelectTrigger className="md:col-span-3">
+                    <SelectValue placeholder="Select State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
+                  </SelectContent>
+                </Select>
+
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">ZIP Code</label>
-                  <input name="zip_code" className="form-control shadow-sm" value={formData.zip_code} onChange={handleChange} />
+                  <Input name="zip_code" value={formData.zip_code} onChange={handleChange}/>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">Phone</label>
-                  <input name="phone" className="form-control shadow-sm" value={formData.phone} onChange={handleChange} />
+                  <Input name="phone"  value={formData.phone} onChange={handleChange}/>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label fw-bold small">Website</label>
-                  <input name="website_url" className="form-control shadow-sm" value={formData.website_url} onChange={handleChange} />
+                  <Input name="website_url"  value={formData.website_url} onChange={handleChange}/>
                 </div>
               </div>
             )}
