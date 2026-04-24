@@ -80,5 +80,10 @@ export const SbAdminSvg = {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
             <path d="M14.3333 7.6665L7.66667 0.999837L1 7.6665" stroke="#454545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
+    ),
+    HamburgerIconSvg: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M4.66699 8.1665H23.3337M4.66699 13.9998H23.3337M4.66699 19.8332H23.3337" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
     )
 };

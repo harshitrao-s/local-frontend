@@ -29,6 +29,7 @@ import "nprogress/nprogress.css";
 // Pages
 import LoginPage from "./Pages/LoginPage";
 import PendingInvoiceList from "./Pages/PurchaseOrder/Invoices/PendingInvoiceList";
+import { SbAdminSvg } from "./Components/Common/Svgs/ActionsSvg";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -148,7 +149,7 @@ const MainLayout = ({ children }) => {
 
       {/* Sidebar */}
       <div
-        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-[64px]" : "w-[250px]"
+        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-0" : "w-[250px] hidden sm:block"
           }`}
       >
         <SideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -160,25 +161,55 @@ const MainLayout = ({ children }) => {
         {/* Header */}
         <div className="h-[60px] bg-white border-b flex items-center justify-between px-4 shadow-sm">
           <IoIosArrowBack
-          onClick={() => setCollapsed(!collapsed)}
-          className={`cursor-pointer transition-transform duration-300 ${collapsed ? "rotate-180" : ""
-            }`}
-        />
+            onClick={() => setCollapsed(!collapsed)}
+            className={`cursor-pointer transition-transform duration-300 ${collapsed ? "rotate-180" : ""
+              } hidden sm:block`}
+          />
           <div className="flex items-center gap-3">
             <input
               type="text"
               placeholder="Search product"
-              className="px-4 py-1.5 border rounded-full text-sm outline-none"
+              className="px-4 py-1.5 border rounded-full text-sm outline-none hidden md:block"
             />
+            <div className="relative group block md:hidden w-10 h-10">
+
+              {/* Icon */}
+              <div className="absolute inset-0 flex items-center justify-center 
+                  group-hover:opacity-0 transition-opacity duration-200">
+                {SbAdminSvg.searchIcon}
+              </div>
+
+              {/* Input */}
+              <input
+                type="text"
+                placeholder="Search..."
+                className="absolute inset-0 w-full h-full px-2 text-sm 
+               opacity-0 group-hover:opacity-100 
+               transition-opacity duration-200 
+               border rounded-md outline-none border rounded-full text-sm outline-none"
+              />
+
+            </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <img
-              src="https://i.pravatar.cc/30"
-              alt="user"
-              className="w-8 h-8 rounded-full"
-            />
-            <span className="text-sm font-medium">Guy Hawkins</span>
+
+
+          <div className="flex gap-4">
+
+
+            <div className="flex items-center gap-2">
+              <img
+                src="https://i.pravatar.cc/30"
+                alt="user"
+                className="w-8 h-8 rounded-full"
+              />
+              <span className="text-sm font-medium">Guy Hawkins</span>
+            </div>
+
+            <div className="cursor-pointer visible sm:hidden" onClick={() => {
+              setCollapsed(!collapsed)
+            }}>{SbAdminSvg.HamburgerIconSvg}</div>
+
           </div>
         </div>
 
