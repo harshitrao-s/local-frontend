@@ -64,7 +64,7 @@ const CreateProduct = () => {
         is_taxable: false,
         is_alias: false
     });
-    
+
 
     const handleInputChange = (field, value) => {
         setProduct(prev => ({ ...prev, [field]: value }));
@@ -80,11 +80,11 @@ const CreateProduct = () => {
             });
 
             if (response.status) {
-                Swal.fire({ 
-                    title: 'Success!', 
-                    text: 'Product Created', 
-                    icon: 'success', 
-                    confirmButtonColor: '#000' 
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Product Created',
+                    icon: 'success',
+                    confirmButtonColor: '#000'
                 });
                 navigate(`/product/edit/${response.product_id}`);
             } else {
@@ -98,7 +98,7 @@ const CreateProduct = () => {
     };
 
     return (
-        <div className="container-fluid p-0 bg-light min-vh-100">
+        <div className="min-vh-100">
             {/* Header with Actions */}
             <div className="d-flex justify-content-between mb-4 border-bottom pb-3">
                 <h3 className="fw-bold m-0">Create New Product</h3>
@@ -151,17 +151,17 @@ const CreateProduct = () => {
                     <Card.Body className="row g-3">
                         <Col md={3}><Form.Label className="small">Brand </Form.Label><Form.Select type="number" size="sm" value={product.brand_id} onChange={e => handleInputChange('brand_id', e.target.value)} >
                             <option value={""} >select</option>
-                             {manufacturers.map((d)=>{
+                            {manufacturers.map((d) => {
                                 return <option value={d.manufacturer_id}>{d.name}</option>
-                             })}
-                            </Form.Select>
+                            })}
+                        </Form.Select>
                         </Col>
                         <Col md={3}><Form.Label className="small">Manufacturer</Form.Label>
-                        <Form.Select size="sm" value={product.manufacturer_id} onChange={e => handleInputChange('manufacturer_id', e.target.value)} >
-                             <option value={""} >select</option>
-                             {brands.map((d)=>{
-                                return <option value={d.brand_id}>{d.name}</option>
-                             })}
+                            <Form.Select size="sm" value={product.manufacturer_id} onChange={e => handleInputChange('manufacturer_id', e.target.value)} >
+                                <option value={""} >select</option>
+                                {brands.map((d) => {
+                                    return <option value={d.brand_id}>{d.name}</option>
+                                })}
                             </Form.Select>
 
                         </Col>
@@ -188,13 +188,13 @@ const CreateProduct = () => {
                         <Col md={4}><Form.Label className="small">FNSKU</Form.Label><Form.Control size="sm" value={product.fnsku} onChange={e => handleInputChange('fnsku', e.target.value)} /></Col>
                         <Col md={4}><Form.Label className="small">FBA SKU</Form.Label><Form.Control size="sm" value={product.fba_sku} onChange={e => handleInputChange('fba_sku', e.target.value)} /></Col>
                         <Col md={6} className="d-flex align-items-center gap-4 ms-4">
-                            <Form.Check 
-                                type="switch" className=" fw-bold" label="Is Taxable" checked={product.is_taxable} 
-                                onChange={e => handleInputChange('is_taxable', e.target.checked)} 
+                            <Form.Check
+                                type="switch" className=" fw-bold" label="Is Taxable" checked={product.is_taxable}
+                                onChange={e => handleInputChange('is_taxable', e.target.checked)}
                             />
-                            <Form.Check 
-                                type="switch" className="ms-4 fw-bold" label="Is Alias" checked={product.is_alias} 
-                                onChange={e => handleInputChange('is_alias', e.target.checked)} 
+                            <Form.Check
+                                type="switch" className="ms-4 fw-bold" label="Is Alias" checked={product.is_alias}
+                                onChange={e => handleInputChange('is_alias', e.target.checked)}
                             />
                         </Col>
                     </Card.Body>
