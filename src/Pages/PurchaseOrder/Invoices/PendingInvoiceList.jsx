@@ -969,10 +969,10 @@ export default function PendingInvoiceList() {
       {/* Stat cards */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {STAT_CFG.map((stat, index) => {
-          const { key, ...rest } = stat; 
+          const { key, ...rest } = stat;
           return (
             <StatCard
-              key={key || index}   
+              key={key || index}
               {...rest}
               isFirst={index === 0}
             />
@@ -981,72 +981,95 @@ export default function PendingInvoiceList() {
       </div>
 
       {/* Filters */}
-      <div className="pil-card bg-white mt-3  mb-3 p-3">
-        <div className="row g-2 align-items-end">
-          <div className="col-md-5">
-            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Search Vendor</label>
-            <div className="position-relative">
-              <FontAwesomeIcon icon={faSearch} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", fontSize: 12, pointerEvents: "none" }} />
-              <input type="text" autoComplete="off" className="form-control form-control-sm"
-                style={{ paddingLeft: 30, borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13 }}
-                placeholder="Name or code…" value={searchValue}
-                onChange={e => { handleVendorInput(e.target.value); setPage(1); }}
-                onFocus={() => vendorSuggestions.length && setShowDropdown(true)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-              />
-              {showDropdown && vendorSuggestions.length > 0 && (
-                <ul className="list-group position-absolute w-100 shadow-sm"
-                  style={{ zIndex: 1000, top: "calc(100% + 4px)", maxHeight: 220, overflowY: "auto", borderRadius: 8, border: "1px solid #e5e7eb" }}>
-                  {vendorSuggestions.map(v => (
-                    <li key={v.id} className="list-group-item list-group-item-action py-2"
-                      style={{ cursor: "pointer", fontSize: 13, borderLeft: "none", borderRight: "none" }}
-                      onMouseDown={() => selectVendor(v)}>
-                      <strong style={{ color: "#4f46e5" }}>{v.vendor_code}</strong>
-                      <span className="ms-2 text-muted">{v.vendor_name}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+      <div className="bg-white mt-3 mb-3 p-4 rounded-xl shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 items-end">
+
+          {/* Search */}
+          <div className="flex flex-col">
+            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Search
+            </label>
+            <input
+              type="text"
+              placeholder="Vendor Name or Code"
+              value={searchValue}
+              onChange={(e) => {
+                handleVendorInput(e.target.value);
+                setPage(1);
+              }}
+              className="h-9 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300"
+            />
           </div>
-          <div className="col-md-3">
-            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Due Date</label>
+
+          {/* Invoice Status */}
+          <div className="flex flex-col">
+            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Invoice Status
+            </label>
+            <select className="h-9 px-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none">
+              <option>All</option>
+            </select>
+          </div>
+
+          {/* Due Date */}
+          <div className="flex flex-col">
+            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Due Date
+            </label>
             <DateRangeInput
               isRange
               size="sm"
               value={dueDateDisplay}
               onChange={(s, e) => {
                 setDueDateDisplay(`${s.format("DD/MM/YYYY")} - ${e.format("DD/MM/YYYY")}`);
-                setFilters({ due_date_from: s.format("YYYY-MM-DD"), due_date_to: e.format("YYYY-MM-DD") });
-                setPage(1);
+                setFilters({
+                  due_date_from: s.format("YYYY-MM-DD"),
+                  due_date_to: e.format("YYYY-MM-DD"),
+                });
               }}
-              onCancel={() => { setDueDateDisplay(""); setFilters({ due_date_from: "", due_date_to: "" }); }}
-              placeholder="Select range"
+              placeholder="Select date range"
             />
           </div>
-          <div className="col-md-2">
-            <label style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 5, display: "block" }}>Payment Term</label>
-            <select className="form-select form-select-sm" style={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13 }}
-              value={paymentTerm} onChange={e => { setPaymentTerm(e.target.value); setPage(1); }}>
-              <option value="">All terms</option>
-              {paymentTerms?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+
+          {/* Payment Term */}
+          <div className="flex flex-col">
+            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+              Payment Term
+            </label>
+            <select
+              value={paymentTerm}
+              onChange={(e) => setPaymentTerm(e.target.value)}
+              className="h-9 px-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none"
+            >
+              <option value="">All</option>
+              {paymentTerms?.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
             </select>
           </div>
-          <div className="col-md-2 d-flex gap-2">
-            <button onClick={() => { setPage(1); fetchData(); }}
-              style={{ flex: "0 0 auto", background: "#343a40", color: "#ffffff", borderRadius: 8, fontSize: 12, fontWeight: 700, padding: "5px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, width: "100px" }}>
-              <FontAwesomeIcon icon={faSearch} style={{ fontSize: 15 }} /> Search
+
+          {/* Buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                setPage(1);
+                fetchData();
+              }}
+              className="flex-1 h-9 bg-gray-800 text-white text-sm font-semibold rounded-lg flex items-center justify-center"
+            >
+              Search
             </button>
-            {/*<button onClick={clearAll} title="Clear" className="btn btn-light" 
-              style={{ width:34,background:"#f3f4f6",color:"#6b7280",border:"none",borderRadius:8,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center" }}
-              <FontAwesomeIcon icon={faTimes} style={{ fontSize:12 }} />
-              Clear
-            </button>*/}
-            <button onClick={clearAll} title="Clear" className="btn btn-light"
+
+            <button
+              onClick={clearAll}
+              className="flex-1 h-9 bg-gray-100 text-gray-600 text-sm font-semibold rounded-lg"
             >
               Clear
             </button>
           </div>
+
         </div>
       </div>
       <div className="clearfix"></div>

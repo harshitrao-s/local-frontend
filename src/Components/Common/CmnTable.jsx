@@ -25,6 +25,7 @@ const CommonTable = ({
   currentPage = 1,
   totalPages = 1,
   searchParamKey = "q",
+  BottomContent,
 }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -323,7 +324,7 @@ const CommonTable = ({
           </table>
         </div>
       </div>
-
+      {BottomContent && BottomContent}
       {isPaginated && (
         <div style={{ marginTop: "16px" }}>
           <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} currentPageSize={tableData.length} />

@@ -216,7 +216,7 @@ const AllVendors = () => {
     {
       title: "Actions",
       field: "actions",
-      render: ( row) => (
+      render: (row) => (
         <div className="flex items-center justify-center gap-2">
           {console.log(row)}
           {/* EDIT */}
@@ -245,11 +245,7 @@ const AllVendors = () => {
       <CmnHeader
         title="All Vendors" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Add New" actionLink="/vendor/addnewvendor"
       />
-      {/* <Input icon={Search} />
-      <div>
-        <Select />
 
-      </div> */}
 
 
       {/* FILTERS */}
@@ -264,7 +260,7 @@ const AllVendors = () => {
                 name="vendor_search"
                 type="text"
                 autoComplete="off"
-                className="form-control"
+                className="form-control cmn_searchbar_featured_design"
                 placeholder="Vendor Name or Vendor Code"
                 value={searchValue}
                 onChange={(e) => {
@@ -303,7 +299,7 @@ const AllVendors = () => {
             <label className="form-label">Vendor Status</label>
             <select
               name="status"
-              className="form-control form-select"
+              className="form-control form-select cmn_searchbar_featured_design"
               value={vendor_status}
               onChange={(e) => {
                 setVendorStatus(e.target.value);
@@ -329,7 +325,7 @@ const AllVendors = () => {
             <label className="form-label">Company Locality</label>
             <select
               name="vendor_locality"
-              className="form-control form-select"
+              className="form-control form-select cmn_searchbar_featured_design"
               value={vendor_locality}
               onChange={(e) => {
                 setVendorLocality(e.target.value);

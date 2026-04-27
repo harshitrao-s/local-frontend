@@ -126,7 +126,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       submenu: [
         { title: "Country", path: "/settings/countries" },
 
-        { title: "Payment Terms", path: "/settings/payment-terms" },
+        { title: "Payment Terms", path: "/settings/payment_terms" },
         { title: "Warehouse", path: "/settings/warehouses" },
         { title: "Shipping Providers", path: "/settings/shipping_providers" },
         { title: "Vendor Login Credentials", path: "/settings/vendor_login_credentials" },

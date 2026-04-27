@@ -10,14 +10,14 @@ import DateRangeInput from "./Common/DateRangeInput";
 import { useMasterData } from "../Context/MasterDataProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
+const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
   const [invoice_status, setInvoiceStatus] = React.useState("");
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = React.useState("");
   const [summary, setSummary] = React.useState(null);
   const [dueDate, setDueDate] = React.useState("");
   const debounceRef = useRef(null);
-  const {paymentTerms } = useMasterData();
+  const { paymentTerms } = useMasterData();
 
   const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
@@ -52,10 +52,10 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
     // Format dates to ISO strings for the backend
     const fromStr = start.format('YYYY-MM-DD');
     const toStr = end.format('YYYY-MM-DD');
-    
+
     // Update the visual input field
     setDateRangeDisplay(`${start.format('DD/MM/YYYY')} - ${end.format('DD/MM/YYYY')}`);
-    
+
     // Store specifically as from/to for the API request
     setFilters({ due_date_from: fromStr, due_date_to: toStr });
 
@@ -91,7 +91,7 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
           });
 
           // Success: Refresh Tabulator data instead of page reload
-          if(del_resp.status)
+          if (del_resp.status)
             Swal.fire({
               title: 'Deleted!',
               text: 'The vendor has been removed.',
@@ -108,8 +108,8 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
 
           // Trigger Tabulator refresh
           if (tabulatorRef.current) {
-              tabulatorRef.current.setData(); 
-            }
+            tabulatorRef.current.setData();
+          }
 
         } catch (error) {
           console.error("Delete failed:", error);
@@ -129,33 +129,33 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
       title: "SB PO",
       field: "sb_po_number",
       width: 140,
-      fixed: true,formatter: (cell) => {
+      fixed: true, formatter: (cell) => {
         const id = cell.getRow().getData().po_id;
-        return  `
+        return `
           <a target="_blank" href=${`/purchaseorder/details/${id}`} class=" link" title="Edit">
               ${cell.getValue()}
         </a>`;
-      } 
+      }
     },
     {
       title: "Vendor PO",
       field: "",
       width: 140,
-      fixed: true, headerSort:false
+      fixed: true, headerSort: false
     },
-{
+    {
       title: "VENDOR NAME",
       field: "vendor_name",
-      minWidth:160,
+      minWidth: 160,
       formatter: (cell) => {
         return cell.getValue();
-      } 
+      }
     },
     {
       title: "INVOICE NO",
       field: "invoice_number",
       width: 140,
-      fixed: true,headerSort:true,
+      fixed: true, headerSort: true,
       formatter: (cell) => {
         const id = cell.getRow().getData().po_invoice_id;
         return `
@@ -170,7 +170,7 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
       headerSort: false,
       formatter: (cell) => {
         return formattedDate(cell.getValue());
-      } 
+      }
     },
     {
       title: "INVOICE DUE DATE",
@@ -179,19 +179,19 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
       headerSort: false,
       formatter: (cell) => {
         return formattedDate(cell.getValue());
-      } 
+      }
     },
     {
       title: "INVOICE AMOUNT",
-      field: "po_amount", width:180,headerSort:false,
+      field: "po_amount", width: 180, headerSort: false,
       formatter: (cell) => {
         return formatCurrency(cell.getValue());
-      } 
+      }
     },
     {
       title: " STATUS",
       field: "status_display",
-      width: 140,headerSort:false, hozAlign:"center", 
+      width: 140, headerSort: false, hozAlign: "center",
       headerHozAlign: "center",
       fixed: true,
       formatter: (cell) => {
@@ -200,7 +200,7 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
         if (status === "Paid") color = "success";
         if (status === "Unpaid") color = "danger";
         if (status === "On Hold") color = "warning";
-        
+
         return `<span class="badge bg-${color}">${status}</span>`;
       }
     },
@@ -208,13 +208,13 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
     {
       title: "PAYMENT TERM",
       field: "payment_term_name",
-      width: 160,headerSort:false,
+      width: 160, headerSort: false,
       fixed: true
     },
-    
-    
+
+
   ];
-  
+
   useEffect(() => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
@@ -231,7 +231,7 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
       ajaxParams: function () {
         return {
           status: invoice_status || "",
-          due_date_from: filters.due_date_from || "", 
+          due_date_from: filters.due_date_from || "",
           due_date_to: filters.due_date_to || "",
           invoice_date_from: invoiceDateFilters.invoice_date_from || "",
           invoice_date_to: invoiceDateFilters.invoice_date_to || "",
@@ -243,23 +243,23 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
         const sorter = params.sort && params.sort.length > 0 ? params.sort[0] : null;
 
         const requestParams = {
-            page: params.page || 1,
-            size: params.size || 20,
-            status: params.status || "",
-            due_date_from: params.due_date_from || "",
-            due_date_to: params.due_date_to || "",
-            invoice_date_from: params.invoice_date_from || "",
-            invoice_date_to: params.invoice_date_to || "",
-            payment_term_id: params.payment_term_id || "",
-            sort_by: sorter ? sorter.field : "",
-            sort_dir: sorter ? sorter.dir : ""
+          page: params.page || 1,
+          size: params.size || 20,
+          status: params.status || "",
+          due_date_from: params.due_date_from || "",
+          due_date_to: params.due_date_to || "",
+          invoice_date_from: params.invoice_date_from || "",
+          invoice_date_to: params.invoice_date_to || "",
+          payment_term_id: params.payment_term_id || "",
+          sort_by: sorter ? sorter.field : "",
+          sort_dir: sorter ? sorter.dir : ""
         };
 
         const query = new URLSearchParams(requestParams).toString();
 
         const response = await apiFetch(`${url}&${query}`);
         return response;
-        },
+      },
 
       ajaxResponse: function (url, params, response) {
         if (response.summary) {
@@ -286,7 +286,7 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
   };
   const clearDateRange = () => {
     // Only reset date-related states
-    setDateRangeDisplay(""); 
+    setDateRangeDisplay("");
     setFilters({ due_date_from: "", due_date_to: "" });
   };
   const clearFilter = () => {
@@ -310,93 +310,93 @@ const VendorInvoices =  ({ vendorCode, isTabMode = true }) => {
       <div className="card mb-4">
         <div className="card-body">
           <div className="">
-        <div className="row mb-3">
-        {/* Order Number */}
-      
-        <div className="col-md-3">
-            <label className="fw-bold small">Invoice Status</label>
-        <select
-            name="status"
-            className="form-control form-select"
-            value={invoice_status}
-            onChange={(e) => {
-              setInvoiceStatus(e.target.value);
-              if (tabulatorRef.current) {
-                tabulatorRef.current.setPage(1);
-              }
-            }}
-        >
-            <option value="">All</option>
-            {[{"id":1, "name":"Paid"},{"id":2, "name":"Unpaid"},{"id":3, "name":"Cancelled"},{"id":4, "name":"On Hold"}]?.map(pt => (
-                <option key={pt.id} value={pt.id}>{pt.name}</option>
-            ))}
-        </select>
-        </div>
-        <div className="col-md-3">
-            <label className="fw-bold small">Invoice Due Date</label>
-            <DateRangeInput isRange={true}
-              value={dateRangeDisplay}
-              onChange={handleDateChange} onCancel={clearDateRange} 
-              placeholder="Select date range" className="bg-white" 
-            />
-        </div>
-        <div className="col-md-3">
-            <label className="fw-bold small">Payment Term</label>
-            <select
-                className="form-control form-select"
-                value={paymentTerm}
-                onChange={(e) => {
-                  setPaymentTerm(e.target.value);
-                  if (tabulatorRef.current) {
-                    tabulatorRef.current.setPage(1);
-                  }
-                }}
-            >
-            <option value="">All</option>
-             {paymentTerms?.map((term) => (
-              <option key={term.id} value={term.id}>
-                {term.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="col-sm-3">
-          <div className="mt-4 d-flex gap-2">
-        <button type="button" className="btn btn-primary" onClick={applyFilter}>
-            <i className="fas fa-search" style={{fontSize:"13px", marginRight:"5px"}}></i>
-            Filter
-        </button>
+            <div className="row mb-3">
+              {/* Order Number */}
 
-        <button type="button" className="btn btn-light" onClick={clearFilter}>
-            Clear
-        </button>
-        </div>
-        </div>
-      </div>
-      <div className="row d-none">
-        <div className="col-md-3">
-            <label className="form-label">Invoice Date</label>
-            <DateRangeInput isRange={true}
-              value={invoiceDateDisplay}
-              onChange={handleInvoiceDateChange}
-              onCancel={() => {
-                setInvoiceDateDisplay("");
-                setInvoiceDateFilters({
-                  invoice_date_from: "",
-                  invoice_date_to: ""
-                });
-              }}
-              placeholder="Select invoice date range"
-              className="bg-white"
-            />
-        </div>
-        
-      </div>
-        {/* FILTER ACTIONS */}
-        
-    </div>
-    </div></div>
-    <div className="card ">
+              <div className="col-md-3">
+                <label className="fw-bold small">Invoice Status</label>
+                <select
+                  name="status"
+                  className="form-control form-select"
+                  value={invoice_status}
+                  onChange={(e) => {
+                    setInvoiceStatus(e.target.value);
+                    if (tabulatorRef.current) {
+                      tabulatorRef.current.setPage(1);
+                    }
+                  }}
+                >
+                  <option value="">All</option>
+                  {[{ "id": 1, "name": "Paid" }, { "id": 2, "name": "Unpaid" }, { "id": 3, "name": "Cancelled" }, { "id": 4, "name": "On Hold" }]?.map(pt => (
+                    <option key={pt.id} value={pt.id}>{pt.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label className="fw-bold small">Invoice Due Date</label>
+                <DateRangeInput isRange={true}
+                  value={dateRangeDisplay}
+                  onChange={handleDateChange} onCancel={clearDateRange}
+                  placeholder="Select date range" className="bg-white"
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="fw-bold small">Payment Term</label>
+                <select
+                  className="form-control form-select"
+                  value={paymentTerm}
+                  onChange={(e) => {
+                    setPaymentTerm(e.target.value);
+                    if (tabulatorRef.current) {
+                      tabulatorRef.current.setPage(1);
+                    }
+                  }}
+                >
+                  <option value="">All</option>
+                  {paymentTerms?.map((term) => (
+                    <option key={term.id} value={term.id}>
+                      {term.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-sm-3">
+                <div className="mt-4 d-flex gap-2">
+                  <button type="button" className="btn btn-primary" onClick={applyFilter}>
+                    <i className="fas fa-search" style={{ fontSize: "13px", marginRight: "5px" }}></i>
+                    Filter
+                  </button>
+
+                  <button type="button" className="btn btn-light" onClick={clearFilter}>
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="row d-none">
+              <div className="col-md-3">
+                <label className="form-label">Invoice Date</label>
+                <DateRangeInput isRange={true}
+                  value={invoiceDateDisplay}
+                  onChange={handleInvoiceDateChange}
+                  onCancel={() => {
+                    setInvoiceDateDisplay("");
+                    setInvoiceDateFilters({
+                      invoice_date_from: "",
+                      invoice_date_to: ""
+                    });
+                  }}
+                  placeholder="Select invoice date range"
+                  className="bg-white"
+                />
+              </div>
+
+            </div>
+            {/* FILTER ACTIONS */}
+
+          </div>
+        </div></div>
+      <div className="card ">
         <div className="card-body d-flex p-1 pt-0 pb-0 mt-0 mb-0 ">
           <div ref={tableRef} />
         </div>

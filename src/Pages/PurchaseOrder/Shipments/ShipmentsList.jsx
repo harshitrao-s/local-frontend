@@ -100,8 +100,8 @@ const ShipmentsList = () => {
   // const [deliveryDateDisplay, setDeliveryDateDisplay] = React.useState("");
   const [shippingDateDisplay, setShippingDateDisplay] = React.useState("");
   // const [deliveryFilters, setDeliveryFilters] = React.useState({
-    // delivery_date_from: "",
-    // delivery_date_to: ""
+  // delivery_date_from: "",
+  // delivery_date_to: ""
   // });
 
   const tableRef = useRef(null);
@@ -367,101 +367,125 @@ const ShipmentsList = () => {
       <DashboardOverview summary={summary} />
       <div className="card mt-3 mb-3">
         <div className="p-3">
-          <div className="">
-            <div className="row mb-3">
-              {/* Order Number */}
-              <div className="col-md-3">
-                <label className="form-label">Search</label>
-                <div className="position-relative">
-                  <input
-                    id="filter_vendor"
-                    name="vendor_search"          // important
-                    type="text"
-                    autoComplete="off"            // disable browser autocomplete
-                    className="form-control"
-                    placeholder="Vendor PO or Order# or Shipping Company"
-                    value={searchValue}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSearchValue(value);
-                      handleVendorSearch(value);
-                    }}
-                    onFocus={() => vendors.length && setShowDropdown(true)}
-                  />
-
-                  {showDropdown && vendors.length > 0 && (
-                    <ul
-                      className="list-group position-absolute w-100 shadow"
-                      style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
-                    >
-                      {vendors.map((vendor) => (
-                        <li
-                          key={vendor.id}
-                          className="list-group-item list-group-item-action"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => handleSelectVendor(vendor)}
-                        >
-                          <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Shipping Status</label>
-                <select
-                  name="status"
-                  className="form-control form-select"
-                  value={invoice_status}
+          <div
+            className="
+        grid gap-3 items-end
+        grid-cols-1
+        sm:grid-cols-2
+        md:grid-cols-3
+        lg:grid-cols-5
+      "
+          >
+            {/* Search */}
+            <div>
+              <label className="form-label">Search</label>
+              <div className="position-relative">
+                <input
+                  id="filter_vendor"
+                  name="vendor_search"
+                  type="text"
+                  autoComplete="off"
+                  className="form-control"
+                  placeholder="Vendor PO or Order# or Shipping Company"
+                  value={searchValue}
                   onChange={(e) => {
-                    setInvoiceStatus(e.target.value);
-                    if (tabulatorRef.current) {
-                      tabulatorRef.current.setPage(1);
-                    }
+                    const value = e.target.value;
+                    setSearchValue(value);
+                    handleVendorSearch(value);
                   }}
-                >
-                  <option value="">All</option>
-                  {SHIPPING_STATUS?.map(pt => (
-                    <option key={pt.id} value={pt.id}>{pt.value}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-md-3">
-                <label className="form-label">Shipping Date</label>
-                <DateRangeInput isRange={true}
-                  value={shippingDateDisplay}
-                  onChange={handleShippingDateChange} onCancel={clearDateRange}
-                  placeholder="Select date range" className="bg-white"
+                  onFocus={() => vendors.length && setShowDropdown(true)}
                 />
-              </div>
-              <div className="col-md-3">
-                <label className="form-label text-muted">Delivery Date</label>
-                <DateRangeInput disabled={true} isRange={true}
-                  value={dateRangeDisplay}
-                  onChange={handleDateChange} onCancel={clearDateRange}
-                  placeholder="Select date range" className="bg-white"
-                />
+
+                {showDropdown && vendors.length > 0 && (
+                  <ul
+                    className="list-group position-absolute w-100 shadow"
+                    style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
+                  >
+                    {vendors.map((vendor) => (
+                      <li
+                        key={vendor.id}
+                        className="list-group-item list-group-item-action"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleSelectVendor(vendor)}
+                      >
+                        <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 
-            {/* FILTER ACTIONS */}
-            <div className="mt-3 d-flex gap-2">
-              <button type="button" className="btn btn-primary" onClick={applyFilter}>
+            {/* Shipping Status */}
+            <div>
+              <label className="form-label">Shipping Status</label>
+              <select
+                name="status"
+                className="form-control form-select"
+                value={invoice_status}
+                onChange={(e) => {
+                  setInvoiceStatus(e.target.value);
+                  tabulatorRef.current?.setPage(1);
+                }}
+              >
+                <option value="">All</option>
+                {SHIPPING_STATUS?.map((pt) => (
+                  <option key={pt.id} value={pt.id}>
+                    {pt.value}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Shipping Date */}
+            <div>
+              <label className="form-label">Shipping Date</label>
+              <DateRangeInput
+                isRange
+                value={shippingDateDisplay}
+                onChange={handleShippingDateChange}
+                onCancel={clearDateRange}
+                placeholder="Select date range"
+                className="bg-white"
+              />
+            </div>
+
+            {/* Delivery Date */}
+            <div>
+              <label className="form-label text-muted">Delivery Date</label>
+              <DateRangeInput
+                disabled
+                isRange
+                value={dateRangeDisplay}
+                onChange={handleDateChange}
+                onCancel={clearDateRange}
+                placeholder="Select date range"
+                className="bg-white"
+              />
+            </div>
+
+            {/* Buttons (same column) */}
+            <div className="flex items-end gap-2">
+              <button
+                type="button"
+                className="btn btn-primary w-100"
+                onClick={applyFilter}
+              >
                 <i className="fas fa-search me-2"></i>
                 Search
               </button>
 
               <button
                 type="button"
-                className="btn btn-light"
+                className="btn btn-light w-100"
                 onClick={clearFilter}
               >
                 Clear
               </button>
             </div>
           </div>
-        </div></div>
+        </div>
+      </div>
       <CmnTable
         config={tableConfig}
         data={tableData}

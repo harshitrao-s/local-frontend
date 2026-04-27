@@ -143,8 +143,8 @@ const tableConfig = [
               }
             }}
             className={`cursor-pointer transition ${isDeleteDisabled
-                ? "opacity-50 cursor-not-allowed"
-                : "text-red-600 hover:scale-110"
+              ? "opacity-50 cursor-not-allowed"
+              : "text-red-600 hover:scale-110"
               }`}
             title="Delete Purchase Order"
           >
@@ -272,12 +272,13 @@ const PurchaseOrderList = () => {
       {/* FILTERS */}
       <div className="card mb-3">
         <div className="card-body">
-          <div className="row g-3">
-            {/* Order Number */}
-            <div className="col-md-4">
+          <div className="row g-3 align-items-end">
+
+            {/* Search */}
+            <div className="col-md-2">
               <label className="form-label">Search</label>
               <input
-                className="form-control"
+                className="form-control cmn_searchbar_featured_design"
                 placeholder="Vendor Order# or PO#"
                 value={filters.order_no}
                 onChange={(e) =>
@@ -285,11 +286,12 @@ const PurchaseOrderList = () => {
                 }
               />
             </div>
+
             {/* Purchase Status */}
             <div className="col-md-2">
               <label className="form-label">Purchase Status</label>
               <select
-                className="form-control form-select"
+                className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.status}
                 onChange={(e) =>
                   setFilters({ ...filters, status: e.target.value })
@@ -302,13 +304,13 @@ const PurchaseOrderList = () => {
                   </option>
                 ))}
               </select>
-
             </div>
+
             {/* Vendor */}
             <div className="col-md-2">
               <label className="form-label">Vendor</label>
               <select
-                className="form-control form-select"
+                className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.vendor_id}
                 onChange={(e) =>
                   setFilters({ ...filters, vendor_id: e.target.value })
@@ -323,10 +325,11 @@ const PurchaseOrderList = () => {
               </select>
             </div>
 
+            {/* Warehouse */}
             <div className="col-md-2">
               <label className="form-label">Warehouse</label>
               <select
-                className="form-control form-select"
+                className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.warehouse}
                 onChange={(e) =>
                   setFilters({ ...filters, warehouse: e.target.value })
@@ -341,11 +344,11 @@ const PurchaseOrderList = () => {
               </select>
             </div>
 
-            {/* Vendor Invoice Status */}
+            {/* Invoice Status */}
             <div className="col-md-2">
               <label className="form-label">Vendor Invoice Status</label>
               <select
-                className="form-control form-select"
+                className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.vendor_payment_status}
                 onChange={(e) =>
                   setFilters({
@@ -363,26 +366,16 @@ const PurchaseOrderList = () => {
               </select>
             </div>
 
-            {/* Delivery Ref */}
-            <div className="col-md-4 d-none">
-              <label className="form-label">Delivery Ref</label>
-              <input
-                id="filter_delivery_ref"
-                className="form-control"
-                placeholder="Delivery Ref"
-              />
+            {/* Buttons (same row) */}
+            <div className="col-md-2 d-flex gap-2">
+              <button className="btn btn-primary w-100" onClick={applyFilter}>
+                Search
+              </button>
+              <button className="btn btn-light w-100" onClick={clearFilter}>
+                Clear
+              </button>
             </div>
-            {/* Warehouse */}
-          </div>
-          {/* FILTER ACTIONS */}
-          <div className="mt-3 d-flex gap-2">
-            <button className="btn btn-primary" onClick={applyFilter}>
-              <i className="fas fa-search me-2"></i>
-              Search
-            </button>
-            <button className="btn btn-light" onClick={clearFilter}>
-              Clear
-            </button>
+
           </div>
         </div>
       </div>
@@ -395,22 +388,18 @@ const PurchaseOrderList = () => {
         config={tableConfig}
         data={tableData}
         isSearchable={false}
-      />
-      <div className="card">
-        <div className="p-0 mt-0">
-          <div ref={tableRef} />
-        </div>
-        <div className="row clearfix py-2 px-2 ">
-          <div className="d-flex justify-content-end">
-            <div className="text-end">
-              <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
-              <p className="text-uppercase mb-0">
-                <span className="text-uppercase text-muted mb-0">Purchase Orders Total</span>
-              </p>
-            </div>
+        bodyHeight={"calc(100vh - 400px)"}
+        BottomContent={<div className="d-flex justify-content-end mt-2">
+          <div className="text-end flex items-center">
+            <p className="text-uppercase mb-0">
+              <span className="text-uppercase text-muted mb-0">Purchase Orders Total</span>
+            </p> -
+            <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
+            
           </div>
-        </div>
-      </div>
+        </div>}
+      />
+
 
 
       {/* <ColumnModal /> */}

@@ -155,10 +155,12 @@ body {
   padding: 16px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-
 }
 
-
+.cmn_searchbar_featured_design {
+  border-radius: 12px !important;
+  border: 1px solid #e5e7eb !important;
+}
 
 
 .background-wrapper {

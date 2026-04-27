@@ -181,11 +181,11 @@ const InvoiceList = () => {
         invoice_date_from: invoiceDateFilters.invoice_date_from,
         invoice_date_to: invoiceDateFilters.invoice_date_to,
       });
-  
+
       const result = await apiFetch(
         `${API_BASE}api/purchaseorder/api/purchase-order/invoices/listing?${params}`
       );
-  
+
       setTableData(result?.data || []);
     } catch (err) {
       console.error(err);
@@ -225,8 +225,8 @@ const InvoiceList = () => {
       invoice_date_to: ""
     });
     setPaymentTerm("");
-  
-    fetchInvoices(); 
+
+    fetchInvoices();
   };
 
   const tableConfig = [
@@ -329,127 +329,128 @@ const InvoiceList = () => {
 
       <DashboardOverview summary={summary} />
       <div className="mt-3 mb-3 p-3 bg-white rounded-[20px]">
-        <div className="">
-          <div className="row mb-3">
-            <div className="col-md-3">
-              <label className="form-label">Search</label>
-              <div className="position-relative">
-                <input
-                  id="filter_vendor"
-                  name="vendor_search"
-                  type="text"
-                  autoComplete="off"
-                  className="form-control"
-                  placeholder="Vendor Name or Vendor Code"
-                  value={searchValue}
-                  onChange={(e) => {
-                    handleVendorSearch(e.target.value);
-                    if (tabulatorRef.current) {
-                      tabulatorRef.current.setPage(1);
-                    }
-                  }}
-                  onFocus={() => vendors.length && setShowDropdown(true)}
-                />
-
-                {showDropdown && vendors.length > 0 && (
-                  <ul
-                    className="list-group position-absolute w-100 shadow"
-                    style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
-                  >
-                    {vendors.map((vendor) => (
-                      <li
-                        key={vendor.id}
-                        className="list-group-item list-group-item-action"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleSelectVendor(vendor)}
-                      >
-                        <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Invoice Status</label>
-              <select
-                name="status"
-                className="form-control form-select"
-                value={invoice_status}
+        <div
+          className="
+      grid gap-3 items-end
+      grid-cols-1
+      sm:grid-cols-2
+      md:grid-cols-3
+      lg:grid-cols-5
+    "
+        >
+          {/* Search */}
+          <div>
+            <label className="form-label">Search</label>
+            <div className="position-relative">
+              <input
+                id="filter_vendor"
+                name="vendor_search"
+                type="text"
+                autoComplete="off"
+                className="form-control"
+                placeholder="Vendor Name or Vendor Code"
+                value={searchValue}
                 onChange={(e) => {
-                  setInvoiceStatus(e.target.value);
-                  if (tabulatorRef.current) {
-                    tabulatorRef.current.setPage(1);
-                  }
+                  handleVendorSearch(e.target.value);
+                  tabulatorRef.current?.setPage(1);
                 }}
-              >
-                <option value="">All</option>
-                {[{ "id": 1, "name": "Paid" }, { "id": 2, "name": "Unpaid" }, { "id": 3, "name": "Cancelled" }, { "id": 4, "name": "On Hold" }]?.map(pt => (
-                  <option key={pt.id} value={pt.id}>{pt.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label"> Due Date</label>
-              <DateRangeInput isRange={true}
-                value={dateRangeDisplay}
-                onChange={handleDateChange} onCancel={clearDateRange}
-                placeholder="Select date range" className="bg-white"
+                onFocus={() => vendors.length && setShowDropdown(true)}
               />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Payment Term</label>
-              <select
-                className="form-control form-select"
-                value={paymentTerm}
-                onChange={(e) => {
-                  setPaymentTerm(e.target.value);
-                  if (tabulatorRef.current) {
-                    tabulatorRef.current.setPage(1);
-                  }
-                }}
-              >
-                <option value="">All</option>
-                {paymentTerms?.map((term) => (
-                  <option key={term.id} value={term.id}>
-                    {term.name}
-                  </option>
-                ))}
-              </select>
+
+              {showDropdown && vendors.length > 0 && (
+                <ul
+                  className="list-group position-absolute w-100 shadow"
+                  style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto" }}
+                >
+                  {vendors.map((vendor) => (
+                    <li
+                      key={vendor.id}
+                      className="list-group-item list-group-item-action"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleSelectVendor(vendor)}
+                    >
+                      <strong>{vendor.vendor_code}</strong> - {vendor.vendor_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
-          <div className="row d-none">
-            <div className="col-md-3">
-              <label className="form-label">Invoice Date</label>
-              <DateRangeInput isRange={true}
-                value={invoiceDateDisplay}
-                onChange={handleInvoiceDateChange}
-                onCancel={() => {
-                  setInvoiceDateDisplay("");
-                  setInvoiceDateFilters({
-                    invoice_date_from: "",
-                    invoice_date_to: ""
-                  });
-                }}
-                placeholder="Select invoice date range"
-                className="bg-white"
-              />
-            </div>
 
+          {/* Invoice Status */}
+          <div>
+            <label className="form-label">Invoice Status</label>
+            <select
+              className="form-control form-select"
+              value={invoice_status}
+              onChange={(e) => {
+                setInvoiceStatus(e.target.value);
+                tabulatorRef.current?.setPage(1);
+              }}
+            >
+              <option value="">All</option>
+              {[{ id: 1, name: "Paid" }, { id: 2, name: "Unpaid" }, { id: 3, name: "Cancelled" }, { id: 4, name: "On Hold" }].map((pt) => (
+                <option key={pt.id} value={pt.id}>
+                  {pt.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="mt-3 d-flex gap-2">
-            <button type="button" className="btn btn-primary" onClick={applyFilter}>
-              <i className="fas fa-search" style={{ fontSize: "13px", marginRight: "5px" }}></i>
+
+          {/* Due Date */}
+          <div>
+            <label className="form-label">Due Date</label>
+            <DateRangeInput
+              isRange
+              value={dateRangeDisplay}
+              onChange={handleDateChange}
+              onCancel={clearDateRange}
+              placeholder="Select date range"
+              className="bg-white"
+            />
+          </div>
+
+          {/* Payment Term */}
+          <div>
+            <label className="form-label">Payment Term</label>
+            <select
+              className="form-control form-select"
+              value={paymentTerm}
+              onChange={(e) => {
+                setPaymentTerm(e.target.value);
+                tabulatorRef.current?.setPage(1);
+              }}
+            >
+              <option value="">All</option>
+              {paymentTerms?.map((term) => (
+                <option key={term.id} value={term.id}>
+                  {term.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Buttons (Same Column) */}
+          <div className="flex items-end gap-2">
+            <button
+              type="button"
+              className="btn btn-primary w-100"
+              onClick={applyFilter}
+            >
+              <i className="fas fa-search me-1"></i>
               Search
             </button>
 
-            <button type="button" className="btn btn-light" onClick={clearFilter}>
+            <button
+              type="button"
+              className="btn btn-light w-100"
+              onClick={clearFilter}
+            >
               Clear
             </button>
           </div>
         </div>
       </div>
-
       <CmnTable
         config={tableConfig}
         data={tableData}
