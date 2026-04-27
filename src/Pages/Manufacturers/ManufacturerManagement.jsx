@@ -90,7 +90,7 @@ const ManufacturerManagement = () => {
         val === 1 ? (
           <span className="new_badge badge-success">Active</span>
         ) : (
-          <span className="new_badge badge-secondary">Inactive</span>
+          <span className="new_badge bg-red-500">Inactive</span>
         ),
     },
     {

@@ -104,7 +104,7 @@ const BrandManagement = () => {
         val === 1 ? (
           <span className="new_badge badge-success ">Active</span>
         ) : (
-          <span className="new_badge badge-secondary ">In-active</span>
+          <span className="new_badge bg-red-500 ">In-active</span>
         ),
     },
 

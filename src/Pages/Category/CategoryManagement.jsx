@@ -99,7 +99,7 @@ const CategoryManagement = () => {
       render: (val) => (
         <span
           className={`new_badge ${
-            val === 1 ? "badge-success" : "badge-secondary"
+            val === 1 ? "badge-success" : "bg-red-500"
           }`}
         >
           {val === 1 ? "Active" : "In-active"}

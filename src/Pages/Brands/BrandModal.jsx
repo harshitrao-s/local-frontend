@@ -2,20 +2,28 @@ import React, { useState, useEffect } from "react";
 import { API_BASE } from "../../Config/api";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../Utils/apiFetch";
+import { Button } from "../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+import { Input } from "../../Components/Common/ui/input";
 
 const BrandModal = ({ mode, initialData, onClose, onRefresh }) => {
-   
+
     const [name, setName] = useState("");
-    const [status, setStatus] = useState(1); // Default
+    const [status, setStatus] = useState(""); // Default
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (mode === 'edit' && initialData) {
+        if (mode === "edit" && initialData) {
             setName(initialData.name || "");
-            
-            // Ensure the status matches the case of your <option> values exactly
-            // If API returns "Active", it sets "Active". 
-            setStatus(initialData?.status);
+
+            const normalizedStatus =
+                initialData.status === 1 ||
+                    initialData.status === "1" ||
+                    initialData.status === "Active"
+                    ? "1"
+                    : "0";
+
+            setStatus(normalizedStatus);
         }
     }, [mode, initialData]);
 
@@ -27,12 +35,12 @@ const BrandModal = ({ mode, initialData, onClose, onRefresh }) => {
 
         setLoading(true);
         const isAdd = mode === 'add';
-        
+
         // Use brand_id for the URL if editing
-        const url = isAdd 
-            ? `${API_BASE}api/product_api/api/brands/create` 
+        const url = isAdd
+            ? `${API_BASE}api/product_api/api/brands/create`
             : `${API_BASE}api/product_api/api/brands/update/${initialData.brand_id}`;
-        
+
         try {
             const response = await apiFetch(url, {
                 method: isAdd ? "POST" : "PUT",
@@ -61,45 +69,74 @@ const BrandModal = ({ mode, initialData, onClose, onRefresh }) => {
     };
 
     return (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content border-0 shadow">
-                    <div className={`modal-header ${mode === 'add' ? 'bg-' : ''}`}>
-                        <h5 className="modal-title">{mode === 'add' ? 'Add New Brand' : 'Edit Brand'}</h5>
-                        <button type="button" className="btn-close btn-close" onClick={onClose}></button>
+        <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full  max-w-lg rounded-[16px] bg-white shadow-xl border border-gray-200 overflow-visible">
+
+                {/* Header */}
+                <div className="flex items-center justify-between px-2 py-1">
+                    <h5 className="text-[16px] text-[#454545] font-semibold">
+                        {mode === "add" ? "Add New Brand" : "Edit Brand"}
+                    </h5>
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-md p-1 hover:bg-gray-100 transition"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-3 space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] font-semibold">Brand Name</label>
+                        <Input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            disabled={loading}
+                            placeholder="Enter brand name"
+                        />
                     </div>
-                    <div className="modal-body p-4">
-                        <div className="mb-3">
-                            <label className="form-label fw-bold">Brand Name</label>
-                            <input 
-                                type="text" 
-                                className="form-control" 
-                                value={name} 
-                                onChange={(e) => setName(e.target.value)}
-                                disabled={loading}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label fw-bold">Status</label>
-                            
-                            <select 
-                                className="form-select" 
-                                value={status} 
-                                onChange={(e) => setStatus(e.target.value)}
-                                disabled={loading}
-                            >
-                                {/* Values must match exactly what comes from initialData.status */}
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] font-semibold">Status</label>
+
+                        <Select
+                            value={status || undefined}
+                            onValueChange={setStatus}
+                            disabled={loading}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Status" />
+                            </SelectTrigger>
+
+                            <SelectContent className="z-[1100] w-[470px] bg-white " position="popper" >
+                                <SelectItem className="hover:bg-gray-100 border-gray-100" value="1">Active</SelectItem>
+                                <SelectItem className="hover:bg-gray-100" value="0">Inactive</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
-                    <div className="modal-footer bg-light">
-                        <button className="btn btn-secondary" onClick={onClose} disabled={loading}>Cancel</button>
-                        <button className={`btn ${mode === 'add' ? 'btn-success' : 'btn-primary'}`} onClick={handleSave} disabled={loading}>
-                            {loading ? 'Processing...' : 'Save Changes'}
-                        </button>
-                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end gap-3 px-3 py-2">
+                    <Button
+                        variant="secondary"
+                        onClick={onClose}
+                        disabled={loading}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        onClick={handleSave}
+                        disabled={loading}
+                        className="bg-black text-white"
+                    >
+                        {loading ? "Processing..." : "Save Changes"}
+                    </Button>
                 </div>
             </div>
         </div>

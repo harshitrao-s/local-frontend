@@ -69,18 +69,18 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
       <div className="w-full max-w-lg rounded-2xl bg-white overflow-visible border border-gray-200">
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-2 py-1">
+        <div className="flex items-center justify-between  px-2 py-1">
           <h6 className="text-sm font-bold">
             {mode === "edit" ? "Edit Unit" : "Add New Unit"}
           </h6>
 
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 hover:bg-gray-100 transition"
+            className="rounded-md p-1 bg-white border-0 hover:bg-gray-100 transition"
           >
             ✕
-          </button>
+          </Button>
         </div>
 
         {/* Body */}
@@ -120,7 +120,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
                 <SelectValue placeholder="Select Status" />
               </SelectTrigger>
 
-              <SelectContent className="z-[1100] w-[460px] bg-white "  position="popper" >
+              <SelectContent className="z-[1100] w-[470px] bg-white p-1"  position="popper" >
                 <SelectItem className="hover:bg-gray-100" value="1">Active</SelectItem>
                 <SelectItem className="hover:bg-gray-100" value="0">Inactive</SelectItem>
               </SelectContent>
@@ -133,6 +133,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
               variant="secondary"
               onClick={onClose}
               disabled={loading}
+              className="bg-[#6c757d] text-white"
             >
               Cancel
             </Button>
@@ -141,6 +142,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
               onClick={handleSave}
               disabled={loading}
               variant={mode === "add" ? "default" : "default"}
+              className="bg-black"
             >
               {loading ? "Saving..." : "Save Unit"}
             </Button>

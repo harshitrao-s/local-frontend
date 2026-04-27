@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../Config/api";
 import { apiFetch, getCookie } from "../../Utils/apiFetch";
+import { Button } from "../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+import { Input } from "../../Components/Common/ui/input";
 
 const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh }) => {
     const [name, setName] = useState("");
@@ -13,14 +16,14 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             setName(initialData.name || "");
-            
+
             // FIX: If is_primary is 1 (True), isSubcategory should be false.
             // If is_primary is 0 (False), isSubcategory should be true.
             const subCheck = initialData.is_primary === 1 ? false : true;
             setIsSubcategory(subCheck);
-            
-            setParentId(initialData.parent_id || "");
-            
+
+            setParentId(initialData.parent_id ? String(initialData.parent_id) : "");
+
             // Normalize status to string "1" or "0" for the select element
             const statusVal = (initialData.status === 1 || initialData.status === "1") ? "1" : "0";
             setStatus(statusVal);
@@ -48,7 +51,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
 
         const baseUrl = `${API_BASE}api/product_api/product_categories`;
         // Use category_id or id based on your backend response
-        const id =  initialData?.category_id;
+        const id = initialData?.category_id;
         const url = mode === 'add' ? `${baseUrl}/create` : `${baseUrl}/update/${id}`;
 
         const payload = {
@@ -90,85 +93,131 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
     };
 
     return (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content shadow-lg border-0">
-                    <div className="modal-header border-bottom">
-                        <h6 className="modal-title fw-bold">
-                            {mode === 'edit' ? 'Edit Category' : 'Add New Category'}
-                        </h6>
-                        <button type="button" className="btn-close" onClick={onClose}></button>
+        <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
+
+                {/* Header */}
+                <div className="flex items-center justify-between  px-2 py-1">
+                    <h6 className="text-sm font-bold">
+                        {mode === "edit" ? "Edit Category" : "Add New Category"}
+                    </h6>
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-md p-1 hover:bg-gray-100 transition"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-3 space-y-4">
+                    {/* Category Name */}
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] font-semibold">
+                            Category Name
+                        </label>
+
+                        <Input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            disabled={loading}
+                            placeholder="Enter category name..."
+                        />
                     </div>
-                    <div className="modal-body p-4">
-                        <div className="mb-3">
-                            <label className="form-label small fw-bold text-uppercase">Category Name</label>
-                            <input 
-                                type="text" 
-                                className="form-control" 
-                                value={name} 
-                                onChange={(e) => setName(e.target.value)} 
+
+                    {/* Subcategory Toggle */}
+                    <div className="rounded-lg border bg-gray-50 p-3">
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="subCheck"
+                                checked={isSubcategory}
+                                onChange={(e) => setIsSubcategory(e.target.checked)}
                                 disabled={loading}
-                                placeholder="Enter category name..."
+                                className="h-4 w-4 rounded border-gray-300"
                             />
-                        </div>
-                        
-                        <div className="mb-3 p-2 bg-light rounded border">
-                            <div className="form-check form-switch ms-3">
-                                <input 
-                                    type="checkbox" 
-                                    className="form-check-input" 
-                                    id="subCheck" 
-                                    checked={isSubcategory} 
-                                    onChange={(e) => setIsSubcategory(e.target.checked)} 
-                                    disabled={loading}
-                                />
-                                <label className="form-check-label small fw-bold" htmlFor="subCheck">
-                                    Define as Subcategory
-                                </label>
-                            </div>
-                        </div>
 
-                        {isSubcategory && (
-                            <div className="mb-3 animate__animated animate__fadeInDown">
-                                <label className="form-label small fw-bold text-uppercase">Parent Category</label>
-                                <select 
-                                    className="form-select border-primary" 
-                                    value={parentId} 
-                                    onChange={(e) => setParentId(e.target.value)}
-                                    disabled={loading}
-                                >
-                                    <option value="">-- Select Parent --</option>
-                                    {main_categories?.map((d)=>(
-                                        <option value={d.id} key={d.id}>{d.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
+                            <label
+                                htmlFor="subCheck"
+                                className="text-[12px] text-[#737373] font-semibold"
+                            >
+                                Define as Subcategory
+                            </label>
+                        </div>
+                    </div>
 
-                        <div className="mb-3">
-                            <label className="form-label small fw-bold text-uppercase">Status</label>
-                            <select 
-                                className="form-select" 
-                                value={status} 
-                                onChange={(e) => setStatus(e.target.value)}
+                    {/* Parent Category */}
+                    {isSubcategory && (
+                        <div className="space-y-2">
+                            <label className="text-[12px] text-[#737373] font-semibold">
+                                Parent Category
+                            </label>
+
+                            <Select
+                                value={parentId || undefined}
+                                onValueChange={setParentId}
                                 disabled={loading}
                             >
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select Parent" />
+                                </SelectTrigger>
+
+                                <SelectContent className="z-[1100] w-[470px] bg-white p-1" position="popper" >
+
+                                    {main_categories?.map((d) => (
+                                        <SelectItem className="hover:bg-gray-100"s key={d.id} value={String(d.id)}>
+                                            {d.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
-                    </div>
-                    <div className="modal-footer bg-light border-top">
-                        <button className="btn btn-link text-decoration-none text-secondary px-4" onClick={onClose} disabled={loading}>Cancel</button>
-                        <button 
-                            className={`btn ${mode === 'add' ? 'btn-success' : 'btn-primary'} px-4 shadow-sm`} 
-                            onClick={handleSave}
+                    )}
+
+                    {/* Status */}
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] semibold">
+                            Status
+                        </label>
+
+                        <Select
+                            value={status || undefined}
+                            onValueChange={setStatus}
                             disabled={loading}
                         >
-                            {loading && <span className="spinner-border spinner-border-sm me-2"></span>}
-                            {mode === 'add' ? 'Create Category' : 'Save Changes'}
-                        </button>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Status" />
+                            </SelectTrigger>
+
+                            <SelectContent className="z-[1100] w-[470px] bg-white" position="popper" >
+                                <SelectItem className="hover:bg-gray-100" value="1">Active</SelectItem>
+                                <SelectItem className="hover:bg-gray-100" value="0">Inactive</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end gap-3 px-3 py-2">
+                    <Button
+                        variant="ghost"
+                        onClick={onClose}
+                        disabled={loading}
+                        className="bg-[#6c757d] text-white"
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        onClick={handleSave}
+                        disabled={loading}
+                        className="bg-black"
+                    >
+                        {loading ? "Processing..." : mode === "add" ? "Create Category" : "Save Changes"}
+                    </Button>
                 </div>
             </div>
         </div>

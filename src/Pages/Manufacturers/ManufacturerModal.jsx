@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../Config/api";
 import { apiFetch, getCookie } from "../../Utils/apiFetch";
+import { Button } from "../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+import { Input } from "../../Components/Common/ui/input";
+
 
 const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
   const [name, setName] = useState("");
@@ -23,8 +27,8 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
 
     setLoading(true);
     const id = initialData?.manufacturer_id;
-    const url = mode === 'add' 
-      ? `${API_BASE}api/product_api/api/manufacturers/create` 
+    const url = mode === 'add'
+      ? `${API_BASE}api/product_api/api/manufacturers/create`
       : `${API_BASE}api/product_api/api/manufacturers/update/${id}`;
 
     try {
@@ -54,40 +58,93 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
   };
 
   return (
-    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content border-0 shadow-lg">
-          <div className="modal-header">
-            <h6 className="modal-title fw-bold">{mode === 'edit' ? 'Edit Manufacturer' : 'New Manufacturer'}</h6>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+
+    <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
+
+        {/* Header */}
+        <div className="flex items-center justify-between border-b px-2 py-1">
+          <h6 className="text-sm font-bold">
+            {mode === "edit" ? "Edit Manufacturer" : "New Manufacturer"}
+          </h6>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-1 hover:bg-gray-100 transition"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-3 space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold">
+              Manufacturer Name
+            </label>
+
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={loading}
+              placeholder="Enter company name"
+            />
           </div>
-          <div className="modal-body p-4">
-            <div className="mb-3">
-              <label className="form-label small fw-bold">Manufacturer Name</label>
-              <input 
-                type="text" 
-                className="form-control" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                disabled={loading}
-                placeholder="Enter company name"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label small fw-bold">Status</label>
-              <select className="form-select" value={status} onChange={(e) => setStatus(e.target.value)} disabled={loading}>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-              </select>
-            </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold">
+              Status
+            </label>
+
+            <Select
+              value={status || undefined}
+              onValueChange={setStatus}
+              disabled={loading}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Status" />
+              </SelectTrigger>
+
+              <SelectContent
+                className="z-[1100] w-[470px] bg-white"
+                position="popper"
+              >
+                <SelectItem className="hover:bg-gray-100" value="1">
+                  Active
+                </SelectItem>
+
+                <SelectItem className="hover:bg-gray-100" value="0">
+                  Inactive
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <div className="modal-footer bg-light border-top">
-            <button className="btn btn-secondary px-4" onClick={onClose} disabled={loading}>Cancel</button>
-            <button className={`btn ${mode === 'add' ? 'btn-success' : 'btn-primary'} px-4`} onClick={handleSave} disabled={loading}>
-              {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null}
-              {mode === 'add' ? 'Save ' : 'Update '}
-            </button>
-          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3 px-3 py-2">
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={loading}
+            className="bg-[#6c757d] text-white"
+          >
+            Cancel
+          </Button>
+
+          <Button
+            onClick={handleSave}
+            disabled={loading}
+            className="bg-black"
+          >
+            {loading
+              ? "Processing..."
+              : mode === "add"
+                ? "Save"
+                : "Update"}
+          </Button>
         </div>
       </div>
     </div>
