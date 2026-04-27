@@ -65,6 +65,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         { title: "Add Purchase", path: "/purchaseorder/create/470/AddNew" },
         { title: "View Purchases", path: "/purchaseorder/listing" },
         { title: "Kanban", path: "/purchaseorder/kanbanlisting" },
+        { title: "Import/Export", path: "/purchaseorder/importexport" },
       ],
     },
     {
@@ -73,8 +74,8 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       icon: MdOutlineAssignmentReturn,
       activeIcon: MdAssignmentReturn,
       submenu: [
-        { title: "Add Return", path: "/supplier-return/add" },
-        { title: "View Returns", path: "/supplier-return/listing" },
+        { title: "Add Return", path: "#" },
+        { title: "View Returns", path: "#" },
       ],
     },
     {
@@ -102,6 +103,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         { title: "All Products", path: "/product/allproducts" },
         { title: "Brands", path: "/product/brands" },
         { title: "Category", path: "/product/categories" },
+        { title: "Manufacturers", path: "/product/manufacturers" },
+        { title: "Attributes", path: "/product/attributes" },
+        { title: "Unit Of Measurement", path: "/product/unit_of_measurements" },
       ],
     },
     {
@@ -121,7 +125,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       activeIcon: MdSettings,
       submenu: [
         { title: "Country", path: "/settings/countries" },
+
+        { title: "Payment Terms", path: "/settings/payment-terms" },
         { title: "Warehouse", path: "/settings/warehouses" },
+        { title: "Shipping Providers", path: "/settings/shipping_providers" },
+        { title: "Vendor Login Credentials", path: "/settings/vendor_login_credentials" },
       ],
     },
     {
@@ -257,7 +265,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         {/* Logo */}
         <div className="flex items-center justify-between mb-6">
           {collapsed ? (
-            <img src={SmallLogo} alt="Small Logo" className="w-8"  onClick={() => setCollapsed(!collapsed)} />
+            <img src={SmallLogo} alt="Small Logo" className="w-8" onClick={() => setCollapsed(!collapsed)} />
           ) : (
             <img src={Logo} alt="Logo" className="w-36" onClick={() => setCollapsed(!collapsed)} />
           )}
@@ -290,9 +298,8 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
       {/* Mobile Sidebar - Slides from Right */}
       <nav
-        className={`fixed top-0 right-0 h-[100%] w-[80%] bg-gray-50 border-l shadow-lg z-40 md:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${
-          collapsed ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-[100%] w-[80%] bg-gray-50 border-l shadow-lg z-40 md:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${collapsed ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Close Button & Logo */}
         <div className="flex items-center justify-between px-4 py-2 border-b sticky top-0 bg-gray-50">

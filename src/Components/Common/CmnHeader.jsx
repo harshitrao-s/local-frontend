@@ -10,7 +10,8 @@ const CmnHeader = ({
     actionBtn,
     actionName,
     actionLink,
-    actions = []
+    actions = [],
+    actionCmp,
 }) => {
 
 
@@ -73,9 +74,12 @@ const CmnHeader = ({
                                 </Link>
                             )
                         ))}
+                       
 
                     </div>
                 )}
+
+                 {actionCmp && actionCmp}
             </div>
         </Fragment>
     );

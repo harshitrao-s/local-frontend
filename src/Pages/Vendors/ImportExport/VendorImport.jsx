@@ -13,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import StickyHeader from "../../../Components/Common/StickyHeader";
 import Swal from "sweetalert2";
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import { ImportIcon, UploadIcon } from "lucide-react";
 
 const VendorImportIndex = () => {
     const navigate = useNavigate();
@@ -205,14 +207,14 @@ const VendorImportIndex = () => {
                         <p><strong>Total Processed:</strong> ${summary.total_processed || 0} Records.</p>
                     </div>
                     `,
-                    confirmButtonText:  "OK",
+                    confirmButtonText: "OK",
                     confirmButtonColor: "#000000"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                       
-                            navigate("/vendor/vendors");
+
+                        navigate("/vendor/vendors");
                     }
-                });  
+                });
 
             } else {
                 showErrorToast(res);
@@ -233,49 +235,42 @@ const VendorImportIndex = () => {
 
     return (
         <div className="mt-0">
-            <StickyHeader>
-                <div className="d-flex justify-content-between mb-2">
-                    <h5 className="fw-bold py-1 ps-0">
-                        <FontAwesomeIcon icon={faFileImport} className="me-2 text-primary" />
-                        Vendor Import Engine
-                    </h5>
-                    <div className="d-flex gap-2">
-                        <div className="dropdown">
+            <CmnHeader IconLucide={ImportIcon} title={"Vendor Import Engine"} actionCmp={<div className="d-flex gap-2">
+                <div className="dropdown">
+                    <button
+                        className="btn btn-success dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        disabled={isDownloading}
+                    >
+                        <i className="fa fa-download me-2"></i>
+                        {isDownloading ? 'Exporting...' : 'Export'}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
                             <button
-                                className="btn btn-success dropdown-toggle"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                disabled={isDownloading}
+                                className="dropdown-item"
+                                onClick={() => handleExportVendors('csv')}
                             >
-                                <i className="fa fa-download me-2"></i>
-                                {isDownloading ? 'Exporting...' : 'Export'}
+                                Export Vendor Data (CSV)
                             </button>
-                            <ul className="dropdown-menu">
-                                <li>
-                                    <button
-                                        className="dropdown-item"
-                                        onClick={() => handleExportVendors('csv')}
-                                    >
-                                        Export Vendor Data (CSV)
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="dropdown-item"
-                                        onClick={() => handleExportVendors('xl')}
-                                    >
-                                        Export Vendor Data (Excel)
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                        <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/vendor/vendors")}>
-                            <FontAwesomeIcon icon={faListUl} className="me-1" /> Listing
-                        </button>
-                    </div>
+                        </li>
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                onClick={() => handleExportVendors('xl')}
+                            >
+                                Export Vendor Data (Excel)
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-            </StickyHeader>
+                <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/vendor/vendors")}>
+                    <FontAwesomeIcon icon={faListUl} className="me-1" /> Listing
+                </button>
+            </div>} />
+
 
             <div className="bg-white shadow-sm mt-1">
                 {/* Stepper Navigation */}
@@ -314,8 +309,8 @@ const VendorImportIndex = () => {
                         /* STAGE 1: UPLOAD */
                         <div className="animate__animated animate__fadeIn">
                             <Row className=" align-items-stretch">
-                                <Col md="6" className="d-flex">
-                                    <div {...getRootProps()} className={`border rounded-3 h-100 w-100  d-flex flex-column justify-content-center p-5  text-center transition-all ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} style={{ cursor: 'pointer', border: '2px dashed #dee2e6' }}>
+                                <Col md="6" className="d-flex items-center">
+                                    <div {...getRootProps()} className={`border rounded-3 h-100 w-100  d-flex items-center flex-column justify-content-center p-5  text-center transition-all ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} style={{ cursor: 'pointer', border: '2px dashed #dee2e6' }}>
                                         <input {...getInputProps()} />
                                         {!selectedFile ? (
                                             <>
@@ -483,13 +478,13 @@ const VendorImportIndex = () => {
                                                         <td className="fw-bold">{row["Vendor Code"]}</td>
                                                         <td>{row["Vendor Name"]}</td>
                                                         <td>{row["Vendor Type"]}</td>
-                                                        <td>{row["Company Locality"] }</td>
-                                                        <td>{row["City"] }</td>
-                                                        <td>{row["Country"] }</td>
-                                                        <td>{row["Currency"] }</td>
-                                                        <td>{row["Tax %"] }</td>
-                                                        <td>{row["Status"] }</td>
-                                                        <td>{row["Action"] }</td>
+                                                        <td>{row["Company Locality"]}</td>
+                                                        <td>{row["City"]}</td>
+                                                        <td>{row["Country"]}</td>
+                                                        <td>{row["Currency"]}</td>
+                                                        <td>{row["Tax %"]}</td>
+                                                        <td>{row["Status"]}</td>
+                                                        <td>{row["Action"]}</td>
                                                     </tr>
                                                 )
                                             ))}
