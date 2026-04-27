@@ -1,18 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
 import { API_BASE } from "../../Config/api";
 import UOMModal from "./UOMModal";
 import Swal from "sweetalert2";
-import { api, apiFetch } from "../../Utils/apiFetch";
+import {  apiFetch } from "../../Utils/apiFetch";
+import CmnHeader from "../../Components/Common/CmnHeader";
+import {Ruler,Plus} from 'lucide-react'
+import CmnTable from "../../Components/Common/CmnTable";
+import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
 
 const UnitOfMeasurement = () => {
-  const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
   const [modalConfig, setModalConfig] = useState({ 
     show: false, 
     mode: 'add', 
     initialData: null 
   });
+  const [tableData, setTableData] = useState([]);
+  const [invoice_status, setInvoiceStatus] = useState("");
 
   const openModal = (mode, data = null) => {
     setModalConfig({ show: true, mode, initialData: data });
@@ -23,9 +27,7 @@ const UnitOfMeasurement = () => {
   };
 
   const refreshTable = () => {
-    if (tabulatorRef.current) {
-      tabulatorRef.current.setData(); 
-    }
+    fetchInvoices()
   };
 
   const handleDelete = async (id) => {
@@ -56,81 +58,95 @@ const UnitOfMeasurement = () => {
     });
   };
 
-  const columns = [
-    { title: "Unit Name", field: "name", hozAlign: "left", headerSort: false, formatter: (cell) => `<span class="fw-bold">${cell.getValue()}</span>` },
-    { title: "Short Code", field: "short_name", width: 150, hozAlign: "center", headerSort: false },
-    { 
-      title: "Status", 
-      field: "status", 
-      width: 120, 
-      headerSort: false,
-      formatter: (cell) => {
-        return cell.getValue() === 1 
-          ? `<span class="new_badge badge-success fw-bold">Active</span>` 
-          : `<span class="new_badge badge-secondary fw-bold">Inactive</span>`;
+  const fetchInvoices = async () => {
+    try {
+      const params = new URLSearchParams({
+        status: invoice_status,
+      });
+
+      const result = await apiFetch(
+        `${API_BASE}api/product_api/api/uom?${params}`
+      );
+
+      setTableData(result?.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [
+     invoice_status,
+  ]);
+
+  const tableConfig = [
+    {
+      title: "Unit Name",
+      field: "name",
+     
+    },
+
+    {
+      title: "Short Code",
+      field: "short_name",
+      
+    },
+    {
+      title: "STATUS",
+      field: "status",
+      render: (val) => {
+        const status = Number(val);
+    
+        return (
+          <span
+            className={`new_badge w-[80px] text-center text-[12px] font-medium text-white inline-block ${
+              status === 1 ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {status === 1 ? "Active" : "Inactive"}
+          </span>
+        );
       }
     },
     {
       title: "Actions",
-      width: 150,
-      headerSort: false,
-      hozAlign: "center",
-      formatter: function (cell) {
-        const d = cell.getRow().getData();
-        const container = document.createElement("div");
-        container.className = "d-flex gap-2";
+      field: "actions",
+      render: (val,row) => (
+        <div className="flex items-center justify-center gap-2">
+          {/* EDIT */}
+          <div
+            onClick={() => openModal('edit',row)}
+            className="cursor-pointer"
+          >
+            {SbAdminSvg.edit}
+          </div>
 
-        const editBtn = document.createElement("button");
-        editBtn.className = "btn btn-sm btn-primary";
-        editBtn.innerHTML = `<i class="fas fa-pen"></i>`;
-        editBtn.onclick = () => openModal('edit', d);
+          {/* DELETE */}
+          <div
+            onClick={() => handleDelete(row.uom_id)}
+            className="cursor-pointer"
+          >
+            {SbAdminSvg.delete}
+          </div>
 
-        const delBtn = document.createElement("button");
-        delBtn.className = "btn btn-sm btn-outline-danger";
-        delBtn.innerHTML = `<i class="fas fa-trash"></i>`;
-        delBtn.onclick = () => handleDelete(d.uom_id);
-
-        container.appendChild(editBtn);
-        container.appendChild(delBtn);
-        return container;
-      }
+        </div>
+      ),
     }
   ];
 
-  useEffect(() => {
-    tabulatorRef.current = new Tabulator(tableRef.current, {
-      layout: "fitColumns",
-      height: "500px",
-      pagination: true,
-      paginationMode: "remote",
-      paginationSize: 20,
-      ajaxURL: `${API_BASE}api/product_api/api/uom`,
-      ajaxRequestFunc: async function (url, config, params) {
-        const query = new URLSearchParams({
-          ...params,
-          q: document.getElementById("filter_uom_name")?.value || "",
-        }).toString();
-        return await apiFetch(`${url}?${query}`, { credentials: "include" });
-      },
-      ajaxResponse: function (url, params, response) {
-        return {
-          data: response.data || [],
-          last_page: response.last_page || 1,
-        };
-      },
-      columns: columns,
-    });
-    return () => tabulatorRef.current?.destroy();
-  }, []);
-
   return (
+
+    
     <div className="p-0">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h3 className="mb-0 fw-bold">Unit of Measurement</h3>
-        <button className="btn btn-dark" onClick={() => openModal('add')}>
-          <i className="fas fa-plus me-2"></i>Add Unit
-        </button>
-      </div>
+
+      <CmnHeader
+        title="Unit of Measurement" IconLucide={Ruler}
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Unit", onClick: ()=>openModal('add')}
+      ]}
+      />
+      
 
       <div className="card mb-3 shadow-sm border-0">
         <div className="card-body">
@@ -147,9 +163,12 @@ const UnitOfMeasurement = () => {
         </div>
       </div>
 
-      <div className="card border-0 shadow-sm">
-        <div ref={tableRef} />
-      </div>
+    
+      <CmnTable
+         config={tableConfig}
+         data={tableData}
+         isSearchable={false}
+      />
 
       {modalConfig.show && (
         <UOMModal 

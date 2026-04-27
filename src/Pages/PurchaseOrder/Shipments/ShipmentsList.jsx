@@ -4,7 +4,7 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { SHIPPING_STATUS } from "../../../Constants/shippingStatus";
-import { Truck, Package, PackageCheck, CheckCircle, RotateCcw } from "lucide-react";
+import { ShoppingBag , Package, PackageCheck, CheckCircle, RotateCcw } from "lucide-react";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import { Ship } from "lucide-react";
 import CmnTable from "../../../Components/Common/CmnTable";
@@ -14,9 +14,8 @@ import CmnTable from "../../../Components/Common/CmnTable";
 const StatCard = ({
   title,
   count,
-  icon,
   colorClass,
-  iconBg,
+  lucid,
   isFirst = false,
 }) => {
   return (
@@ -25,22 +24,23 @@ const StatCard = ({
       ${isFirst ? "bg-[#002B5B] text-white" : "bg-white"}`}
     >
       {/* TOP ROW (Title + Icon) */}
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center ">
         <p
-          className={`text-[10px] uppercase font-bold tracking-wider
-          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+          className={`text-[12px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-[#454545]"}`}
         >
           {title}
         </p>
 
         <div
           className={`w-[34px] h-[34px] flex items-center justify-center rounded-full
-          ${isFirst ? "bg-white/20" : iconBg}`}
+          ${isFirst ? "" : colorClass}`}
         >
-          <i
+          {/* <i
             className={`${icon} text-[14px] ${isFirst ? "text-white" : colorClass
               }`}
-          ></i>
+          ></i> */}
+          {lucid}
         </div>
       </div>
 
@@ -48,7 +48,7 @@ const StatCard = ({
       <div className="flex justify-between items-center">
         <h4 className="font-bold text-lg truncate">{count}</h4>
 
-        <span
+        {/* <span
           className={`px-2 py-1 text-xs rounded-full border whitespace-nowrap
           ${isFirst
               ? "bg-white/20 text-white border-white/30"
@@ -56,7 +56,7 @@ const StatCard = ({
             }`}
         >
           Items
-        </span>
+        </span> */}
       </div>
     </div>
   );
@@ -65,15 +65,13 @@ const DashboardOverview = ({ summary }) => {
   const stats = [
     {
       title: 'Total ',
-      count: summary?.total?.count, icon: 'fas fa-shipping-fast',
-      colorClass: 'text-primary', iconBg: 'bg-primary-light', "lucid": <Truck size={22} strokeWidth={2} />
+      count: summary?.total?.count,
+      colorClass: 'text-white-500', lucid: < ShoppingBag size={22} strokeWidth={2} />
     },
-    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, icon: 'fas fa-hourglass-start', colorClass: 'text-success', iconBg: 'bg-success-light', "lucid": <Package size={22} strokeWidth={2} /> },
-    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, icon: 'fas fa-box-open', colorClass: 'text-danger', iconBg: 'bg-danger-light', "lucid": <PackageCheck size={22} strokeWidth={2} /> },
-    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, icon: 'fas fa-check-circle', colorClass: 'text-warning', iconBg: 'bg-warning-light', "lucid": <CheckCircle size={22} strokeWidth={2} /> },
-    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count, icon: 'fas fa-undo', colorClass: 'text-secondary', iconBg: 'bg-light', "lucid": <RotateCcw size={22} strokeWidth={2} /> },
-
-    //{ title: 'Cancelled', amount: formatCurrency(summary?.cancelled?.amount), count: summary?.cancelled?.count, icon: 'fas fa-times-circle', colorClass: 'text-secondary', iconBg: 'bg-light' },
+    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-green-500',  "lucid": <Package size={22} strokeWidth={2} /> },
+    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, colorClass: 'text-red-600',  "lucid": <PackageCheck size={22} strokeWidth={2} /> },
+    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, colorClass: 'text-yellow-500',  "lucid": <CheckCircle size={22} strokeWidth={2} /> },
+    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count,  colorClass: 'text-blue-700',  "lucid": <RotateCcw size={22} strokeWidth={2} /> },
   ];
 
   return (

@@ -13,7 +13,7 @@ import { useMasterData } from "../../../Context/MasterDataProvider";
 import toast from "react-hot-toast";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import { FileSpreadsheet } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Store , Banknote , DollarSign, RotateCcw } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
    STYLES
@@ -256,10 +256,11 @@ const SortArrow = ({ field, sortBy, sortDir }) => {
    STAT CARDS
 ═══════════════════════════════════════════════════════════ */
 const STAT_CFG = [
-  { key: "total_vendors", label: "Vendors Due Today", icon: "fas fa-store", bg: "#ede9fe", col: "#7c3aed", isCurrency: false, showSub: false },
-  { key: "total_due", label: "Total Due Amount", icon: "fas fa-money-bill-wave", bg: "#dcfce7", col: "#15803d", isCurrency: true, showSub: true },
-  { key: "total_invoices", label: "Total Invoices", icon: "fas fa-file-invoice-dollar", bg: "#fee2e2", col: "#b91c1c", isCurrency: false, showSub: false },
-  { key: "overdue", label: "Overdue", icon: "fas fa-clock", bg: "#fef9c3", col: "#a16207", isCurrency: false, showSub: true },
+  // { key: "total_vendors", label: "Vendors Due Today", icon: "fas fa-store", bg: "#ede9fe", col: "#7c3aed", isCurrency: false, showSub: false },
+  { key: 'total_vendors',  label: "Vendors Due Today",   colorClass: 'text-white-500',  Lucid: <Store   size={22} strokeWidth={2} /> },
+  { key: 'total_due',  label: "Total Due Amount",   colorClass: 'text-red-500',  Lucid: <Banknote    size={22} strokeWidth={2} /> },
+  { key: 'total_invoices',  label: "Total Invoices",   colorClass: 'text-yellow-500',  Lucid: <DollarSign   size={22} strokeWidth={2} /> },
+  { key: 'overdue',  label: "Overdue",   colorClass: 'text-blue-500',  Lucid: <RotateCcw   size={22} strokeWidth={2} /> },
 ];
 
 
@@ -267,9 +268,8 @@ const STAT_CFG = [
 const StatCard = ({
   label,
   amount,
-  icon,
-  col,
-  bg,
+  colorClass,
+  Lucid,
   isFirst = false,
   isCurrency = false,
 }) => {
@@ -280,23 +280,22 @@ const StatCard = ({
     >
       {/* TOP ROW */}
       <div className="flex justify-between items-center mb-2">
-        <p
-          className={`text-[10px] uppercase font-bold tracking-wider
-          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+      <p
+          className={`text-[12px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-[#454545]"}`}
         >
           {label}
         </p>
 
         <div
-          className="w-[34px] h-[34px] flex items-center justify-center rounded-full"
-          style={{
-            background: isFirst ? "rgba(255,255,255,0.2)" : bg,
-          }}
+          className={`w-[34px] h-[34px] flex items-center justify-center rounded-full
+          ${isFirst ? "" : colorClass}`}
         >
-          <i
+          {/* <i
             className={`${icon} text-[14px]`}
             style={{ color: isFirst ? "#fff" : col }}
-          ></i>
+          ></i> */}
+          {Lucid}
         </div>
       </div>
 

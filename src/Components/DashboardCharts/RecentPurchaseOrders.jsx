@@ -37,7 +37,7 @@ const RecentPurchaseOrders = () => {
         <div>
             <div className="bg-white border h-full d-flex flex-column rounded-[20px]">
                 <div className="">
-                    <h6 className='font-semibold text-[13px] px-4 py-3'>Recent Purchase Orders</h6>
+                    <h2 className='font-semibold text-[16px] text-[#454545] px-4 py-3'>Recent Purchase Orders</h2>
                 </div>
 
                 <CommonTable

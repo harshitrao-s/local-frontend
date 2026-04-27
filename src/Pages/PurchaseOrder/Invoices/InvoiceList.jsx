@@ -7,14 +7,13 @@ import { useMasterData } from "../../../Context/MasterDataProvider";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import { FileSpreadsheet } from "lucide-react";
 import CmnTable from "../../../Components/Common/CmnTable";
+import { File , CalendarX , DollarSign, BadgeAlert, Loader } from "lucide-react";
 
 const StatCard = ({
   title,
   amount,
-  count,
-  icon,
   colorClass,
-  iconBg,
+  lucid,
   isFirst = false,
 }) => {
   return (
@@ -25,20 +24,22 @@ const StatCard = ({
       {/* TOP ROW (Title + Icon) */}
       <div className="flex justify-between items-center mb-2">
         <p
-          className={`text-[10px] uppercase font-bold tracking-wider
-          ${isFirst ? "text-white/70" : "text-gray-400"}`}
+          className={`text-[12px] uppercase font-bold tracking-wider
+          ${isFirst ? "text-white/70" : "text-[#454545]"}`}
         >
           {title}
         </p>
 
         <div
           className={`w-[34px] h-[34px] flex items-center justify-center rounded-full
-          ${isFirst ? "bg-white/20" : iconBg}`}
+          ${isFirst ? "" : colorClass}`}
         >
-          <i
+          {/* <i
             className={`${icon} text-[14px] ${isFirst ? "text-white" : colorClass
               }`}
-          ></i>
+          ></i> */}
+
+          {lucid}
         </div>
       </div>
 
@@ -53,7 +54,7 @@ const StatCard = ({
               : "bg-gray-100 text-gray-700 border-gray-200"
             }`}
         >
-          {count} Invoices
+          2 Invoices
         </span>
       </div>
     </div>
@@ -62,11 +63,11 @@ const StatCard = ({
 
 const DashboardOverview = ({ summary }) => {
   const stats = [
-    { title: 'All Invoices', amount: formatCurrency(summary?.total?.amount), count: summary?.total?.count, icon: 'fas fa-file-invoice', colorClass: 'text-primary', iconBg: 'bg-primary-light' },
-    { title: 'Paid', amount: formatCurrency(summary?.paid?.amount), count: summary?.paid?.count, icon: 'fas fa-dollar-sign', colorClass: 'text-success', iconBg: 'bg-success-light' },
-    { title: 'Unpaid', amount: formatCurrency(summary?.unpaid?.amount), count: summary?.unpaid?.count, icon: 'fas fa-copy', colorClass: 'text-danger', iconBg: 'bg-danger-light' },
-    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, icon: 'fas fa-spinner', colorClass: 'text-warning', iconBg: 'bg-warning-light' },
-    { title: 'Overdue', amount: formatCurrency(summary?.overdue?.amount), count: summary?.overdue?.count, icon: 'fas fa-exclamation-circle', colorClass: 'text-secondary', iconBg: 'bg-light' },
+    { title: 'All Invoices', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-white-500',  "lucid": <File  size={22} strokeWidth={2} /> },
+    { title: 'Paid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-green-500',  "lucid": <DollarSign  size={22} strokeWidth={2} /> },
+    { title: 'Unpaid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-red-500',  "lucid": <BadgeAlert  size={22} strokeWidth={2} /> },
+    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-yellow-500',  "lucid": <Loader  size={22} strokeWidth={2} /> },
+    { title: 'Overdue', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-blue-500',  "lucid": <CalendarX  size={22} strokeWidth={2} /> },
   ];
 
   return (
@@ -91,7 +92,6 @@ const InvoiceList = () => {
   const debounceRef = useRef(null);
   const { paymentTerms } = useMasterData();
 
-  const tableRef = useRef(null);
   const tabulatorRef = useRef(null);
   const [dateRangeDisplay, setDateRangeDisplay] = React.useState("");
   const [filters, setFilters] = React.useState({ due_date_from: "", due_date_to: "" });

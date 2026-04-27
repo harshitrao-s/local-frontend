@@ -7,17 +7,19 @@ import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
 import { showErrorToast } from "../../../Utils/utilFunctions";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
     faListUl, faUpload, faFileCsv, faTimes, faFileAlt, faFileExcel,
-    faFileImport, faCheckCircle, faExclamationTriangle, faUndo, faSave, faDownload 
+    faFileImport, faCheckCircle, faExclamationTriangle, faUndo, faSave, faDownload
 } from '@fortawesome/free-solid-svg-icons';
-import StickyHeader from "../../../Components/Common/StickyHeader";
+// import StickyHeader from "../../../Components/Common/StickyHeader";
 import Swal from "sweetalert2";
+import CmnHeader from "../../../Components/Common/CmnHeader";
+import { ImportIcon, Download } from "lucide-react";
 
 const POImportHome = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("import");
-    const [importType, setImportType] = useState("vendor"); 
+    const [importType, setImportType] = useState("vendor");
     const [selectedFile, setSelectedFile] = useState(null);
     const [processing, setProcessing] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
@@ -82,12 +84,12 @@ const POImportHome = () => {
             window.URL.revokeObjectURL(url);
 
             toast.success("PO Export completed!", {
-                position: "bottom-center",
+                position: "top-right",
             });
 
         } catch (err) {
             showErrorToast("PO Export failed", {
-                position: "bottom-center",
+                position: "top-right",
             });
         } finally {
             setIsDownloading(false);
@@ -106,7 +108,7 @@ const POImportHome = () => {
             });
 
             // Axios blob response-la data direct-ah res.data-la irukkum
-            const blob = new Blob([res.data], { 
+            const blob = new Blob([res.data], {
                 type: res.headers['content-type'] || (format === 'xl' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv')
             });
 
@@ -120,12 +122,12 @@ const POImportHome = () => {
             // Memory cleanup
             a.remove();
             window.URL.revokeObjectURL(url);
-            toast.success("Template downloaded!",{
-                position: "bottom-center",
+            toast.success("Template downloaded!", {
+                position: "top-right",
             });
         } catch (err) {
-            showErrorToast("Download failed",{
-                position: "bottom-center",
+            showErrorToast("Download failed", {
+                position: "top-right",
             });
         } finally {
             setIsDownloading(false);
@@ -155,13 +157,13 @@ const POImportHome = () => {
         const formData = new FormData();
         formData.append("file", selectedFile);
         formData.append("import_type", importType);
-        formData.append("duplicate_action", duplicateAction); 
+        formData.append("duplicate_action", duplicateAction);
         setProcessing(true);
         try {
             const res = await apiFetch(`${API_BASE}api/purchaseorder/api/pre-import-check`, {
                 method: "POST",
                 body: formData,
-                isFormData: true 
+                isFormData: true
             });
             let resp = res;
             if (typeof res === "string") {
@@ -172,7 +174,7 @@ const POImportHome = () => {
                     return;
                 }
             }
-      
+
             if (resp.status) {
                 setImportSummary(resp.data);
                 setStep(2);
@@ -215,7 +217,7 @@ const POImportHome = () => {
                 });
 
                 return;
-           
+
             }
         } catch (err) {
             showErrorToast("Connection error during validation");
@@ -230,9 +232,9 @@ const POImportHome = () => {
         try {
             const res = await apiFetch(`${API_BASE}api/purchaseorder/api/confirm-import/`, {
                 method: "POST",
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     file_id: importSummary.file_id,
-                    import_type: importType ,
+                    import_type: importType,
                     duplicate_action: duplicateAction
                 })
             });
@@ -259,49 +261,14 @@ const POImportHome = () => {
 
     return (
         <div className="mt-0">
-            <StickyHeader>
-                <div className="d-flex justify-content-between mb-2">
-                    <h5 className="fw-bold py-1 ps-0">
-                        <FontAwesomeIcon icon={faFileImport} className="me-2 text-primary" />
-                        PO Import/Export
-                    </h5>
-                    <div className="d-flex gap-2">
-                        <div className="dropdown">
-                            <button 
-                                className="btn btn-success dropdown-toggle" 
-                                type="button" 
-                                data-bs-toggle="dropdown" 
-                                aria-expanded="false"
-                                disabled={isDownloading}
-                            >
-                                <i className="fa fa-download me-2"></i>
-                                {isDownloading ? 'Exporting...' : 'Export PO'}
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li>
-                                <button 
-                                    className="dropdown-item" 
-                                    onClick={() => handleExport('csv')}
-                                >
-                                    CSV
-                                </button>
-                                </li>
-                                {/* <li>
-                                <button 
-                                    className="dropdown-item" 
-                                    onClick={() => handleExport('csv')}
-                                >
-                                   XLS
-                                </button
-                                </li>>*/}
-                            </ul>
-                        </div>
-                        <Link to="/purchaseorder/listing" className="btn btn-outline-primary px-3 shadow-sm" >
-                            <FontAwesomeIcon icon={faListUl} className="me-1" /> Listing
-                        </Link>
-                    </div>
-                </div>
-            </StickyHeader>
+
+            <CmnHeader IconLucide={ImportIcon} title={"Vendor Import Engine"}
+                actionName='Listing'
+                actionLink="/purchaseorder/listing"
+                actions={[
+                    { icon: <Download size={16} />, name: "Export PO (CSV) ", onClick: handleExport },
+                ]}
+            />
 
             <div className="bg-white shadow-sm mt-1">
                 {/* Stepper Navigation */}
@@ -326,8 +293,8 @@ const POImportHome = () => {
                                         {!selectedFile ? (
                                             <>
                                                 <FontAwesomeIcon icon={faUpload} size="3x" className="text-muted mb-3" />
-                                                <h6 className="fw-bold">Drop .csv or .xlsx file here</h6>
-                                                <p className="text-muted small mb-2">Drag and drop or click to browse</p>
+                                                <h6 className="text-[16px] text-[#737373] fw-bold">Drop .csv or .xlsx file here</h6>
+                                                <p className="text-[#737373] small mb-2">Drag and drop or click to browse</p>
                                             </>
                                         ) : (
                                             <div className="d-flex flex-column align-items-center">
@@ -346,67 +313,65 @@ const POImportHome = () => {
                                     </div>
                                 </Col>
                                 <Col md="6">
-                                        <div className="card p-2">
-                                            <div className="card-header">
-                                                 <h6 className="fw-bold mb-2">How should duplicate records be handled?</h6>
-                                         
-                                            </div>
+                                    <div className="card p-2 h-100">
+                                        <div className="card-header">
+                                            <h6 className="text-[16px] text-[#737373] fw-semibols mb-2">How should duplicate records be handled?</h6>
 
-                                            <div className="card-body pt-3 ps-3 pb-0">
-                                                <p>
-                                                   <div className="form-check icheck-primary d-inline">
-                                            <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="duplicate_action"
-                                            id="skip_duplicates"
-                                            value="skip"
-                                            checked={duplicateAction === "skip"}
-                                            onChange={(e) => setDuplicateAction(e.target.value)}
-                                            />
-                                            <label className="form-check-label" htmlFor="skip_duplicates">
-                                            Skip duplicate records
-                                            </label>
                                         </div>
-                                        </p>
-                                        <p>
-                                        <div className="form-check icheck-primary d-inline">
-                                            <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="duplicate_action"
-                                            id="update_duplicates"
-                                            value="update"
-                                            checked={duplicateAction === "update"}
-                                            onChange={(e) => setDuplicateAction(e.target.value)}
-                                            />
-                                            <label className="form-check-label" htmlFor="update_duplicates">
-                                            Update duplicate records
-                                            </label>
-                                        </div></p>
 
-                                            </div>
-                                          
+                                        <div className="card-body pt-3 ps-3 pb-0 flex flex-col">
+                                                <div className="form-check icheck-primary d-inline">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name="duplicate_action"
+                                                        id="skip_duplicates"
+                                                        value="skip"
+                                                        checked={duplicateAction === "skip"}
+                                                        onChange={(e) => setDuplicateAction(e.target.value)}
+                                                    />
+                                                    <label className="form-check-label text-[#737373] " htmlFor="skip_duplicates">
+                                                        Skip duplicate records
+                                                    </label>
+                                                </div>
 
-                                        
+                                                <div className="form-check icheck-primary d-inline">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name="duplicate_action"
+                                                        id="update_duplicates"
+                                                        value="update"
+                                                        checked={duplicateAction === "update"}
+                                                        onChange={(e) => setDuplicateAction(e.target.value)}
+                                                    />
+                                                    <label className="form-check-label text-[#737373] `" htmlFor="update_duplicates">
+                                                        Update duplicate records
+                                                    </label>
+                                                </div>
 
-                                         <div className="card-footer">
-                                                <small className="text-muted d-block mb-2">
-                                            Duplicates are identified based on Vendor Code or Vendor Email for vendor Contacts.
+                                        </div>
+
+
+
+
+                                        <div className="card-footer">
+                                            <small className="text-muted d-block mb-2">
+                                                Duplicates are identified based on Vendor Code or Vendor Email for vendor Contacts.
                                             </small>
-                                             </div>
                                         </div>
+                                    </div>
                                 </Col>
 
                             </Row>
-                            
+
 
 
                             <div className="d-flex justify-content-between mt-4">
                                 {/* Format Dropdown Template Button */}
                                 <Dropdown as={ButtonGroup} size="sm">
                                     <Button variant="link" className="text-decoration-none text-dark fw-bold p-0" disabled={isDownloading}>
-                                        <FontAwesomeIcon icon={faDownload} className="me-1 text-success" /> 
+                                        <FontAwesomeIcon icon={faDownload} className="me-1 text-success" />
                                         Get {importType === 'vendor' ? 'PO' : 'Contact'} Template
                                     </Button>
                                     <Dropdown.Toggle split variant="link" className="text-success p-0 ms-2" id="dropdown-split-basic" />
@@ -421,7 +386,7 @@ const POImportHome = () => {
                                 </Dropdown>
 
                                 <Button variant="primary" className="px-4 shadow-sm" disabled={!selectedFile || processing} onClick={handleInitialUpload}>
-                                    {processing ? <><Spinner size="sm" className="me-2"/>Validating...</> : "Next: Preview Data"}
+                                    {processing ? <><Spinner size="sm" className="me-2" />Validating...</> : "Next: Preview Data"}
                                 </Button>
                             </div>
                         </div>
@@ -430,48 +395,48 @@ const POImportHome = () => {
                         <div className="animate__animated animate__fadeIn">
                             <div className="row mb-4">
                                 <div className="col-md-8">
-                                    <h6 className="fw-bold mb-3"><FontAwesomeIcon icon={faCheckCircle} className="text-success me-2"/> Preview (Top Records)</h6>
+                                    <h6 className="fw-bold mb-3"><FontAwesomeIcon icon={faCheckCircle} className="text-success me-2" /> Preview (Top Records)</h6>
                                     <Table responsive bordered size="sm" className="small align-middle">
                                         <thead className="table-light text-uppercase" style={{ fontSize: "11px" }}>
                                             {importType === "po" ? (
-                                            <tr>
-                                                <th>Vendor Code</th>
-                                                <th>Vendor Name</th>
-                                                <th>Currency</th>
-                                                <th>GST No</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Vendor Code</th>
+                                                    <th>Vendor Name</th>
+                                                    <th>Currency</th>
+                                                    <th>GST No</th>
+                                                </tr>
                                             ) : (
-                                            <tr>
-                                                <th>Vendor Code</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
-                                                <th>Department</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Description</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Vendor Code</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Department</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Description</th>
+                                                </tr>
                                             )}
                                         </thead>
                                         <tbody>
                                             {importSummary.preview_data.map((row, idx) =>
-                                            importType === "vendor" ? (
-                                                <tr key={idx}>
-                                                <td className="fw-bold">{row["Vendor Code"]}</td>
-                                                <td>{row["Vendor Name"]}</td>
-                                                <td>{row["Currency Code"]}</td>
-                                                <td>{row["GST Number"]}</td>
-                                                </tr>
-                                            ) : (
-                                                <tr key={idx}>
-                                                <td className="fw-bold">{row["Vendor Code"]}</td>
-                                                <td>{row["First Name"]}</td>
-                                                <td>{row["Last Name"]}</td>
-                                                <td>{row["Department"]}</td>
-                                                <td>{row["Email"]}</td>
-                                                <td>{row["Phone"]}</td>
-                                                <td>{row["Description"]}</td>
-                                                </tr>
-                                            )
+                                                importType === "vendor" ? (
+                                                    <tr key={idx}>
+                                                        <td className="fw-bold">{row["Vendor Code"]}</td>
+                                                        <td>{row["Vendor Name"]}</td>
+                                                        <td>{row["Currency Code"]}</td>
+                                                        <td>{row["GST Number"]}</td>
+                                                    </tr>
+                                                ) : (
+                                                    <tr key={idx}>
+                                                        <td className="fw-bold">{row["Vendor Code"]}</td>
+                                                        <td>{row["First Name"]}</td>
+                                                        <td>{row["Last Name"]}</td>
+                                                        <td>{row["Department"]}</td>
+                                                        <td>{row["Email"]}</td>
+                                                        <td>{row["Phone"]}</td>
+                                                        <td>{row["Description"]}</td>
+                                                    </tr>
+                                                )
                                             )}
                                         </tbody>
                                     </Table>
@@ -489,8 +454,8 @@ const POImportHome = () => {
                             {/* ERROR LOG SECTION */}
                             {importSummary.errors.length > 0 && (
                                 <div className="mb-4">
-                                    <h6 className="fw-bold text-danger small"><FontAwesomeIcon icon={faExclamationTriangle} className="me-2"/> Validation Error Log</h6>
-                                    <div className="border border-danger-subtle rounded bg-danger-light p-2" style={{maxHeight: '160px', overflowY: 'auto'}}>
+                                    <h6 className="fw-bold text-danger small"><FontAwesomeIcon icon={faExclamationTriangle} className="me-2" /> Validation Error Log</h6>
+                                    <div className="border border-danger-subtle rounded bg-danger-light p-2" style={{ maxHeight: '160px', overflowY: 'auto' }}>
                                         {importSummary.errors.map((err, i) => (
                                             <div key={i} className="text-danger small border-bottom border-danger-subtle py-1">
                                                 <strong>Row {err.row}:</strong> Column "{err.column}" — {err.message}
@@ -502,16 +467,16 @@ const POImportHome = () => {
 
                             <div className="d-flex justify-content-between border-top pt-3">
                                 <Button variant="outline-secondary" size="md" onClick={handleReset}>
-                                    <FontAwesomeIcon icon={faUndo} className="me-1"/> Cancel & Reset
+                                    <FontAwesomeIcon icon={faUndo} className="me-1" /> Cancel & Reset
                                 </Button>
-                                <Button 
-                                    variant="success" 
+                                <Button
+                                    variant="success"
                                     size="md"
                                     className="px-4 shadow-sm"
                                     disabled={importSummary.valid_count === 0 || isConfirming}
                                     onClick={handleFinalConfirm}
                                 >
-                                    {isConfirming ? <Spinner size="sm" className="me-2"/> : <FontAwesomeIcon icon={faSave} className="me-2"/>}
+                                    {isConfirming ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
                                     Confirm & Import {importSummary.valid_count} Records
                                 </Button>
                             </div>

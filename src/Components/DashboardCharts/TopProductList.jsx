@@ -9,8 +9,8 @@ const ListCard = ({ title, data, type }) => {
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-[16px] font-semibold text-[#454545]">{title}</h3>
-        <button className="flex items-center gap-1 text-[12px] text-[#3D3D3D] hover:text-gray-800 transition-colors">
+        <h2 className="text-[16px] font-semibold text-[#454545]">{title}</h2>
+        <button className="flex items-center gap-1 text-[12px] text-[#3D3D3D]">
           Show All <ArrowUpRight size={16} />
         </button>
       </div>
@@ -23,7 +23,7 @@ const ListCard = ({ title, data, type }) => {
               <div className="text-gray-400">
                 {type === "product" ? <Box size={18} /> : <Users size={18} />}
               </div>
-              <span className="text-[12px] text-[#737373] font-400">
+              <span className="text-[12px] text-[#737373] font-normal">
                 {item.name}
               </span>
             </div>

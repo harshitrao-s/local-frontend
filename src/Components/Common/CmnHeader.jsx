@@ -24,7 +24,7 @@ const CmnHeader = ({
                         {IconLucide ? <IconLucide size={18} /> : <i className={`${icon1}`} />}
                     </div>
                     <div>
-                        <h3 className="iwl-title">{title}</h3>
+                        <h2 className="text-[24px] font-semibold text-[#2A2A2A] font-roboto">{title}</h2>
                         <p className="iwl-subtitle">
                             {subtitle}
                         </p>
@@ -67,9 +67,10 @@ const CmnHeader = ({
                             ) : (
                                 <Link
                                     key={index}
-                                    className={`${icon} no-underline text-white`}
+                                    className={`${icon} no-underline text-white flex items-center gap-2 px-2`}
                                     onClick={action.onClick}
                                 >
+                                    {action.icon}
                                     {action.name}
                                 </Link>
                             )

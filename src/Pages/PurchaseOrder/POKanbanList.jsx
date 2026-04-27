@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl, faSliders, faLock } from '@fortawesome/free-solid-svg-icons';
 import KanbanLayoutModal from "./POComponents/KanbanLayoutModal";
 import { Link } from "react-router-dom";
+import CmnHeader from "../../Components/Common/CmnHeader";
+import {Kanban } from 'lucide-react'
 
 /* ================= STATUS HELPERS (Existing) ================= */
 const STATUS = { DRAFT: -1, PARKED: 0, PLACED: [1, 2, 3] };
@@ -135,8 +137,16 @@ const POKanbanList = () => {
   if (!isConfigLoaded) return null;
 
   return (
+    <>
+     <CmnHeader
+        title="Purchase Order Kanban" IconLucide={Kanban } Icon="iwl-add-btn" actionName="List View" 
+        actionLink="/purchaseorder/listing" actions={[
+          { name: "Edit Layout ", onClick: setShowLayoutConfig }
+        ]}
+      />
+  
     <div className="p-0 bg-light ">
-      <div className="p-0 d-flex justify-content-between align-items-center mb-3">
+      {/* <div className="p-0 d-flex justify-content-between align-items-center mb-3">
         <h3 className="mb-0 fw-bold">Purchase Order Kanban</h3>
         <div className="d-flex gap-2 align-items-center">
           <Link to= "/purchaseorder/listing" className="btn btn-outline-primary shadow-sm">
@@ -146,9 +156,11 @@ const POKanbanList = () => {
             <FontAwesomeIcon className="me-1 ps-0" icon={faSliders} /> Edit Layout
           </button>
         </div>
-      </div>
+      </div> */}
 
-      <div className="d-flex gap-2 rounded-4 overflow-auto px-2 w-[83vw]" style={{ Height: "84vh", minHeight: "84" }}>
+     
+
+      <div className="d-flex gap-2 rounded-4 overflow-auto px-2 w-[82vw] h-[78vh]" >
         {displayColumns.map((col) => (
           <KanbanColumn
             key={col.id}
@@ -170,6 +182,7 @@ const POKanbanList = () => {
         onRefresh={loadUserConfig} 
       />
     </div>
+    </>
   );
 };
 

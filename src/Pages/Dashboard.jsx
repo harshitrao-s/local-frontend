@@ -18,7 +18,7 @@ const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }
     >
       {/* Top Content */}
       <div className="flex items-start justify-between">
-        <p className={`text-[14px] font-medium ${titleColor ? titleColor : dark ? "text-white" : "text-gray-500"}`}>
+        <p className={`text-[16px] font-semibold ${titleColor ? titleColor : dark ? "text-white" : "text-[#454545]"}`}>
           {title}
         </p>
         {Icon && <Icon className={`w-5 h-5 ${dark ? "text-white/80" : "text-gray-400"}`} />}
@@ -72,12 +72,12 @@ const Dashboard = () => {
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-        <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
+        <h2 className="text-[24px] font-semibold text-[#2A2A2A]">Dashboard</h2>
 
         <div className="flex gap-2">
           <Button
             onClick={handleAddNew}
-            className="text-[14px] bg-white/90 px-3 py-3 rounded-[12px] flex items-center gap-1"
+            className="text-[14px] bg-white/90 px-3 py-3 rounded-[12px] flex items-center gap-1 hover:ring-1 hover:ring-blue-800 hover:ring-offset-2 transition"
           >
             + Add Purchase Order
           </Button>

@@ -230,15 +230,15 @@ const SalesChart = () => {
       {/* Header Section */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h2 className="text-[16px] font-semibold text-[#454545] mb-3">Sales Overview</h2>
+          <h2 className="text-[16px] font-semibold text-[#454545] mb-3 font-roboto">Sales Overview</h2>
           <div className="flex gap-6">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-[#ff1a1a] rounded-sm"></div>
-              <span className="text-sm text-gray-500">Average Sale Value</span>
+              <span className="text-[12px] text-[#737373]">Average Sale Value</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-[#001f5c] rounded-sm"></div>
-              <span className="text-sm text-gray-500">Average item per sale</span>
+              <span className="text-[12px] text-[#737373]">Average item per sale</span>
             </div>
           </div>
         </div>
@@ -250,15 +250,15 @@ const SalesChart = () => {
         {/* --- NEW OVERLAY BOXES --- */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 flex gap-3 w-full justify-center px-4 pointer-events-none">
           {/* Average Item Box (Dashed Border) - Reduced Size */}
-          <div className="bg-white border-[1.5px] border-dashed border-[#001f5c] rounded-xl py-1 px-3  min-w-[120px]  text-center">
-            <p className="text-[9px] md:text-[10px] text-gray-400 font-medium leading-tight">Average item per sale</p>
-            <p className="text-xs md:text-sm font-bold text-[#454545]">$ 211,411,223</p>
+          <div className="bg-white border-[1.5px] border-dashed border-[#001f5c] rounded-xl py-1 px-2  min-w-[120px] text-center">
+            <p className="text-[10px]  text-[#888888] font-medium leading-tight">Average item per sale</p>
+            <p className="text-[12px] font-bold text-[##888888]">$ 211,411,223</p>
           </div>
 
           {/* Average Year Value Box (Solid Red) - Reduced Size */}
-          <div className="bg-[#ff1a1a] rounded-xl py-1 px-3  min-w-[120px]  text-center">
-            <p className="text-[9px] md:text-[10px] text-white/80 font-medium leading-tight">Average year value</p>
-            <p className="text-xs md:text-sm font-bold text-white">$ 339,091,888</p>
+          <div className="bg-[#ff1a1a] rounded-xl py-1 px-2  min-w-[120px]  text-center">
+            <p className="text-[10px]  text-[#F6F6F6] font-medium leading-tight">Average year value</p>
+            <p className="text-[12px] font-bold text-[#F6F6F6]">$ 339,091,888</p>
           </div>
         </div>
         {/* --- END OVERLAY BOXES --- */}

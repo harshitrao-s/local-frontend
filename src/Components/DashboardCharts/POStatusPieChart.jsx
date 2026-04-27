@@ -163,9 +163,9 @@ export const POStatusPieChart = ({ change = "3.6%", dark = false }) => {
 
   return (
     <div className="w-full lg:h-[448px] xl:h-[394px] rounded-[20px] bg-white border p-6 flex flex-col justify-between mask-scroll overflow-x-auto ">
-      <h3 className="text-[16px] font-semibold text-[#454545] mb-4">
+      <h2 className="text-[16px] font-semibold text-[#454545] mb-4">
         Purchase Order Status
-      </h3>
+      </h2>
 
       <div className="flex flex-row items-center justify-between flex-1 gap-2">
         {/* Left Side: Labels */}
@@ -179,7 +179,7 @@ export const POStatusPieChart = ({ change = "3.6%", dark = false }) => {
                   className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full shrink-0"
                   style={{ background: item.color }}
                 />
-                <span className="text-[12px] sm:text-[14px] text-gray-500 whitespace-nowrap truncate">
+                <span className="text-[12px] sm:text-[14px] text-[#454545] font-normal whitespace-nowrap truncate">
                   {item.name}
                 </span>
               </div>

@@ -14,7 +14,7 @@ import {
 import StickyHeader from "../../../Components/Common/StickyHeader";
 import Swal from "sweetalert2";
 import CmnHeader from "../../../Components/Common/CmnHeader";
-import { ImportIcon, UploadIcon } from "lucide-react";
+import { ImportIcon, Download } from "lucide-react";
 
 const VendorImportIndex = () => {
     const navigate = useNavigate();
@@ -235,42 +235,15 @@ const VendorImportIndex = () => {
 
     return (
         <div className="mt-0">
-            <CmnHeader IconLucide={ImportIcon} title={"Vendor Import Engine"} actionCmp={<div className="d-flex gap-2">
-                <div className="dropdown">
-                    <button
-                        className="btn btn-success dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        disabled={isDownloading}
-                    >
-                        <i className="fa fa-download me-2"></i>
-                        {isDownloading ? 'Exporting...' : 'Export'}
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button
-                                className="dropdown-item"
-                                onClick={() => handleExportVendors('csv')}
-                            >
-                                Export Vendor Data (CSV)
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                className="dropdown-item"
-                                onClick={() => handleExportVendors('xl')}
-                            >
-                                Export Vendor Data (Excel)
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/vendor/vendors")}>
-                    <FontAwesomeIcon icon={faListUl} className="me-1" /> Listing
-                </button>
-            </div>} />
-
+            
+            <CmnHeader IconLucide={ImportIcon} title="Vendor Import Engine" 
+            actionName='Listing' 
+            actionLink="/vendor/vendors" 
+            actions={[
+                {  icon: <Download size={16} />, name: " Export Vendor Data (CSV) ", onClick: ()=>handleExportVendors('csv') },
+                {  icon: <Download size={16} />, name: "  Export Vendor Data (Excel) ", onClick:()=> handleExportVendors('xl')},
+              ]}
+            />
 
             <div className="bg-white shadow-sm mt-1">
                 {/* Stepper Navigation */}
