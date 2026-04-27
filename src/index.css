@@ -257,6 +257,10 @@ body {
   color: #111827;
 }
 
+
+.card-header { 
+  background-color: transparent !important;
+}
 .iwl-title {
   font-size: 24px;
   font-weight: 600;

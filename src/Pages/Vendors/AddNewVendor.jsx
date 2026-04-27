@@ -402,18 +402,19 @@ const AddNewVendor = () => {
     return (
         <FlushRegistryContext.Provider value={register}>
             <div className="mt-0">
-                <CmnHeader title={"Vendor Registration"} IconLucide={UserPlus} actionCmp={<div className="d-flex gap-2 align-items-center">
-                    <button type="button" className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/vendor/vendors")}>
-                        <FontAwesomeIcon className="me-1" icon={faListUl} /> Listing
-                    </button>
-                    <button type="submit" form="vendor-form" className="btn btn-primary px-3 shadow-sm" disabled={saving}>
-                        <FontAwesomeIcon className="me-1" icon={faSave} />
-                        {saving ? "Saving..." : "Create"}
-                    </button>
-                    <button type="button" className="btn btn-secondary px-3 shadow-sm" onClick={() => navigate(-1)}>
-                        <FontAwesomeIcon className="me-1" icon={faUndo} /> Cancel
-                    </button>
-                </div>} />
+                <CmnHeader title={"Vendor Registration"} IconLucide={UserPlus}
+                    actionCmp={<div className="d-flex gap-2 align-items-center">
+                        <button type="button" className="iwl-add-btn" onClick={() => navigate("/vendor/vendors")}>
+                            <FontAwesomeIcon className="me-1" icon={faListUl} /> Listing
+                        </button>
+                        <button type="submit" form="vendor-form" className="iwl-add-btn" disabled={saving}>
+                            <FontAwesomeIcon className="me-1" icon={faSave} />
+                            {saving ? "Saving..." : "Create"}
+                        </button>
+                        <button type="button" className="iwl-add-btn" onClick={() => navigate(-1)}>
+                            <FontAwesomeIcon className="me-1" icon={faUndo} /> Cancel
+                        </button>
+                    </div>} />
 
 
                 <div className="bg-white  mt-4 h-100 rounded-3">
