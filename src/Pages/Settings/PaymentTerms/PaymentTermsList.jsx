@@ -6,6 +6,7 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import CommonTable from "../../../Components/Common/CmnTable";
+import { Plus } from "lucide-react";
 
 const PaymentTermsList = () => {
   const { refreshMasterData } = useMasterData();
