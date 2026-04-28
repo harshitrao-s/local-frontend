@@ -85,5 +85,10 @@ export const SbAdminSvg = {
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
             <path d="M4.66699 8.1665H23.3337M4.66699 13.9998H23.3337M4.66699 19.8332H23.3337" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
+    ),
+    filterIconSvg: (
+       <svg xmlns="http://www.w3.org/2000/svg" width="21" height="14" viewBox="0 0 21 14" fill="none">
+<path d="M0.700195 0.700195H19.3669M0.700195 6.53353H19.3669M0.700195 12.3669H19.3669" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
     )
 };

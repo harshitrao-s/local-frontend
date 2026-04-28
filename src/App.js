@@ -12,7 +12,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import "./Assets/plugins/icheck-bootstrap.min.css";
 import "./Assets/plugins/fontawesome-free/css/all.min.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import { LayoutProvider } from "./Context/LayoutContext";
 import { AuthProvider } from "./Context/AuthContext";
@@ -30,6 +30,7 @@ import "nprogress/nprogress.css";
 import LoginPage from "./Pages/LoginPage";
 import PendingInvoiceList from "./Pages/PurchaseOrder/Invoices/PendingInvoiceList";
 import { SbAdminSvg } from "./Components/Common/Svgs/ActionsSvg";
+import { ChevronDown, LogOut } from "lucide-react";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -143,7 +144,8 @@ const ProtectedLayout = ({ children }) => {
 // ---------------- Main Layout ----------------
 const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="flex  bg-gray-100">
 
@@ -166,16 +168,30 @@ const MainLayout = ({ children }) => {
               } hidden sm:block`}
           />
           <div className="flex items-center gap-3">
-            <input
-              type="text"
-              placeholder="Search product"
-              className="px-4 py-1.5 border rounded-full text-sm outline-none hidden md:block"
-            />
+
+            {/* Desktop Search */}
+            <div className="relative hidden md:block">
+              <input
+                type="text"
+                placeholder="Search product"
+                className=" pr-10 py-1.5 px-[1.5rem] pl-[2.5rem] border rounded-full text-sm outline-none w-[300px]"
+              />
+
+              {/* Icon */}
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                {SbAdminSvg.searchIcon}
+              </div>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer">
+                {SbAdminSvg.filterIconSvg}
+              </div>
+            </div>
+
+            {/* Mobile Search */}
             <div className="relative group block md:hidden w-10 h-10">
 
               {/* Icon */}
               <div className="absolute inset-0 flex items-center justify-center 
-                  group-hover:opacity-0 transition-opacity duration-200">
+        group-hover:opacity-0 transition-opacity duration-200">
                 {SbAdminSvg.searchIcon}
               </div>
 
@@ -184,26 +200,51 @@ const MainLayout = ({ children }) => {
                 type="text"
                 placeholder="Search..."
                 className="absolute inset-0 w-full h-full px-2 text-sm 
-               opacity-0 group-hover:opacity-100 
-               transition-opacity duration-200 
-               border rounded-md outline-none border rounded-full text-sm outline-none"
+      opacity-0 group-hover:opacity-100 
+      transition-opacity duration-200 
+      border rounded-full outline-none w-[300px]"
               />
-
             </div>
+
           </div>
 
 
 
           <div className="flex gap-4">
 
+            <div className="relative inline-block">
+              {/* Trigger */}
+              <div
+                onClick={() => setOpen(!open)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <img
+                  src="https://i.pravatar.cc/30"
+                  alt="user"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="text-sm font-medium">Guy Hawkins</span>
 
-            <div className="flex items-center gap-2">
-              <img
-                src="https://i.pravatar.cc/30"
-                alt="user"
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="text-sm font-medium">Guy Hawkins</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""
+                    }`}
+                />
+              </div>
+
+              {/* Dropdown */}
+              {open && (
+                <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-md">
+                  <div
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="cursor-pointer visible sm:hidden" onClick={() => {

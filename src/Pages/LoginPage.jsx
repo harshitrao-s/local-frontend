@@ -21,52 +21,100 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false)
   const redirectTo = params.get("redirectTo") || "/dashboard";
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setLoginError(false);
+
+  //   try {
+  //     const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
+  //       method: "POST",
+  //       body: {
+  //         username: email,
+  //         password: password,
+  //       },
+  //       skipAuthRefresh: true,
+  //     });
+
+  //     if (data?.status === "success") {
+  //       setShowSuccess(true)
+
+  //       setTimeout(() => {
+  //         login()
+  //         navigate(decodeURIComponent(redirectTo), { replace: true })
+  //       }, 1200)
+  //     } else {
+  //       throw new Error("Invalid credentials");
+  //     }
+  //   } catch (error) {
+  //     const msg = "Invalid credentials";
+
+  //     setLoginError(true);
+  //     Swal.close();
+  //     Swal.fire({
+  //       toast: true,
+  //       position: "top-end",
+  //       icon: "error",
+  //       title: "Invalid email or password",
+  //       showConfirmButton: false,
+  //       timer: 3000,
+  //       timerProgressBar: true,
+  //       background: "#f8d7da",   // light red
+  //       color: "#842029",        // dark red text
+  //       iconColor: "#842029",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setLoginError(false);
+  e.preventDefault();
 
-    try {
-      const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
-        method: "POST",
-        body: {
-          username: email,
-          password: password,
-        },
-        skipAuthRefresh: true,
-      });
+  // ✅ TEMP BYPASS (only for development)
+  if (process.env.NODE_ENV === "development") {
+    login();
+    navigate(decodeURIComponent(redirectTo), { replace: true });
+    return;
+  }
 
-      if (data?.status === "success") {
-        setShowSuccess(true)
+  setLoading(true);
+  setLoginError(false);
 
-        setTimeout(() => {
-          login()
-          navigate(decodeURIComponent(redirectTo), { replace: true })
-        }, 1200)
-      } else {
-        throw new Error("Invalid credentials");
-      }
-    } catch (error) {
-      const msg = "Invalid credentials";
+  try {
+    const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
+      method: "POST",
+      body: {
+        username: email,
+        password: password,
+      },
+      skipAuthRefresh: true,
+    });
 
-      setLoginError(true);
-      Swal.close();
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "error",
-        title: "Invalid email or password",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: "#f8d7da",   // light red
-        color: "#842029",        // dark red text
-        iconColor: "#842029",
-      });
-    } finally {
-      setLoading(false);
+    if (data?.status === "success") {
+      setShowSuccess(true);
+
+      setTimeout(() => {
+        login();
+        navigate(decodeURIComponent(redirectTo), { replace: true });
+      }, 1200);
+    } else {
+      throw new Error("Invalid credentials");
     }
-  };
+  } catch (error) {
+    setLoginError(true);
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "error",
+      title: "Invalid email or password",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">

@@ -10,20 +10,49 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   /* ---------------- AUTH BOOTSTRAP ---------------- */
+  // useEffect(() => {
+  //   const path = window.location.pathname;
+
+  //   // 🚫 Login page – skip bootstrap check
+  //   if (path === "/login") {
+  //     setIsAuthenticated(false);
+  //     setUser(null);
+  //     setAuthChecked(true);
+  //     return;
+  //   }
+
+  //   // 🔑 ALWAYS ask backend
+  //   verifyAuth();
+  // }, []);
+
+
   useEffect(() => {
-    const path = window.location.pathname;
+  const path = window.location.pathname;
 
-    // 🚫 Login page – skip bootstrap check
-    if (path === "/login") {
-      setIsAuthenticated(false);
-      setUser(null);
-      setAuthChecked(true);
-      return;
-    }
+  if (path === "/login") {
+    setIsAuthenticated(false);
+    setUser(null);
+    setAuthChecked(true);
+    return;
+  }
 
-    // 🔑 ALWAYS ask backend
-    verifyAuth();
-  }, []);
+  // ✅ DEV BYPASS
+  if (process.env.NODE_ENV === "development") {
+    setIsAuthenticated(true);
+    setAuthChecked(true);
+    setUser({
+      id: 1,
+      email: "dev@test.com",
+      name: "Dev User",
+      is_superuser: true,
+      is_staff: true,
+    });
+    return;
+  }
+
+  verifyAuth();
+}, []);
+
 
   const verifyAuth = async () => {
     try {
@@ -61,12 +90,32 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /* ---------------- LOGIN ---------------- */
+  // const login = () => {
+  //   setIsAuthenticated(true);
+  //   setAuthChecked(true);
+  //   localStorage.removeItem("logout-event");
+  //   verifyAuth();
+  // };
+
   const login = () => {
-    setIsAuthenticated(true);
-    setAuthChecked(true);
-    localStorage.removeItem("logout-event");
+  setIsAuthenticated(true);
+  setAuthChecked(true);
+  localStorage.removeItem("logout-event");
+
+  // ✅ Skip API check in development
+  if (process.env.NODE_ENV !== "development") {
     verifyAuth();
-  };
+  } else {
+    // optional mock user
+    setUser({
+      id: 1,
+      email: "dev@test.com",
+      name: "Dev User",
+      is_superuser: true,
+      is_staff: true,
+    });
+  }
+};
 
   /* ---------------- LOGOUT ---------------- */
   const logout = async () => {
