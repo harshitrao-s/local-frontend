@@ -270,7 +270,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
 
       <button
         onClick={onClose}
-        className="rounded-md p-1 hover:bg-gray-100"
+        className="rounded-md p-1"
       >
         ✕
       </button>

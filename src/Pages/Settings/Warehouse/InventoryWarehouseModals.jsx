@@ -117,9 +117,9 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
                                 <SelectValue placeholder="Select Location" />
                             </SelectTrigger>
 
-                            <SelectContent position="popper">
+                            <SelectContent className="z-[1100] w-full min-w-[420px] bg-white p-1"  position="popper">
                                 {warehouseLocations?.map((d) => (
-                                    <SelectItem key={d.id} value={String(d.id)}>
+                                    <SelectItem className="hover:bg-gray-100 p-1" key={d.id} value={String(d.id)}>
                                         {d.name}
                                     </SelectItem>
                                 ))}

@@ -80,7 +80,7 @@ const AttributeModal = ({ mode, initialData, onClose, onRefresh }) => {
                     <button
                         type="button"
                         onClick={onClose}
-                        className="rounded-md p-1 hover:bg-gray-100 transition"
+                        className="rounded-md p-1"
                     >
                         ✕
                     </button>
