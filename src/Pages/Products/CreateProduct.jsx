@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
+import CmnHeader from "../../Components/Common/CmnHeader";
+import { HousePlus, Save, Undo2 } from "lucide-react";
 
 const CreateProduct = () => {
     const navigate = useNavigate();
@@ -100,15 +102,14 @@ const CreateProduct = () => {
     return (
         <div className="min-vh-100">
             {/* Header with Actions */}
-            <div className="d-flex justify-content-between mb-4 border-bottom pb-3">
-                <h3 className="fw-bold m-0">Create New Product</h3>
-                <div className="d-flex gap-2">
-                    <Button variant="success" onClick={handleSave} disabled={loading}>
-                        {loading ? <Spinner size="sm" /> : "Save Product"}
-                    </Button>
-                    <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>
-                </div>
-            </div>
+            <CmnHeader
+               title="Create New Product" IconLucide={HousePlus} actionVariant="ghost" actionName="List View" 
+               actionLink="/purchaseorder/listing" 
+               actions={[
+                 { icon: <Save size={16} /> ,name: "Save Product ", onClick: ()=> handleSave(),  variant: "primary" },
+                 { icon: <Undo2 size={16} /> ,name: "Cancel ", onClick: ()=>navigate(-1),  variant: "danger" }
+               ]}
+            />
 
             <Form onSubmit={handleSave}>
                 {/* 1. BASIC INFORMATION */}
