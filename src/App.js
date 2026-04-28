@@ -4,7 +4,6 @@ import data from "./Assets/dist/img/sb_logo.json";
 import { IoIosArrowBack } from "react-icons/io";
 
 import "./Assets/dist/css/adminlte.min.css";
-import ROCKET_LOADER from "./Assets/dist/img/loading_rocket.gif";
 import "./Assets/dist/css/app-custom.css";
 import "./Assets/dist/css/erp-theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -31,6 +30,7 @@ import LoginPage from "./Pages/LoginPage";
 import PendingInvoiceList from "./Pages/PurchaseOrder/Invoices/PendingInvoiceList";
 import { SbAdminSvg } from "./Components/Common/Svgs/ActionsSvg";
 import { ChevronDown, LogOut } from "lucide-react";
+import CommonModal from "./Components/Common/CommonModal";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -145,6 +145,7 @@ const ProtectedLayout = ({ children }) => {
 const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
   const navigate = useNavigate();
   return (
     <div className="flex  bg-gray-100">
@@ -181,7 +182,9 @@ const MainLayout = ({ children }) => {
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                 {SbAdminSvg.searchIcon}
               </div>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer" onClick={() => {
+                setOpenModal(!openModal)
+              }}>
                 {SbAdminSvg.filterIconSvg}
               </div>
             </div>
@@ -241,7 +244,7 @@ const MainLayout = ({ children }) => {
                     }}
                   >
                     <LogOut className="w-4 h-4" />
-                    
+
                   </div>
                 </div>
               )}
@@ -250,6 +253,11 @@ const MainLayout = ({ children }) => {
             <div className="cursor-pointer visible sm:hidden" onClick={() => {
               setCollapsed(!collapsed)
             }}>{SbAdminSvg.HamburgerIconSvg}</div>
+
+            {openModal &&
+              <CommonModal open={openModal} title={"Select Filter"} subTitle={"Select Filter helps narrow results by choosing options."} onClose={() => {
+                setOpenModal(false)
+              }} />}
 
           </div>
         </div>
