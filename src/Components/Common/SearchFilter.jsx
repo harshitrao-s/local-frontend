@@ -26,6 +26,7 @@ import {
   MdOutlineLogout,
   MdLogout,
 } from "react-icons/md";
+import { SlidersHorizontal } from "lucide-react";
 
 // ================= DATA =================
 const DATA = [
@@ -115,7 +116,7 @@ const SearchFilter = () => {
           onClick={() => setOpenModal(!openModal)}
           className="cursor-pointer"
         >
-          {SbAdminSvg.filterIconSvg}
+          <SlidersHorizontal className="text-[#454545]" color="#454545" />
         </div>
       </div>
 

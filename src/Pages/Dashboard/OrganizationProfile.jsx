@@ -117,16 +117,16 @@ const OrganizationProfile = () => {
   return (
     <>
       <CmnHeader
-        title="Organization Profile" IconLucide={Building}  actionName="Save" actionBtn={handleSave} actionVariant="primary"
+        title="Organization Profile" IconLucide={Building} actionName="Save" actionBtn={handleSave} actionVariant="primary"
       />
 
       {/* Stats */}
       <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           {/* Active Users */}
           <div className="p-4 bg-white rounded-[20px] flex items-center gap-4">
-            <div className="bg-blue-500 text-white p-3 rounded-[20px]">
+            <div className="w-12 h-12 flex items-center justify-center bg-blue-500 text-white rounded-[20px]">
               <i className="fas fa-users text-lg"></i>
             </div>
             <div>
@@ -137,7 +137,7 @@ const OrganizationProfile = () => {
 
           {/* Total Roles */}
           <div className="p-4 bg-white rounded-[20px] flex items-center gap-4">
-            <div className="bg-cyan-500 text-white p-3 rounded-[20px]">
+            <div className="w-12 h-12 flex items-center justify-center bg-cyan-500 text-white rounded-[20px]">
               <i className="fas fa-user-shield text-lg"></i>
             </div>
             <div>
@@ -146,86 +146,90 @@ const OrganizationProfile = () => {
             </div>
           </div>
 
+          {/* Logo Upload */}
+          <div className="p-4 bg-white rounded-[20px] flex items-center gap-4">
+            <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-[20px]">
+              <img src="/Logo.svg" className="h-6 object-contain" />
+            </div>
+            <div>
+              <Input type="file" id="logoUpload" className=" h-[60px]" />
+            </div>
+          </div>
+
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
           {/* LEFT */}
-          <div className="lg:col-span-8 space-y-4">
 
-            {/* General */}
-            <div className="p-4 rounded-[20px] bg-white space-y-4">
+          {/* General */}
+          <div className="p-4 rounded-[20px] bg-white space-y-4">
 
-              <div className="">
-                <label>Company Name *</label>
-                <Input name="company_name" value={formData.company_name} onChange={handleChange} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label>Email</label>
-                  <Input name="email" value={formData.email} onChange={handleChange} />
-                </div>
-                <div>
-                  <label>Website</label>
-                  <Input name="website_url" value={formData.website_url} onChange={handleChange} />
-                </div>
-              </div>
-
+            <div className="">
+              <label>Company Name *</label>
+              <Input name="company_name" value={formData.company_name} onChange={handleChange} />
             </div>
 
-            {/* Address */}
-            <div className=" rounded-[20px] bg-white p-4 space-y-4">
-
+            <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label>Country</label>
-                <Select disabled value={formData.country_id} >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {metaData.countries.map(c => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <label>Email</label>
+                <Input name="email" value={formData.email} onChange={handleChange} />
               </div>
-
               <div>
-                <label>Street</label>
-                <Textarea name="street_address" value={formData.street_address} onChange={handleChange} />
+                <label>Website</label>
+                <Input name="website_url" value={formData.website_url} onChange={handleChange} />
               </div>
-
-              <div className="grid md:grid-cols-12 gap-4">
-                <Input className="md:col-span-6" name="city" value={formData.city} onChange={handleChange} />
-
-                <Select value={formData.state_id} onValueChange={(val) => handleChange({ target: { name: 'state_id', value: val } })}>
-                  <SelectTrigger className="md:col-span-3">
-                    <SelectValue placeholder="State" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {metaData.states.map(s => (
-                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Input className="md:col-span-3" name="zip_code" value={formData.zip_code} onChange={handleChange} />
-              </div>
-
-              <Input name="phone" value={formData.phone} onChange={handleChange} />
-
             </div>
 
           </div>
+
+          {/* Address */}
+          <div className=" rounded-[20px] bg-white p-4 space-y-4">
+
+            <div>
+              <label>Country</label>
+              <Select disabled value={formData.country_id} >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  {metaData.countries.map(c => (
+                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label>Street</label>
+              <Textarea name="street_address" value={formData.street_address} onChange={handleChange} />
+            </div>
+
+            <div className="grid md:grid-cols-12 gap-4">
+              <Input className="md:col-span-6" name="city" value={formData.city} onChange={handleChange} />
+
+              <Select value={formData.state_id} onValueChange={(val) => handleChange({ target: { name: 'state_id', value: val } })}>
+                <SelectTrigger className="md:col-span-3">
+                  <SelectValue placeholder="State" />
+                </SelectTrigger>
+                <SelectContent>
+                  {metaData.states.map(s => (
+                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Input className="md:col-span-3" name="zip_code" value={formData.zip_code} onChange={handleChange} />
+            </div>
+
+            <Input name="phone" value={formData.phone} onChange={handleChange} />
+
+          </div>
+
+
 
           {/* RIGHT */}
-          <div className="lg:col-span-4">
-            <div className="rounded-[20px] p-4 text-center bg-white">
-              <img src="/Logo.svg" className="h-[80px] mx-auto object-contain" />
-              <Input type="file" id="logoUpload" className="mt-3 h-[60px]" />
-            </div>
-          </div>
+
 
         </div>
 
