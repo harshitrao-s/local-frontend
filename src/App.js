@@ -29,8 +29,9 @@ import "nprogress/nprogress.css";
 import LoginPage from "./Pages/LoginPage";
 import PendingInvoiceList from "./Pages/PurchaseOrder/Invoices/PendingInvoiceList";
 import { SbAdminSvg } from "./Components/Common/Svgs/ActionsSvg";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut, SlidersHorizontal } from "lucide-react";
 import CommonModal from "./Components/Common/CommonModal";
+import SearchFilter from "./Components/Common/SearchFilter";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -169,33 +170,31 @@ const MainLayout = ({ children }) => {
               } hidden sm:block`}
           />
           <div className="flex items-center gap-3">
-
-            {/* Desktop Search */}
-            <div className="relative hidden md:block">
+            {/* Search Filter */}
+            {/* <div className="relative hidden md:block">
               <input
                 type="text"
                 placeholder="Search product"
                 className=" pr-10 py-1.5 px-[1.5rem] pl-[2.5rem] border rounded-full text-sm outline-none w-[300px]"
               />
 
-              {/* Icon */}
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                 {SbAdminSvg.searchIcon}
               </div>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer" onClick={() => {
                 setOpenModal(!openModal)
               }}>
-                {SbAdminSvg.filterIconSvg}
+                <SlidersHorizontal />
               </div>
-            </div>
+            </div> */}
 
-            {/* Mobile Search */}
+            <SearchFilter />
+
             <div className="relative group block md:hidden w-10 h-10">
 
-              {/* Icon */}
               <div className="absolute inset-0 flex items-center justify-center 
         group-hover:opacity-0 transition-opacity duration-200">
-                {SbAdminSvg.searchIcon}
+
               </div>
 
               {/* Input */}
@@ -244,7 +243,7 @@ const MainLayout = ({ children }) => {
                     }}
                   >
                     <LogOut className="w-4 h-4" />
-
+                    Logout
                   </div>
                 </div>
               )}
@@ -254,10 +253,7 @@ const MainLayout = ({ children }) => {
               setCollapsed(!collapsed)
             }}>{SbAdminSvg.HamburgerIconSvg}</div>
 
-            {openModal &&
-              <CommonModal open={openModal} title={"Select Filter"} subTitle={"Select Filter helps narrow results by choosing options."} onClose={() => {
-                setOpenModal(false)
-              }} />}
+
 
           </div>
         </div>
