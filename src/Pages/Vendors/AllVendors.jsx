@@ -243,11 +243,8 @@ const AllVendors = () => {
   return (
     <>
       <CmnHeader
-        title="All Vendors" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Add New" actionLink="/vendor/addnewvendor"
+        title="All Vendors" IconLucide={FileSpreadsheet} actionVariant="ghost" actionName="Add New" actionLink="/vendor/addnewvendor"
       />
-
-
-
       {/* FILTERS */}
       <div className="card p-2">
         <div className="row p-2">

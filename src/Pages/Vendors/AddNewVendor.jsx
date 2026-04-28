@@ -7,20 +7,15 @@ import { API_BASE } from "../../Config/api";
 import useMasterData from "../../Context/MasterDataProvider";
 import Swal from "sweetalert2";
 import SearchableSelect from "../../Components/Common/SearchableSelect";
-import { showErrorToast, formatToISODate } from "../../Utils/utilFunctions";
+import { formatToISODate } from "../../Utils/utilFunctions";
 import DateInput from "../../Components/Common/DateInput";
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListUl, faSave, faUndo, faPen, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import StickyHeader from "../../Components/Common/StickyHeader";
 import ABNInput from "../../Components/Common/ABNInput";
 import ACNInput from "../../Components/Common/ACNInput";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { AddressForm } from "./AddressForm";
 import VendorPOList from "../../Components/VendorPOList";
 import VendorPaymentForm from "./Edit/tabs/VendorPaymentForm";
 import CmnHeader from "../../Components/Common/CmnHeader";
-import { UserPlus } from "lucide-react";
+import { FileSpreadsheetIcon, Undo2, UserPlus } from "lucide-react";
 
 // ─── Flush Registry Context ──────────────────────────────────────
 const FlushRegistryContext = createContext(null);
@@ -402,20 +397,16 @@ const AddNewVendor = () => {
     return (
         <FlushRegistryContext.Provider value={register}>
             <div className="mt-0">
-                <CmnHeader title={"Vendor Registration"} IconLucide={UserPlus}
-                    actionCmp={<div className="d-flex gap-2 align-items-center">
-                        <button type="button" className="iwl-add-btn" onClick={() => navigate("/vendor/vendors")}>
-                            <FontAwesomeIcon className="me-1" icon={faListUl} /> Listing
-                        </button>
-                        <button type="submit" form="vendor-form" className="iwl-add-btn" disabled={saving}>
-                            <FontAwesomeIcon className="me-1" icon={faSave} />
-                            {saving ? "Saving..." : "Create"}
-                        </button>
-                        <button type="button" className="iwl-add-btn" onClick={() => navigate(-1)}>
-                            <FontAwesomeIcon className="me-1" icon={faUndo} /> Cancel
-                        </button>
-                    </div>} />
-
+                <CmnHeader
+                    title={"Vendor Registration"}
+                    IconLucide={UserPlus}
+                    actionVariant="ghost" actionName="Listing"
+                    actionLink="/vendor/vendors"
+                    actions={[
+                        { icon: <FileSpreadsheetIcon size={16} />, name: "Create", onClick: () => document.getElementById("vendor-form")?.requestSubmit(), variant: "primary", },
+                        { icon: <Undo2 size={16} />, name: "Cancel", onClick: () => navigate(-1), variant: "danger", }
+                    ]}
+                />
 
                 <div className="bg-white  mt-4 h-100 rounded-3">
                     <Form id="vendor-form" onSubmit={handleCreate}>

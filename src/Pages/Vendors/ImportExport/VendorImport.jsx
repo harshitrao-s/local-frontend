@@ -239,6 +239,7 @@ const VendorImportIndex = () => {
             <CmnHeader IconLucide={ImportIcon} title="Vendor Import Engine" 
             actionName='Listing' 
             actionLink="/vendor/vendors" 
+            actionVariant="ghost"
             actions={[
                 {  icon: <Download size={16} />, name: " Export Vendor Data (CSV) ", onClick: ()=>handleExportVendors('csv') },
                 {  icon: <Download size={16} />, name: "  Export Vendor Data (Excel) ", onClick:()=> handleExportVendors('xl')},

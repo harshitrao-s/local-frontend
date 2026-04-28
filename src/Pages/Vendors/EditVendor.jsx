@@ -8,19 +8,15 @@ import { API_BASE, API_ENDPOINTS } from "../../Config/api";
 import Swal from "sweetalert2";
 import SearchableSelect from "../../Components/Common/SearchableSelect";
 import formatCurrency, { formatAUD, formatToISODate, showErrorToast } from "../../Utils/utilFunctions";
-import StickyHeader from "../../Components/Common/StickyHeader";
 import DateInput from "../../Components/Common/DateInput";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileInvoice, faTableColumns, faPen, faListUl , faSave, faCircleQuestion, faUndo} from '@fortawesome/free-solid-svg-icons';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-
 import ABNInput from "../../Components/Common/ABNInput";
 import ACNInput from "../../Components/Common/ACNInput";
 import VendorPOList from "../../Components/VendorPOList";
 import { AddressForm } from "./AddressForm";
 import VendorInvoicesList from "../../Components/VendorInvoicesList";
 import VendorPaymentForm from "./Edit/tabs/VendorPaymentForm";
+import { FileSpreadsheetIcon, Undo2, UserPlus } from "lucide-react";
+import CmnHeader from "../../Components/Common/CmnHeader";
 
 
 const EditVendor = () => {
@@ -492,16 +488,15 @@ const EditVendor = () => {
 
     return (
         <div className="mt-0">
-            <StickyHeader>
-                <div className="d-flex justify-content-between mt-0 mb-2">
-                    <div><h5 className="fw-bold py-1 px-2"><i className="fas fa-pen me-2 text-primary"></i>Update Vendor</h5></div>
-                    <div className="d-flex gap-2 align-items-center">
-                        <button className="btn btn-outline-primary px-3 shadow-sm" onClick={() => navigate("/vendor/vendors")}><FontAwesomeIcon className="me-1" icon={faListUl} /> Listing</button>
-                        <button className="btn btn-primary px-3 shadow-sm" onClick={handleUpdate}><FontAwesomeIcon className="me-1" icon={faSave} /> Update</button>
-                        <button className="btn btn-secondary px-3 shadow-sm" onClick={() => navigate(-1)}><FontAwesomeIcon className="me-1" icon={faUndo} /> Cancel</button>
-                    </div>
-                </div>
-            </StickyHeader>
+            <CmnHeader
+                    title={"Update Vendor"}
+                    IconLucide={UserPlus}
+                    actionVariant="ghost" actionName="Listing"
+                    actionLink="/vendor/vendors"
+                    actions={[
+                        { icon: <FileSpreadsheetIcon size={16} />, name: "Update", onClick: () => handleUpdate(), variant: "primary", },
+                    ]}
+                />
 
             <div className="bg-white shadow-sm mt-4">
                 <Form>
