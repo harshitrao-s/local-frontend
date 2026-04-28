@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
 import Swal from 'sweetalert2';
+import { Button } from "../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
 import { Input } from "../../Components/Common/ui/input";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+
 
 const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
   const [loading, setLoading] = useState(false);
@@ -126,113 +128,320 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
   };
 
   return (
-    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-      <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content border-0 shadow-lg">
-          <div className="modal-header">
-            <h5 className="modal-title fw-bold">
-              {mode === 'edit' ? <i className="fas fa-edit me-2"></i> : <i className="fas fa-plus me-2"></i>}
-              {mode === 'edit' ? 'Edit Location' : 'Add New Location'}
-            </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+    // <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
+    //   <div className="modal-dialog modal-lg modal-dialog-centered">
+    //     <div className="modal-content border-0 shadow-lg">
+    //       <div className="modal-header">
+    //         <h5 className="modal-title fw-bold">
+    //           {mode === 'edit' ? <i className="fas fa-edit me-2"></i> : <i className="fas fa-plus me-2"></i>}
+    //           {mode === 'edit' ? 'Edit Location' : 'Add New Location'}
+    //         </h5>
+    //         <button type="button" className="btn-close" onClick={onClose}></button>
+    //       </div>
+
+    //       <div className="modal-body p-4">
+    //         {loading ? (
+    //           <div className="text-center py-5"><i className="fas fa-spinner fa-spin fa-2x text-primary"></i></div>
+    //         ) : (
+    //           <div className="row g-3">
+    //             <div className="col-md-6">
+    //               <label className="form-label fw-bold small">Location Name *</label>
+    //               {/* <input name="name" className="form-control shadow-sm" value={formData.name} onChange={handleChange} /> */}
+    //               <Input  name="name"  value={formData.name} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-6">
+    //               <label className="form-label fw-bold small">Attention</label>
+    //               <Input  name="attention"  value={formData.attention} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-12">
+    //               <label className="form-label fw-bold small">Address Line 1</label>
+    //               <Input   name="address_line1"  value={formData.address_line1} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-12">
+    //               <label className="form-label fw-bold small">Address Line 2</label>
+    //               <Input  name="address_line2"  value={formData.address_line2} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">City</label>
+    //               <Input  name="city" value={formData.city} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">Country</label>
+    //               {/* <select name="country_id" className="form-select shadow-sm" value={formData.country_id} onChange={handleChange}>
+    //                 <option value="">Select Country</option>
+    //                 {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
+    //               </select> */}
+
+    //               <Select name="country_id" value={formData.country_id} onChange={handleChange}>
+    //               <SelectTrigger className="md:col-span-3">
+    //                 <SelectValue placeholder="Select Country" />
+    //               </SelectTrigger>
+    //               <SelectContent>
+    //               {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
+    //               </SelectContent>
+    //             </Select>
+
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">State</label>
+    //               {/* <select 
+    //                 name="state_name" 
+    //                 className="form-select shadow-sm" 
+    //                 value={formData.state_name} 
+    //                 onChange={handleChange}
+    //                 disabled={!formData.country_id}
+    //               >
+    //                 <option value="">Select State</option>
+    //                 {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
+    //               </select> */}
+
+    //               <Select name="state_name" 
+    //                 className="form-select shadow-sm" 
+    //                 value={formData.state_name} 
+    //                 onChange={handleChange}
+    //                 disabled={!formData.country_id}>
+
+    //               <SelectTrigger className="md:col-span-3">
+    //                 <SelectValue placeholder="Select State" />
+    //               </SelectTrigger>
+    //               <SelectContent>
+    //               {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
+    //               </SelectContent>
+    //             </Select>
+
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">ZIP Code</label>
+    //               <Input name="zip_code" value={formData.zip_code} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">Phone</label>
+    //               <Input name="phone"  value={formData.phone} onChange={handleChange}/>
+    //             </div>
+    //             <div className="col-md-4">
+    //               <label className="form-label fw-bold small">Website</label>
+    //               <Input name="website_url"  value={formData.website_url} onChange={handleChange}/>
+    //             </div>
+    //           </div>
+    //         )}
+    //       </div>
+
+    //       <div className="modal-footer bg-light border-0">
+    //         <button className="btn btn-secondary px-4 shadow-sm" onClick={onClose} disabled={saving}>Cancel</button>
+    //         <button className="btn btn-primary px-4 shadow-sm" onClick={handleSave} disabled={loading || saving}>
+    //           {saving ? <><i className="fas fa-spinner fa-spin me-1"></i> Saving...</> : <><i className="fas fa-save me-1"></i> Save Changes</>}
+    //         </button>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+  <div className="w-full max-w-[500px] rounded-2xl bg-white overflow-visible">
+
+    {/* Header */}
+    <div className="flex items-center justify-between  px-3 py-3">
+      <h5 className="flex items-center gap-2 text-[16px] font-semibold text-[#454545]">
+        <i className={`fas ${mode === "edit" ? "fa-edit" : "fa-plus"}`} />
+        {mode === "edit" ? "Edit Location" : "Add New Location"}
+      </h5>
+
+      <button
+        type="button"
+        onClick={onClose}
+        className="rounded-md p-1 "
+      >
+        ✕
+      </button>
+    </div>
+
+    {/* Body */}
+    <div className="p-3">
+      {loading ? (
+        <div className="flex justify-center py-10">
+          <i className="fas fa-spinner fa-spin text-2xl text-blue-500" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-12 gap-4">
+
+          <div className="col-span-12 md:col-span-6 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Location Name *
+            </label>
+            <Input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </div>
 
-          <div className="modal-body p-4">
-            {loading ? (
-              <div className="text-center py-5"><i className="fas fa-spinner fa-spin fa-2x text-primary"></i></div>
-            ) : (
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label fw-bold small">Location Name *</label>
-                  {/* <input name="name" className="form-control shadow-sm" value={formData.name} onChange={handleChange} /> */}
-                  <Input  name="name"  value={formData.name} onChange={handleChange}/>
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-bold small">Attention</label>
-                  <Input  name="attention"  value={formData.attention} onChange={handleChange}/>
-                </div>
-                <div className="col-md-12">
-                  <label className="form-label fw-bold small">Address Line 1</label>
-                  <Input   name="address_line1"  value={formData.address_line1} onChange={handleChange}/>
-                </div>
-                <div className="col-md-12">
-                  <label className="form-label fw-bold small">Address Line 2</label>
-                  <Input  name="address_line2"  value={formData.address_line2} onChange={handleChange}/>
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">City</label>
-                  <Input  name="city" value={formData.city} onChange={handleChange}/>
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">Country</label>
-                  {/* <select name="country_id" className="form-select shadow-sm" value={formData.country_id} onChange={handleChange}>
-                    <option value="">Select Country</option>
-                    {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
-                  </select> */}
-
-                  <Select name="country_id" value={formData.country_id} onChange={handleChange}>
-                  <SelectTrigger className="md:col-span-3">
-                    <SelectValue placeholder="Select Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                  {countries.map(c => <option key={c.id} value={c.id}>{c.text || c.name}</option>)}
-                  </SelectContent>
-                </Select>
-
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">State</label>
-                  {/* <select 
-                    name="state_name" 
-                    className="form-select shadow-sm" 
-                    value={formData.state_name} 
-                    onChange={handleChange}
-                    disabled={!formData.country_id}
-                  >
-                    <option value="">Select State</option>
-                    {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
-                  </select> */}
-
-                  <Select name="state_name" 
-                    className="form-select shadow-sm" 
-                    value={formData.state_name} 
-                    onChange={handleChange}
-                    disabled={!formData.country_id}>
-
-                  <SelectTrigger className="md:col-span-3">
-                    <SelectValue placeholder="Select State" />
-                  </SelectTrigger>
-                  <SelectContent>
-                  {statesList.map(s => <option key={s.id} value={s.name}>{s.text || s.name}</option>)}
-                  </SelectContent>
-                </Select>
-
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">ZIP Code</label>
-                  <Input name="zip_code" value={formData.zip_code} onChange={handleChange}/>
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">Phone</label>
-                  <Input name="phone"  value={formData.phone} onChange={handleChange}/>
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label fw-bold small">Website</label>
-                  <Input name="website_url"  value={formData.website_url} onChange={handleChange}/>
-                </div>
-              </div>
-            )}
+          <div className="col-span-12 md:col-span-6 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Attention
+            </label>
+            <Input
+              name="attention"
+              value={formData.attention}
+              onChange={handleChange}
+            />
           </div>
 
-          <div className="modal-footer bg-light border-0">
-            <button className="btn btn-secondary px-4 shadow-sm" onClick={onClose} disabled={saving}>Cancel</button>
-            <button className="btn btn-primary px-4 shadow-sm" onClick={handleSave} disabled={loading || saving}>
-              {saving ? <><i className="fas fa-spinner fa-spin me-1"></i> Saving...</> : <><i className="fas fa-save me-1"></i> Save Changes</>}
-            </button>
+          <div className="col-span-12 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Address Line 1
+            </label>
+            <Input
+              name="address_line1"
+              value={formData.address_line1}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-span-12 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Address Line 2
+            </label>
+            <Input
+              name="address_line2"
+              value={formData.address_line2}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              City
+            </label>
+            <Input
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Country
+            </label>
+
+            <Select
+              value={formData.country_id || undefined}
+              onValueChange={(value) =>
+                handleChange({
+                  target: { name: "country_id", value },
+                })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
+                {countries.map((c) => (
+                  <SelectItem key={c.id} value={String(c.id)}>
+                    {c.text || c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              State
+            </label>
+
+            <Select
+              value={formData.state_name || undefined}
+              onValueChange={(value) =>
+                handleChange({
+                  target: { name: "state_name", value },
+                })
+              }
+              disabled={!formData.country_id}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select State" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
+                {statesList.map((s) => (
+                  <SelectItem key={s.id} value={s.name}>
+                    {s.text || s.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              ZIP Code
+            </label>
+            <Input
+              name="zip_code"
+              value={formData.zip_code}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Phone
+            </label>
+            <Input
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-span-12 md:col-span-4 space-y-2">
+            <label className="text-[12px] text-[#737373] font-semibold">
+              Website
+            </label>
+            <Input
+              name="website_url"
+              value={formData.website_url}
+              onChange={handleChange}
+            />
           </div>
         </div>
-      </div>
+      )}
     </div>
+
+    {/* Footer */}
+    <div className="flex justify-end gap-2 px-3 py-3">
+      <Button
+        variant="secondary"
+        onClick={onClose}
+        disabled={saving}
+        className="bg-[#FF141F] rounded-[12px] text-white"
+
+      >
+        Cancel
+      </Button>
+
+      <Button
+        onClick={handleSave}
+        disabled={loading || saving}
+        className="bg-[#1A71F6] text-white rounded-[12px]"
+      >
+        {saving ? (
+          <>
+            <i className="fas fa-spinner fa-spin mr-1" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <i className="fas fa-save mr-1" />
+            Save Changes
+          </>
+        )}
+      </Button>
+    </div>
+  </div>
+</div>
   );
 };
 

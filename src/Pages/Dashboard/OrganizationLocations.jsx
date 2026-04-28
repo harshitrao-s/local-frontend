@@ -102,9 +102,10 @@ const OrganizationLocations = ({ locations }) => {
       <div className="card-header border-bottom">
         <h6 className="card-title font-weight-bold">Locations</h6>
         <div className="card-tools">
-          <button className="btn btn-primary btn-sm px-3" onClick={() => setModal({ show: true, mode: 'add', id: null })}>
+          <button className="bg-[#1A71F6] text-white rounded-[30px] no-underline py-2 px-3"  onClick={() => setModal({ show: true, mode: 'add', id: null })}>
             <i className="fas fa-plus me-1"></i> Add New
           </button></div>
+
       </div>
 
 
