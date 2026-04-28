@@ -6,8 +6,9 @@ import SalesChart from "../Components/DashboardCharts/SalesChart";
 import { POStatusPieChart } from "../Components/DashboardCharts/POStatusPieChart";
 import RecentPurchaseOrders from "../Components/DashboardCharts/RecentPurchaseOrders";
 import TopProductList from "../Components/DashboardCharts/TopProductList";
-import { DollarSign, ShoppingCart, Package, Users, } from "lucide-react";
+import { DollarSign, ShoppingCart, Package, Users, Presentation, Plus, } from "lucide-react";
 import { Button } from "../Components/Common/ui/button";
+import CmnHeader from "../Components/Common/CmnHeader";
 
 
 const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }) => {
@@ -71,25 +72,13 @@ const Dashboard = () => {
     <div className="w-full font-roboto bg-[#f5f6f8]">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-        <h2 className="text-[24px] font-semibold text-[#2A2A2A]">Dashboard</h2>
-
-        <div className="flex gap-2">
-          <Button
-            onClick={handleAddNew}
-            className="text-[14px] bg-white/90 px-3 py-3 rounded-[12px] flex items-center gap-1 hover:ring-1 hover:ring-blue-800 hover:ring-offset-2 transition"
-          >
-            + Add Purchase Order
-          </Button>
-
-          <Link
-            to="/purchaseorder/listing"
-            className="no-underline bg-white/80 focus:outline-none hover:ring-1 hover:ring-blue-800 hover:ring-offset-2 transition px-3 py-1 text-[14px] rounded-[12px] flex items-center gap-1"
-          >
-            View
-          </Link>
-        </div>
-      </div>
+      <CmnHeader
+      title="Dashboard" IconLucide={Presentation } 
+      actions={[
+        {icon: <Plus  size={16} />,  name: "Add Purchase Order", onClick:()=> handleAddNew, variant: "ghost", },
+        {name: "View",actionLink:"/purchaseorder/listing", variant: "primary", },
+      ]}
+      />
 
       {/* Top Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
