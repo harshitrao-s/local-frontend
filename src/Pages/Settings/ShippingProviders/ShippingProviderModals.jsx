@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../../Config/api";
 import { getCookie, apiFetch } from "../../../Utils/apiFetch";
+import { Button } from "../../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../Components/Common/ui/select";
+import { Input } from "../../../Components/Common/ui/input";
 
-const ShippingProviderModals = ({ config, onClose, onRefresh }) => { 
+const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
     const { type, data } = config;
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -31,7 +34,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
         setLoading(true);
         const url = type === 'add' ? `${API_BASE}api/shipping-providers/create` : `${API_BASE}api/shipping-providers/update/${data.carrier_id}`;
-        
+
         try {
             const res = await apiFetch(url, {
                 method: type === 'add' ? "POST" : "PUT",
@@ -42,8 +45,8 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
                 Swal.fire("Success", res.message || "Carrier saved", "success");
                 onRefresh();
                 onClose();
-            }else
-                 Swal.fire("Error", res.message || "Error in create", "error");
+            } else
+                Swal.fire("Error", res.message || "Error in create", "error");
         } catch (e) {
             Swal.fire("Error", e.message || "Operation failed", "error");
         } finally {
@@ -96,75 +99,146 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
     // --- Add/Edit Modal View ---
     return (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-            <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content border-0 shadow-lg">
-                    <div className="modal-header py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0 ">
-                            <i className={`fas ${type === 'add' ? 'fa-plus' : 'fa-pen'} me-2`}></i> 
-                            {type === 'add' ? 'Add New Shipping Carrier' : 'Edit Shipping Carrier'}
-                        </h5>
-                        <button className="btn-close" onClick={onClose}></button>
-                    </div>
-                    <div className="card-body p-4">
-                        <div className="  p-2 mb-4 bg-white shadow-sm">
-                            <div className="row mb-3 align-items-center">
-                                <label className="col-sm-4 col-form-label small fw-bold">Carrier Name<span className="text-danger">*</span></label>
-                              
-                                <div className="col-sm-8">
-                                    <input type="text" className="form-control" placeholder="e.g. DHL Express" value={formData.carrier_name} onChange={(e) => setFormData({...formData, carrier_name: e.target.value})} />
-                                </div>
-                            </div>
+        <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full max-w-[500px] rounded-2xl bg-white overflow-visible">
 
-                            <div className="row mb-3 align-items-center">
-                                <label className="col-sm-4 col-form-label small fw-bold">Carrier Code</label>
-                                <div className="col-sm-8">
-                                    <input type="text" className="form-control" placeholder="e.g. DHL" value={formData.carrier_code} onChange={(e) => setFormData({...formData, carrier_code: e.target.value})} />
-                                </div>
-                            </div>
+                {/* Header */}
+                <div className="flex items-center justify-between px-3 py-3">
+                    <h5 className="flex items-center gap-2 text-base font-semibold">
+                        {type === "add" ? "Add New Shipping Carrier" : "Edit Shipping Carrier"}
+                    </h5>
 
-                            <div className="row mb-3 align-items-center">
-                                <label className="col-sm-4 col-form-label small fw-bold">Class Code <span className="text-danger">*</span></label>
-                                <div className="col-sm-8">
-                                    <select className="form-select" value={formData.class_code} onChange={(e) => setFormData({...formData, class_code: e.target.value})}>
-                                        <option value="" >select</option>
-                                        <option value="Ground">Ground</option>
-                                        <option value="Standard" >Standard</option>
-                                        <option value="Expedited">Expedited</option>
-                                        <option value="Priority">Priority</option>
-                                        <option value="Overnight">Overnight</option>
-                                        <option value="Freight Class">Freight Class</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="row mb-1 align-items-center">
-                                <label className="col-sm-4 col-form-label small fw-bold">Tracking URL Format <span className="text-danger">*</span></label>
-                                <div className="col-sm-8">
-                                    <input type="text" className="form-control" placeholder="https://tracking.link/{0}" value={formData.tracking_url} onChange={(e) => setFormData({...formData, tracking_url: e.target.value})} />
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="col-sm-4"></div>
-                                <div className="col-sm-8">
-                                    <div className="alert alert-info py-2 px-3 mt-2 border-0" style={{ fontSize: "0.8rem" }}>
-                                        <i className="fas fa-lightbulb me-2"></i>
-                                        Use <strong>{'{0}'}</strong> as a placeholder for the tracking number.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="d-flex justify-content-end gap-2">
-                            <button className="btn btn-light px-4 border" onClick={onClose} disabled={loading}>Cancel</button>
-                            <button className="btn btn-primary px-4 shadow-sm" onClick={handleSave} disabled={loading}>
-                                {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : <i className="fas fa-save me-2"></i>}
-                                {type === 'add' ? 'Save ' : 'Update '}
-                            </button>
-                        </div>
-                    </div>
+                    <button
+                        onClick={onClose}
+                        className="rounded-md p-1"
+                    >
+                        ✕
+                    </button>
                 </div>
+
+                {/* Body */}
+                    <div className="px-3 bg-white space-y-4">
+
+                        {/* Carrier Name */}
+                        <div className="grid grid-cols-12 items-center gap-4">
+                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                                Carrier Name <span className="text-red-500">*</span>
+                            </label>
+
+                            <div className="col-span-8">
+                                <Input
+                                    type="text"
+                                    placeholder="e.g. DHL Express"
+                                    value={formData.carrier_name}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            carrier_name: e.target.value,
+                                        })
+                                    }
+                                />
+                            </div>
+                        </div>
+
+                        {/* Carrier Code */}
+                        <div className="grid grid-cols-12 items-center gap-4">
+                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                                Carrier Code
+                            </label>
+
+                            <div className="col-span-8">
+                                <Input
+                                    type="text"
+                                    placeholder="e.g. DHL"
+                                    value={formData.carrier_code}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            carrier_code: e.target.value,
+                                        })
+                                    }
+                                />
+                            </div>
+                        </div>
+
+                        {/* Class Code */}
+                        <div className="grid grid-cols-12 items-center gap-4">
+                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                                Class Code <span className="text-red-500">*</span>
+                            </label>
+
+                            <div className="col-span-8">
+                                <Select
+                                    value={formData.class_code || undefined}
+                                    onValueChange={(val) =>
+                                        setFormData({
+                                            ...formData,
+                                            class_code: val,
+                                        })
+                                    }
+                                >
+                                    <SelectTrigger className="w-full rounded-[16px]">
+                                        <SelectValue placeholder="Select" />
+                                    </SelectTrigger>
+
+                                    <SelectContent   className="z-[1100] w-full min-w-[300px] p-1 bg-white" position="popper">
+                                        <SelectItem className="hover:bg-gray-100" value="Ground">Ground</SelectItem>
+                                        <SelectItem className="hover:bg-gray-100" value="Standard">Standard</SelectItem>
+                                        <SelectItem className="hover:bg-gray-100" value="Expedited">Expedited</SelectItem>
+                                        <SelectItem className="hover:bg-gray-100" value="Priority">Priority</SelectItem>
+                                        <SelectItem className="hover:bg-gray-100" value="Overnight">Overnight</SelectItem>
+                                        <SelectItem className="hover:bg-gray-100" value="Freight Class">Freight Class</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* Tracking URL */}
+                        <div className="grid grid-cols-12 items-start gap-4">
+                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold pt-2">
+                                Tracking URL Format <span className="text-red-500">*</span>
+                            </label>
+
+                            <div className="col-span-8 space-y-2">
+                                <Input
+                                    type="text"
+                                    placeholder="https://tracking.link/{0}"
+                                    value={formData.tracking_url}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            tracking_url: e.target.value,
+                                        })
+                                    }
+                                />
+
+                                <div className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700">
+                                    <i className="fas fa-lightbulb mr-2" />
+                                    Use <strong>{"{0}"}</strong> as a placeholder for the tracking number.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex justify-end gap-2 py-2 px-3">
+                        <Button
+                            onClick={onClose}
+                            disabled={loading}
+                            className="bg-[#FF141F] rounded-[12px] text-white hover:bg-[#e3121b]"
+                        >
+                            Cancel
+                        </Button>
+
+                        <Button
+                            onClick={handleSave}
+                            disabled={loading}
+                            className="bg-[#1A71F6] rounded-[12px] text-white hover:bg-[#155fd1]"
+                        >
+                            {loading ? "Processing..." : type === "add" ? "Save" : "Update"}
+                        </Button>
+                    </div>
             </div>
         </div>
     );

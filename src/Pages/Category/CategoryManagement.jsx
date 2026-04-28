@@ -6,6 +6,7 @@ import { apiFetch } from "../../Utils/apiFetch";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CommonTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import { Plus } from "lucide-react";
 
 const CategoryManagement = () => {
   const [modalConfig, setModalConfig] = useState({
@@ -133,9 +134,9 @@ const CategoryManagement = () => {
       <CmnHeader
         title={"Category Management"}
         subtitle={"Manage categories"}
-        icon1={"fas fa-layer-group"}
-        actionName={"Add Category"}
-        actionBtn={() => openModal("add")}
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Category ", onClick: ()=> openModal('add'), variant: "primary", }
+        ]}
       />
 
       {/* TABLE */}

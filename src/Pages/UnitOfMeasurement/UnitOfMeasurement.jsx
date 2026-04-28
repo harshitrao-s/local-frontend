@@ -143,7 +143,7 @@ const UnitOfMeasurement = () => {
       <CmnHeader
         title="Unit of Measurement" IconLucide={Ruler}
         actions={[
-          { icon: <Plus size={16} />, name: "Add Unit", onClick: ()=>openModal('add')}
+          { icon: <Plus size={16} />, name: "Add Unit", onClick: ()=>openModal('add') }
       ]}
       />
       

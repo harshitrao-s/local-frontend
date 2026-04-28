@@ -135,23 +135,23 @@ const PurchaseInvoiceList = ({ vendors }) => {
     return () => tabulatorRef.current?.destroy();
   }, []);
 
-  const openShippingModal = async (poId, productId, receivedItemId) => {
-    setLoadingModal(true);
-    setModalData([]);
-    setShowModal(true);
+  // const openShippingModal = async (poId, productId, receivedItemId) => {
+  //   setLoadingModal(true);
+  //   setModalData([]);
+  //   setShowModal(true);
 
-    try {
-        const response = await apiFetch(
-          `${API_BASE}api/purchaseorder/api/purchase-order/${poId}/${productId}/${receivedItemId}/shipments/`,
-          { method: "GET" }
-        );
-        setModalData(response.data || []);
-    } catch (err) {
-        console.error("Failed to fetch shipments", err);
-    } finally {
-        setLoadingModal(false);
-    }
-  };
+  //   try {
+  //       const response = await apiFetch(
+  //         `${API_BASE}api/purchaseorder/api/purchase-order/${poId}/${productId}/${receivedItemId}/shipments/`,
+  //         { method: "GET" }
+  //       );
+  //       setModalData(response.data || []);
+  //   } catch (err) {
+  //       console.error("Failed to fetch shipments", err);
+  //   } finally {
+  //       setLoadingModal(false);
+  //   }
+  // };
 
   const handleSearch = (e) => {
     e.preventDefault();

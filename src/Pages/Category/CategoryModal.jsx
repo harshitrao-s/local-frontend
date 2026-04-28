@@ -94,7 +94,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
 
     return (
         <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
-            <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
+            <div className="w-full max-w-[450px] rounded-2xl bg-white overflow-visible">
 
                 {/* Header */}
                 <div className="flex items-center justify-between  px-2 py-1">
@@ -105,7 +105,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                     <button
                         type="button"
                         onClick={onClose}
-                        className="rounded-md p-1 hover:bg-gray-100 transition"
+                        className="rounded-md p-1"
                     >
                         ✕
                     </button>
@@ -165,7 +165,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                                     <SelectValue placeholder="Select Parent" />
                                 </SelectTrigger>
 
-                                <SelectContent className="z-[1100] w-[470px] bg-white p-1" position="popper" >
+                                <SelectContent className="z-[1100] w-[420px] bg-white p-1" position="popper" >
 
                                     {main_categories?.map((d) => (
                                         <SelectItem className="hover:bg-gray-100"s key={d.id} value={String(d.id)}>
@@ -192,7 +192,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                                 <SelectValue placeholder="Select Status" />
                             </SelectTrigger>
 
-                            <SelectContent className="z-[1100] w-[470px] bg-white" position="popper" >
+                            <SelectContent className="z-[1100] w-[420px] bg-white" position="popper" >
                                 <SelectItem className="hover:bg-gray-100" value="1">Active</SelectItem>
                                 <SelectItem className="hover:bg-gray-100" value="0">Inactive</SelectItem>
                             </SelectContent>
@@ -201,12 +201,12 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-end gap-3 px-3 py-2">
+                <div className="flex justify-end gap-2 px-3 py-2">
                     <Button
                         variant="ghost"
                         onClick={onClose}
                         disabled={loading}
-                        className="bg-[#6c757d] text-white"
+                          className="bg-[#FF141F] rounded-[12px] text-white"
                     >
                         Cancel
                     </Button>
@@ -214,7 +214,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                     <Button
                         onClick={handleSave}
                         disabled={loading}
-                        className="bg-black"
+                        className="bg-[#1A71F6] rounded-[12px] text-white"
                     >
                         {loading ? "Processing..." : mode === "add" ? "Create Category" : "Save Changes"}
                     </Button>

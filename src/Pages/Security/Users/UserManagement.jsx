@@ -4,6 +4,7 @@ import UserModals from "./UserModals";
 import { apiFetch } from "../../../Utils/apiFetch";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import CommonTable from "../../../Components/Common/CmnTable";
+import { Plus } from "lucide-react";
 
 const UserManagement = () => {
     const [modalConfig, setModalConfig] = useState({ type: null, data: null });
@@ -104,8 +105,12 @@ const UserManagement = () => {
                 title="User Management"
                 subtitle="Manage system users, roles & access"
                 icon1="fas fa-users-cog"   // ✅ Better icon
-                actionBtn={() => setModalConfig({ type: "add", data: null })}
-                actionName="Add User"     // ✅ Fixed naming
+                // actionBtn={() => setModalConfig({ type/: "add", data: null })}
+                // actionName="Add User"  
+                
+                actions={[
+                    { icon: <Plus size={16} />, name: "Add User ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+                  ]}   // ✅ Fixed naming
             />
 
             <CommonTable

@@ -5,7 +5,7 @@ import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import CmnHeader from "../../../Components/Common/CmnHeader";
-import { FileSpreadsheet } from "lucide-react";
+import { CalendarX2, FileSpreadsheet } from "lucide-react";
 import CmnTable from "../../../Components/Common/CmnTable";
 import { File , CalendarX , DollarSign, BadgeAlert, Loader } from "lucide-react";
 
@@ -323,9 +323,9 @@ const InvoiceList = () => {
 
   return (
     <>
-      <CmnHeader
-        title="All Invoices" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="Due Payments" actionLink="/purchaseorder/invoicedue"
-      />
+        <CmnHeader
+          title="All Invoices" IconLucide={FileSpreadsheet}  actionName="Due Payments" actionLink="/purchaseorder/invoicedue" actionVariant="primary" 
+        />
 
       <DashboardOverview summary={summary} />
       <div className="mt-3 mb-3 p-3 bg-white rounded-[20px]">

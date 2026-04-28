@@ -7,7 +7,7 @@ import { faListUl, faSliders, faLock } from '@fortawesome/free-solid-svg-icons';
 import KanbanLayoutModal from "./POComponents/KanbanLayoutModal";
 import { Link } from "react-router-dom";
 import CmnHeader from "../../Components/Common/CmnHeader";
-import {Kanban } from 'lucide-react'
+import {Kanban, Plus } from 'lucide-react'
 
 /* ================= STATUS HELPERS (Existing) ================= */
 const STATUS = { DRAFT: -1, PARKED: 0, PLACED: [1, 2, 3] };
@@ -139,9 +139,10 @@ const POKanbanList = () => {
   return (
     <>
      <CmnHeader
-        title="Purchase Order Kanban" IconLucide={Kanban } Icon="iwl-add-btn" actionName="List View" 
-        actionLink="/purchaseorder/listing" actions={[
-          { name: "Edit Layout ", onClick: setShowLayoutConfig }
+        title="Purchase Order Kanban" IconLucide={Kanban} actionVariant="ghost" actionName="List View" 
+        actionLink="/purchaseorder/listing" 
+        actions={[
+          { icon: <Plus size={16} /> ,name: "Edit Layout ", onClick: setShowLayoutConfig ,  variant: "primary" }
         ]}
       />
   

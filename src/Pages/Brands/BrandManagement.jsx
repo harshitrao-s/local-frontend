@@ -6,6 +6,7 @@ import { apiFetch } from "../../Utils/apiFetch";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CommonTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import { Plus } from "lucide-react";
 
 const BrandManagement = () => {
   const [data, setData] = useState([]);
@@ -143,12 +144,10 @@ const BrandManagement = () => {
       <CmnHeader
         title="Brand Management"
         subtitle="Manage product brands"
-        icon1="fas fa-tags"
-        actionName="Add Brand"
-        actionBtn={() => openModal("add")}
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Brand ", onClick: ()=> openModal('add'), variant: "primary", }
+        ]}
       />
-
-
 
       {/* TABLE */}
       <CommonTable

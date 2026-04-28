@@ -6,81 +6,97 @@ const CmnHeader = ({
     subtitle,
     icon1,
     IconLucide,
-    icon = "iwl-add-btn",
     actionBtn,
     actionName,
     actionLink,
+    actionVariant = "",
     actions = [],
     actionCmp,
 }) => {
 
+    const variantClasses = {
+        ghost:
+            "bg-transparent border-[#B0B0B0] border text-[#454545] rounded-[30px]  ",
+        primary:
+            "bg-[#1A71F6] text-white rounded-[30px] no-underline",
+        danger:
+            "bg-[#FF141F] text-white hover:bg-[#e3121b] rounded-[30px] ",
+    };
 
     return (
         <Fragment>
-            {/* Header */}
             <div className="iwl-header">
                 <div className="iwl-title-wrap">
                     <div className="iwl-icon">
-                        {IconLucide ? <IconLucide size={18} /> : <i className={`${icon1}`} />}
+                        {IconLucide ? (
+                            <IconLucide size={18} />
+                        ) : (
+                            <i className={`${icon1}`} />
+                        )}
                     </div>
+
                     <div>
-                        <h2 className="text-[24px] font-semibold text-[#2A2A2A] font-roboto">{title}</h2>
-                        <p className="iwl-subtitle">
-                            {subtitle}
-                        </p>
+                        <h2 className="text-[24px] font-semibold text-[#2A2A2A] font-roboto">
+                            {title}
+                        </h2>
+
+                        <p className="iwl-subtitle">{subtitle}</p>
                     </div>
                 </div>
+
                 {(actionName || actions?.length > 0) && (
                     <div className="flex gap-2">
 
-                        {/* 🔹 OLD SUPPORT (unchanged behavior) */}
-                        {actionName && (
-                            actionLink ? (
+                        {/* Primary Single Action */}
+                        {actionName &&
+                            (actionLink ? (
                                 <Link
                                     to={actionLink}
-                                    className={`${icon} no-underline text-white`}
+                                    className={`text-[12px] py-2 px-3 ${variantClasses[actionVariant]} visited:text-inherit no-underline text-[12px] flex gap-1 items-center`}
                                     onClick={actionBtn}
-                                >
-                                    + {actionName}
+                                >   
+                                   {actionName}
                                 </Link>
                             ) : (
                                 <button
-                                    className={`${icon}`}
+                                    className={`text-[12px] py-2 px-3 ${variantClasses[actionVariant]} visited:text-inherit no-underline text-[12px]`}
                                     onClick={actionBtn}
                                 >
-                                    + {actionName}
+                                    {actionName}
                                 </button>
-                            )
-                        )}
+                            ))}
 
-                        {/* 🔹 NEW MULTIPLE ACTIONS */}
+                        {/* Multiple Actions */}
                         {actions?.map((action, index) => (
                             action.link ? (
                                 <Link
                                     key={index}
                                     to={action.link}
-                                    className={`${icon} no-underline text-white`}
-                                    onClick={action.onClick}
-                                >
-                                    {action.name}
-                                </Link>
-                            ) : (
-                                <Link
-                                    key={index}
-                                    className={`${icon} no-underline text-white flex items-center gap-2 px-2`}
+                                    className={`text-[12px] py-2 px-3 ${
+                                        variantClasses[action.variant || "primary"]
+                                    } flex items-center gap-2 visited:text-inherit no-underline text-[12px]`}
                                     onClick={action.onClick}
                                 >
                                     {action.icon}
                                     {action.name}
                                 </Link>
+                            ) : (
+                                <button
+                                    key={index}
+                                    className={`text-[12px] py-2 px-3 ${
+                                        variantClasses[action.variant || "primary"]
+                                    } flex items-center gap-2 visited:text-inherit no-underline text-[12px]`}
+                                    onClick={action.onClick}
+                                >
+                                    {action.icon}
+                                    {action.name}
+                                </button>
                             )
                         ))}
-                       
-
                     </div>
                 )}
 
-                 {actionCmp && actionCmp}
+                {actionCmp && actionCmp}
             </div>
         </Fragment>
     );

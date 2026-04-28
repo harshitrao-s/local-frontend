@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
+import { Button } from "../../../Components/Common/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../Components/Common/ui/select";
+import { Input } from "../../../Components/Common/ui/input";
 
-const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefresh }) => { 
+const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefresh }) => {
     const { type, data } = config;
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -16,11 +19,11 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
     useEffect(() => {
         if (type === 'edit' && data) {
             setFormData({
-                warehouse_id: data.warehouse_id ,
-                warehouse_name: data.warehouse_name ,
-                location: data.location ,
+                warehouse_id: data.warehouse_id,
+                warehouse_name: data.warehouse_name,
+                location: data.location,
                 status: data.status,
-                is_default: data.is_default 
+                is_default: data.is_default
             });
         }
     }, [type, data]);
@@ -31,10 +34,10 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
         }
 
         setLoading(true);
-        const url = type === 'add' 
-            ? `${API_BASE}api/inventory-locations/create` 
+        const url = type === 'add'
+            ? `${API_BASE}api/inventory-locations/create`
             : `${API_BASE}api/inventory-locations/update/${data.warehouse_id}`;
-        
+
         try {
             const res = await apiFetch(url, {
                 method: type === 'add' ? "POST" : "PUT",
@@ -56,74 +59,179 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
     };
 
     return (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-            <div className="modal-dialog modal-md modal-dialog-centered">
-                <div className="modal-content border-0 shadow-lg">
-                    {/* Header color changes based on type like your original images */}
-                    <div className={`modal-header py-3 border-bottom d-flex justify-content-between align-items-center `}>
-                        <h5 className="mb-0">
-                            {type === 'add' ? 'Add New Inventory' : 'Edit Warehouse'}
-                        </h5>
-                        <button className="btn-close btn-close" onClick={onClose}></button>
+        <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
+            <div className="w-full max-w-[450px] rounded-2xl bg-white  overflow-visible">
+
+                {/* Header */}
+                <div className="flex items-center justify-between px-2 py-2">
+                    <h5 className="text-base font-semibold">
+                        {type === "add" ? "Add New Inventory" : "Edit Warehouse"}
+                    </h5>
+
+                    <button
+                        onClick={onClose}
+                        className="rounded-md p-1"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-3 space-y-4">
+
+                    {/* Warehouse Name */}
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] semibold">
+                            Warehouse Name
+                        </label>
+
+                        <Input
+                            type="text"
+                            placeholder="Warehouse name"
+                            value={formData.warehouse_name}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    warehouse_name: e.target.value,
+                                })
+                            }
+                        />
                     </div>
-                    <div className="modal-body p-4">
-                        <div className="mb-3">
-                            <label className="form-label small fw-bold">Warehouse Name</label>
-                            <input 
-                                type="text" 
-                                className="form-control" 
-                                placeholder="Warehouse name" 
-                                value={formData.warehouse_name} 
-                                onChange={(e) => setFormData({...formData, warehouse_name: e.target.value})} 
-                            />
-                        </div>
 
-                        <div className="mb-3">
-                            <label className="form-label small fw-bold">Location</label>
-                            <select 
-                                className="form-select" 
-                                value={formData.location} 
-                                onChange={(e) => setFormData({...formData, location: e.target.value})}
-                            >
-                                <option value="">select</option>
-                                {warehouseLocations?.map((d)=>{
-                                  return  <option value={d.id} key={d.id}>{d.name}</option>
+                    {/* Location */}
+                    <div className="space-y-2">
+                        <label className="text-[12px] text-[#737373] semibold">
+                            Location
+                        </label>
 
-})}
-                            </select>
-                        </div>
+                        <Select
+                            value={formData.location?.toString() || undefined}
+                            onValueChange={(val) =>
+                                setFormData({
+                                    ...formData,
+                                    location: val,
+                                })
+                            }
+                        >
+                            <SelectTrigger className="w-full rounded-[16px]">
+                                <SelectValue placeholder="Select Location" />
+                            </SelectTrigger>
 
-                        <div className="row mb-3">
-                            <div className="col-6">
-                                <label className="form-label small fw-bold d-block">Active Status</label>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="status" id="s1" value="1" checked={formData.status === 1} onChange={() => setFormData({...formData, status: 1})} />
-                                    <label className="form-check-label" htmlFor="s1">Enabled</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="status" id="s2" value="0" checked={formData.status === 0} onChange={() => setFormData({...formData, status: 0})} />
-                                    <label className="form-check-label" htmlFor="s2">Disabled</label>
-                                </div>
+                            <SelectContent position="popper">
+                                {warehouseLocations?.map((d) => (
+                                    <SelectItem key={d.id} value={String(d.id)}>
+                                        {d.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Radio Groups */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        {/* Active Status */}
+                        <div className="space-y-2">
+                            <label className="text-[12px] text-[#737373] semibold">
+                                Active Status
+                            </label>
+
+                            <div className="flex gap-4">
+                                <label className="flex items-center gap-2 text-sm">
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        checked={formData.status === 1}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                status: 1,
+                                            })
+                                        }
+                                    />
+                                    Enabled
+                                </label>
+
+                                <label className="flex items-center gap-2 text-sm">
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        checked={formData.status === 0}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                status: 0,
+                                            })
+                                        }
+                                    />
+                                    Disabled
+                                </label>
                             </div>
-                            <div className="col-6">
-                                <label className="form-label small fw-bold d-block">Is Primary</label>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="is_default" value="1" id="p1" checked={formData.is_default === 1} onChange={() => setFormData({...formData, is_default: 1})} />
-                                    <label className="form-check-label" htmlFor="p1">Enabled</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="is_default" id="p2"  value="0"  checked={formData.is_default === 0} onChange={() => setFormData({...formData, is_default: 0})} />
-                                    <label className="form-check-label" htmlFor="p2">Disabled</label>
-                                </div>
+                        </div>
+
+                        {/* Is Primary */}
+                        <div className="space-y-2">
+                            <label className="text-[12px] text-[#737373] semibold">
+                                Is Primary
+                            </label>
+
+                            <div className="flex gap-4">
+                                <label className="flex items-center gap-2 text-sm">
+                                    <input
+                                        type="radio"
+                                        name="is_default"
+                                        checked={formData.is_default === 1}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                is_default: 1,
+                                            })
+                                        }
+                                    />
+                                    Enabled
+                                </label>
+
+                                <label className="flex items-center gap-2 text-sm">
+                                    <input
+                                        type="radio"
+                                        name="is_default"
+                                        checked={formData.is_default === 0}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                is_default: 0,
+                                            })
+                                        }
+                                    />
+                                    Disabled
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <div className="modal-footer border-0">
-                        <button className="btn btn-success px-4" onClick={handleSave} disabled={loading}>
-                            {loading ? 'Processing...' : (type === 'add' ? 'Create' : 'Save')}
-                        </button>
-                        <button className="btn btn-secondary px-4" onClick={onClose} disabled={loading}>Cancel</button>
-                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end gap-2 px-3 py-2">
+                    <Button
+                        onClick={handleSave}
+                        disabled={loading}
+                        className="bg-[#1A71F6] rounded-[12px] text-white"
+                    >
+                        {loading
+                            ? "Processing..."
+                            : type === "add"
+                                ? "Create"
+                                : "Save"}
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        onClick={onClose}
+                        disabled={loading}
+                        className="bg-[#FF141F] rounded-[12px] text-white"
+                    >
+                        Cancel
+                    </Button>
                 </div>
             </div>
         </div>

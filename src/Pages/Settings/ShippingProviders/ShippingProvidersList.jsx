@@ -6,6 +6,7 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import useMasterData from "../../../Context/MasterDataProvider";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import CommonTable from "../../../Components/Common/CmnTable";
+import { Plus } from "lucide-react";
 
 const ShippingProvidersList = () => {
   const { refreshMasterData } = useMasterData();
@@ -147,9 +148,9 @@ const ShippingProvidersList = () => {
         title="Shipping Providers"
         subtitle="Manage carriers and shipping options"
         icon1={"fas fa-truck"}
-        icon="iwl-add-btn"
-        actionBtn={() => setModalConfig({ type: "add", data: null })}
-        actionName="Add Provider"
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Provider ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+        ]}
       />
 
       {/* 🔍 Search */}

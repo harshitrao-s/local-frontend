@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CommonTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import { Plus } from "lucide-react";
 
 const ProductsList = () => {
   const [data, setData] = useState([]);
@@ -92,10 +93,13 @@ const ProductsList = () => {
         title="Product Inventory"
         subtitle="Manage your products"
         icon1="fas fa-boxes"
-        actionName={"Add Product"}
-        actionBtn={() => {
-          navigate("/product/create");
-        }}
+        // actionName={"Add Product"}
+        // actionBtn={() => {
+        //   navigate("/product/create");
+        // }}
+        actions={[
+          {icon: <Plus  size={16} />,  name: "Add Product", link: "/product/create" , variant: "primary",},
+        ]}
       />
 
 

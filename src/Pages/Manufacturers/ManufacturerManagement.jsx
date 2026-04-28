@@ -4,7 +4,7 @@ import ManufacturerModal from "./ManufacturerModal";
 import Swal from "sweetalert2";
 import { apiFetch } from "../../Utils/apiFetch";
 import CmnHeader from "../../Components/Common/CmnHeader";
-import { Factory } from "lucide-react";
+import { Factory, Plus } from "lucide-react";
 import CmnTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
 
@@ -114,8 +114,9 @@ const ManufacturerManagement = () => {
       <CmnHeader
         title="Manufacturers"
         IconLucide={Factory}
-        actionBtn={() => openModal("add")}
-        actionName="Add New"
+        actions={[
+          { icon: <Plus size={16} />, name: "Add New", onClick: ()=> openModal('add'), variant: "primary", }
+        ]}
       />
 
       <CmnTable

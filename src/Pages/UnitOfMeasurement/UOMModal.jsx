@@ -66,7 +66,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
   return (
 
     <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center">
-      <div className="w-full max-w-lg rounded-2xl bg-white overflow-visible border border-gray-200">
+      <div className="w-full max-w-[450px] rounded-2xl bg-white overflow-visible border border-gray-200">
 
         {/* Header */}
         <div className="flex items-center justify-between  px-2 py-1">
@@ -77,7 +77,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
           <Button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 bg-white border-0 hover:bg-gray-100 transition"
+            className="rounded-md p-1 bg-white border-0"
           >
             ✕
           </Button>
@@ -86,7 +86,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
         {/* Body */}
         <div className="p-3 space-y-3">
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Unit Name</label>
+            <label className="text-[12px] text-[#737373] semibold">Unit Name</label>
             <Input
               type="text"
               value={name}
@@ -97,7 +97,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Short Code</label>
+            <label className="text-[12px] text-[#737373] semibold">Short Code</label>
             <Input
               type="text"
               value={shortName}
@@ -109,7 +109,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold">Status</label>
+            <label className="text-[12px] text-[#737373] semibold">Status</label>
 
             <Select
               value={status}
@@ -120,7 +120,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
                 <SelectValue placeholder="Select Status" />
               </SelectTrigger>
 
-              <SelectContent className="z-[1100] w-[470px] bg-white p-1"  position="popper" >
+              <SelectContent className="z-[1100] w-full min-w-[415px] bg-white p-1" position="popper" >
                 <SelectItem className="hover:bg-gray-100" value="1">Active</SelectItem>
                 <SelectItem className="hover:bg-gray-100" value="0">Inactive</SelectItem>
               </SelectContent>
@@ -128,12 +128,12 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 px-3 py-1">
+          <div className="flex justify-end gap-2">
             <Button
               variant="secondary"
               onClick={onClose}
               disabled={loading}
-              className="bg-[#6c757d] text-white"
+              className="bg-[#FF141F] rounded-[12px] text-white"
             >
               Cancel
             </Button>
@@ -142,7 +142,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
               onClick={handleSave}
               disabled={loading}
               variant={mode === "add" ? "default" : "default"}
-              className="bg-black"
+              className="bg-[#1A71F6] rounded-[12px] text-white"
             >
               {loading ? "Saving..." : "Save Unit"}
             </Button>
@@ -153,4 +153,4 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
   )
 };
 
-      export default UOMModal;
+export default UOMModal;

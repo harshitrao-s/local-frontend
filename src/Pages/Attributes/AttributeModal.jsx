@@ -68,62 +68,8 @@ const AttributeModal = ({ mode, initialData, onClose, onRefresh }) => {
     };
 
     return (
-        // <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}>
-        //     <div className="modal-dialog modal-dialog-centered">
-        //         <div className="modal-content border-0 shadow">
-        //             <div className={`modal-header border-bottom ${mode === 'add' ? '' : ''}`}>
-        //                 <h6 className="modal-title">{mode === 'add' ? 'Create Attribute' : 'Edit Attribute'}</h6>
-        //                 <button type="button" className="btn-close btn-close" onClick={onClose}></button>
-        //             </div>
-        //             <div className="modal-body p-4">
-        //                 <div className="mb-3">
-        //                     <label className="form-label small fw-bold">Attribute Name</label>
-        //                     <input className="form-control" value={name} onChange={(e)=>setName(e.target.value)} disabled={loading} />
-        //                 </div>
-
-        //                 <div className="mb-3">
-        //                     <label className="form-label small fw-bold">Attribute Type</label>
-        //                     <div className="d-flex gap-3">
-        //                         <div className="form-check">
-        //                             <input className="form-check-input" type="radio" name="attrType" id="typeText" 
-        //                                    checked={type === "TEXT"} onChange={() => setType("TEXT")} />
-        //                             <label className="form-check-label small" htmlFor="typeText">Text Input</label>
-        //                         </div>
-        //                         <div className="form-check">
-        //                             <input className="form-check-input" type="radio" name="attrType" id="typeDrop" 
-        //                                    checked={type === "DROPDOWN"} onChange={() => setType("DROPDOWN")} />
-        //                             <label className="form-check-label small" htmlFor="typeDrop">Dropdown</label>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-
-        //                 <div className="mb-3">
-        //                     <label className="form-label small fw-bold">Default Value</label>
-        //                     <input className="form-control" value={defaultValue} onChange={(e)=>setDefaultValue(e.target.value)} disabled={loading} />
-        //                 </div>
-
-        //                 {type === "DROPDOWN" && (
-        //                     <div className="mb-3">
-        //                         <label className="form-label small fw-bold text-danger">Option List (separated by ||)</label>
-        //                         <textarea className="form-control" rows="2" value={optionList} 
-        //                                   onChange={(e)=>setOptionList(e.target.value)} 
-        //                                   placeholder="Red||Blue||Green" disabled={loading} />
-        //                     </div>
-        //                 )}
-        //             </div>
-        //             <div className="modal-footer border-0 bg-light">
-        //                 <button className="btn btn-secondary px-4" onClick={onClose} disabled={loading}>Cancel</button>
-        //                 <button className={`btn ${mode === 'add' ? 'btn-success' : 'btn-primary'} px-4`} 
-        //                         onClick={handleSave} disabled={loading}>
-        //                     {loading ? 'Saving...' : mode === 'add' ? 'Create' : 'Save'}
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-
         <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
-            <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
+            <div className="w-full max-w-[450px] rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
 
                 {/* Header */}
                 <div className="flex items-center justify-between px-2 py-1">
@@ -218,12 +164,12 @@ const AttributeModal = ({ mode, initialData, onClose, onRefresh }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-end gap-3 px-3 py-2">
+                <div className="flex justify-end gap-2 px-3 py-2">
                     <Button
                         variant="secondary"
                         onClick={onClose}
                         disabled={loading}
-                        className="bg-[#6c757d] text-white"
+                        className="bg-[#FF141F] rounded-[12px] text-white"
                     >
                         Cancel
                     </Button>
@@ -231,7 +177,7 @@ const AttributeModal = ({ mode, initialData, onClose, onRefresh }) => {
                     <Button
                         onClick={handleSave}
                         disabled={loading}
-                        className="bg-black"
+                        className="bg-[#1A71F6] rounded-[12px] text-white"
                     >
                         {loading
                             ? "Saving..."

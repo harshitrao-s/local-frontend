@@ -60,10 +60,10 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
   return (
 
     <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
+      <div className="w-full max-w-[450px] rounded-2xl bg-white  overflow-visible">
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-2 py-1">
+        <div className="flex items-center justify-between  px-2 py-1">
           <h6 className="text-sm font-bold">
             {mode === "edit" ? "Edit Manufacturer" : "New Manufacturer"}
           </h6>
@@ -71,7 +71,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 hover:bg-gray-100 transition"
+            className="rounded-md p-1"
           >
             ✕
           </button>
@@ -80,7 +80,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
         {/* Body */}
         <div className="p-3 space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-semibold">
+            <label className="text-[12px] text-[#737373] semibold">
               Manufacturer Name
             </label>
 
@@ -94,7 +94,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold">
+            <label className="text-[12px] text-[#737373] semibold">
               Status
             </label>
 
@@ -108,7 +108,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
               </SelectTrigger>
 
               <SelectContent
-                className="z-[1100] w-[470px] bg-white"
+                className="z-[1100] w-[420px] bg-white"
                 position="popper"
               >
                 <SelectItem className="hover:bg-gray-100" value="1">
@@ -124,12 +124,12 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-3 py-2">
+        <div className="flex justify-end gap-2 px-3 py-2">
           <Button
             variant="secondary"
             onClick={onClose}
             disabled={loading}
-            className="bg-[#6c757d] text-white"
+              className="bg-[#FF141F] rounded-[12px] text-white"
           >
             Cancel
           </Button>
@@ -137,7 +137,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="bg-black"
+            className="bg-[#1A71F6] rounded-[12px] text-white"
           >
             {loading
               ? "Processing..."

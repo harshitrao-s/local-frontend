@@ -6,7 +6,7 @@ import { apiFetch } from "../../Utils/apiFetch";
 import CmnTable from "../../Components/Common/CmnTable";
 import CmnHeader from "../../Components/Common/CmnHeader";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
-import { SlidersHorizontal } from "lucide-react"; // good icon for attributes
+import { Plus, SlidersHorizontal } from "lucide-react"; // good icon for attributes
 
 const AttributeManagement = () => {
   const [data, setData] = useState([]);
@@ -114,8 +114,9 @@ const AttributeManagement = () => {
       <CmnHeader
         title="Attributes"
         IconLucide={SlidersHorizontal}
-        actionBtn={() => openModal("add")}
-        actionName="Add New"
+        actions={[
+          { icon: <Plus size={16} />, name: "Add New ", onClick: ()=> openModal('add'), variant: "primary", }
+        ]}
       />
 
       {/* TABLE */}

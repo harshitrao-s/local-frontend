@@ -179,10 +179,9 @@ const PaymentTermsList = () => {
         title="Payment Terms"
         subtitle="Manage vendor payment terms"
         icon1="fas fa-file-invoice-dollar"
-        actionBtn={() =>
-          setModalConfig({ type: "add", data: null })
-        }
-        actionName="Add Term"
+          actions={[
+          { icon: <Plus size={16} />, name: "Add New ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+        ]}
       />
 
       {/* TABLE */}

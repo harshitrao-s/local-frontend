@@ -265,8 +265,9 @@ const POImportHome = () => {
             <CmnHeader IconLucide={ImportIcon} title={"Vendor Import Engine"}
                 actionName='Listing'
                 actionLink="/purchaseorder/listing"
+                actionVariant="ghost"
                 actions={[
-                    { icon: <Download size={16} />, name: "Export PO (CSV) ", onClick: handleExport },
+                    { icon: <Download size={16} />, name: "Export PO (CSV) ", onClick: handleExport , variant:"primary"},
                 ]}
             />
 

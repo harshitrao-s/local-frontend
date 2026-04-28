@@ -6,6 +6,7 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import { useAuth } from "../../../Context/AuthContext";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import CommonTable from "../../../Components/Common/CmnTable";
+import { Plus } from "lucide-react";
 
 const VendorLoginCredentialsList = () => {
   const { user, authChecked } = useAuth();
@@ -181,8 +182,9 @@ const VendorLoginCredentialsList = () => {
         title="Vendor Login Credentials"
         subtitle="Manage encrypted vendor portal logins"
         icon1="fas fa-key"
-        actionBtn={() => setModalConfig({ type: "add", data: null })}
-        actionName="Add Credential"
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Credential ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+        ]}
       />
 
       {/* Search */}

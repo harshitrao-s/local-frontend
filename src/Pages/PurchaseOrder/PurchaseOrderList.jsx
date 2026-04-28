@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { formatAUD, formattedDate } from "../../Utils/utilFunctions";
 import { PO_STATUS } from "../../Constants/PO_Status";
 import { INVOICE_STATUS } from "../../Constants/InvoiceStatus";
-import { CreditCard } from 'lucide-react'
+import { CreditCard, Plus, Truck } from 'lucide-react'
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CmnTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
@@ -262,9 +262,9 @@ const PurchaseOrderList = () => {
       {/* HEADER */}
 
       <CmnHeader
-        title="All Purchases" IconLucide={CreditCard} Icon="iwl-add-btn" actionName="Kanban View" actionLink="/purchaseorder/kanbanlisting" actions={[
-          { name: "In-transit", link: "/purchaseorder/intransit/listing" },
-          { name: "Add New ", onClick: handleAddNew }
+        title="All Purchases" IconLucide={CreditCard}  actionName="Kanban View" actionLink="/purchaseorder/kanbanlisting" actionVariant="ghost" actions={[
+          {icon: <Truck  size={16} />,  name: "In-transit", link: "/purchaseorder/intransit/listing" , variant: "primary",},
+          { icon: <Plus size={16} />, name: "Add New ", onClick: handleAddNew, variant: "danger", }
         ]}
       />
 

@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 export default function Layout({ children }) {
   return (
-    <div className="wrapper">
+    <div className="wrapper font-roboto">
       <Topbar />
       <Sidebar />
 

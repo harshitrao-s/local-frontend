@@ -117,7 +117,7 @@ const OrganizationProfile = () => {
   return (
     <>
       <CmnHeader
-        title="Organization Profile" IconLucide={Building} Icon="iwl-add-btn" actionName="Save" actionBtn={handleSave}
+        title="Organization Profile" IconLucide={Building}  actionName="Save" actionBtn={handleSave} actionVariant="primary"
       />
 
       {/* Stats */}

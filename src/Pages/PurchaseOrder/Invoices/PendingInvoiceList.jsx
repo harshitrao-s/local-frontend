@@ -962,7 +962,7 @@ export default function PendingInvoiceList() {
 
       {/* Header */}
       <CmnHeader
-        title="Due Invoices" IconLucide={FileSpreadsheet} Icon="iwl-add-btn" actionName="All Invoices" actionLink="/purchaseorder/invoices"
+        title="Due Invoices" IconLucide={FileSpreadsheet} actionVariant="primary" actionName="All Invoices" actionLink="/purchaseorder/invoices"
       />
 
       {/* Stat cards */}
