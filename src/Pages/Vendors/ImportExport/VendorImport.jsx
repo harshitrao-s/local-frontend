@@ -241,8 +241,8 @@ const VendorImportIndex = () => {
             actionLink="/vendor/vendors" 
             actionVariant="ghost"
             actions={[
-                {  icon: <Download size={16} />, name: " Export Vendor Data (CSV) ", onClick: ()=>handleExportVendors('csv') },
-                {  icon: <Download size={16} />, name: "  Export Vendor Data (Excel) ", onClick:()=> handleExportVendors('xl')},
+                {  icon: <Download size={16} />, name: " Export Vendor Data (CSV) ", onClick: ()=>handleExportVendors('csv') , variant:"primary"},
+                {  icon: <Download size={16} />, name: "  Export Vendor Data (Excel) ", onClick:()=> handleExportVendors('xl'),  variant:"danger"},
               ]}
             />
 
