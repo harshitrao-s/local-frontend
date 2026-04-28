@@ -27,13 +27,13 @@ const CmnHeader = ({
         <Fragment>
             <div className="iwl-header">
                 <div className="iwl-title-wrap">
-                    <div className="iwl-icon">
+                    {/* <div className="iwl-icon">
                         {IconLucide ? (
                             <IconLucide size={18} />
                         ) : (
                             <i className={`${icon1}`} />
                         )}
-                    </div>
+                    </div> */}
 
                     <div>
                         <h2 className="text-[24px] font-semibold text-[#2A2A2A] font-roboto">

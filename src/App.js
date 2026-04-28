@@ -32,6 +32,7 @@ import { SbAdminSvg } from "./Components/Common/Svgs/ActionsSvg";
 import { ChevronDown, LogOut, SlidersHorizontal } from "lucide-react";
 import CommonModal from "./Components/Common/CommonModal";
 import SearchFilter from "./Components/Common/SearchFilter";
+import { Input } from "./Components/Common/ui/input";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -198,13 +199,13 @@ const MainLayout = ({ children }) => {
               </div>
 
               {/* Input */}
-              <input
+              <Input
                 type="text"
                 placeholder="Search..."
                 className="absolute inset-0 w-full h-full px-2 text-sm 
       opacity-0 group-hover:opacity-100 
       transition-opacity duration-200 
-      border rounded-full outline-none w-[300px]"
+      border rounded-full outline-none max-w-[300px]"
               />
             </div>
 
@@ -218,7 +219,7 @@ const MainLayout = ({ children }) => {
               {/* Trigger */}
               <div
                 onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer "
               >
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/149/149071.png"

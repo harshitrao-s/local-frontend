@@ -132,7 +132,7 @@ const SearchFilter = () => {
                 <Link
                   to={item.path}
                   key={index}
-                  className="flex items-center gap-3 px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 transition"
+                  className="flex items-center gap-3 px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 transition no-underline"
                 //   onMouseDown={() => setShow(false)}
                 >
                   {Icon && <Icon size={16} className="text-gray-600" />}

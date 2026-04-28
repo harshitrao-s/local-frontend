@@ -176,7 +176,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                   className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
                     ${isSubmenuActive
                       ? "bg-[#d9edff] text-black rounded-full"
-                      : "text-gray-600 hover:bg-[#d9edff] hover:text-black rounded-full"
+                      : "text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full"
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -233,7 +233,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
    no-underline hover:no-underline focus:no-underline active:no-underline
                    ${isActive
                     ? "bg-[#d9edff] text-black rounded-full"
-                    : "text-gray-600 hover:bg-[#d9edff] hover:text-black rounded-full"
+                    : "text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full"
                   }`
                 }
               >
@@ -261,7 +261,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex w-[250px] h-screen bg-gray-50 border-r px-3 py-4 overflow-y-auto flex-col">
+      <nav className="hidden md:flex w-[250px] h-screen bg-white border-r px-3 py-4 overflow-y-auto flex-col">
         {/* Logo */}
         <div className="flex items-center justify-between mb-6">
           {collapsed ? (
