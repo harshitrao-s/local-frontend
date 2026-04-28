@@ -221,11 +221,11 @@ const MainLayout = ({ children }) => {
                 className="flex items-center gap-2 cursor-pointer"
               >
                 <img
-                  src="https://i.pravatar.cc/30"
+                  src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                   alt="user"
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="text-sm font-medium">Guy Hawkins</span>
+                <span className="text-sm font-medium">User</span>
 
                 <ChevronDown
                   className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""
@@ -235,9 +235,9 @@ const MainLayout = ({ children }) => {
 
               {/* Dropdown */}
               {open && (
-                <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-md">
+                <div className="absolute right-0 mt-2 bg-white border rounded-lg ">
                   <div
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                    className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 cursor-pointer text-[14px]"
                     onClick={() => {
                       navigate("/login");
                     }}
