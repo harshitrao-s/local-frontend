@@ -265,9 +265,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         {/* Logo */}
         <div className="flex items-center justify-between mb-6">
           {collapsed ? (
-            <img src={SmallLogo} alt="Small Logo" className="w-8" onClick={() => setCollapsed(!collapsed)} />
+            <img src={SmallLogo} alt="Small Logo" className="w-8 cursor-pointer" onClick={() => setCollapsed(!collapsed)} />
           ) : (
-            <img src={Logo} alt="Logo" className="w-36" onClick={() => setCollapsed(!collapsed)} />
+            <img src={Logo} alt="Logo" className="w-36 cursor-pointer" onClick={() => setCollapsed(!collapsed)} />
           )}
         </div>
 

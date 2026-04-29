@@ -1,5 +1,6 @@
 import React from "react";
 import { SbAdminSvg } from "../Svgs/ActionsSvg";
+import { Input } from "./input";
 
 const SearchBar = ({
     searchType = "input",
@@ -9,7 +10,7 @@ const SearchBar = ({
 }) => {
     return searchType === "input" ? (
         <div className="d-flex relative w-fit search-wrapper">
-            <input
+            <Input
                 type="text"
                 className="cmn_searchbar"
                 value={value}

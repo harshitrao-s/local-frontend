@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { SbAdminSvg } from "./Svgs/ActionsSvg";
 import CommonModal from "./CommonModal";
 import {
@@ -129,7 +129,7 @@ const SearchFilter = () => {
               const Icon = getIcon(item);
 
               return (
-                <Link
+                <NavLink
                   to={item.path}
                   key={index}
                   className="flex items-center gap-3 px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 transition no-underline"
@@ -137,7 +137,7 @@ const SearchFilter = () => {
                 >
                   {Icon && <Icon size={16} className="text-gray-600" />}
                   <span>{item.label}</span>
-                </Link>
+                </NavLink>
               );
             })
           ) : (

@@ -10,7 +10,25 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   /* ---------------- AUTH BOOTSTRAP ---------------- */
-  useEffect(() => {
+  // useEffect(() => {
+  //   const path = window.location.pathname;
+
+  //   // 🚫 Login page – skip bootstrap check
+  //   if (path === "/login") {
+  //     setIsAuthenticated(false);
+  //     setUser(null);
+  //     setAuthChecked(true);
+  //     return;
+  //   }
+
+  //   // 🔑 ALWAYS ask backend
+  //   verifyAuth();
+  // }, []);
+
+
+
+
+   useEffect(() => {
     const path = window.location.pathname;
 
     // 🚫 Login page – skip bootstrap check
@@ -20,13 +38,29 @@ export const AuthProvider = ({ children }) => {
       setAuthChecked(true);
       return;
     }
+  if (path === "/login") {
+    setIsAuthenticated(false);
+    setUser(null);
+    setAuthChecked(true);
+    return;
+  }
 
-    // 🔑 ALWAYS ask backend
-    verifyAuth();
-  }, []);
+  // ✅ DEV BYPASS
+  if (process.env.NODE_ENV === "development") {
+    setIsAuthenticated(true);
+    setAuthChecked(true);
+    setUser({
+      id: 1,
+      email: "dev@test.com",
+      name: "Dev User",
+      is_superuser: true,
+      is_staff: true,
+    });
+    return;
+  }
 
-
-
+  verifyAuth();
+}, []);
   const verifyAuth = async () => {
     try {
       const me = await apiFetch(API_ENDPOINTS.API_ME, {

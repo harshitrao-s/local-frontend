@@ -89,7 +89,7 @@ const ShippingProvidersList = () => {
       field: "class_code",
       render: (val) => (
         <span
-          
+
         >
           {val || "—"}
         </span>
@@ -149,42 +149,20 @@ const ShippingProvidersList = () => {
         subtitle="Manage carriers and shipping options"
         icon1={"fas fa-truck"}
         actions={[
-          { icon: <Plus size={16} />, name: "Add Provider ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+          { icon: <Plus size={16} />, name: "Add Provider ", onClick: () => setModalConfig({ type: "add", data: null }), variant: "primary", }
         ]}
       />
 
-      {/* 🔍 Search */}
-      <div className="cl-search-wrap">
-        <div className="cl-search-inner">
-          <i className="fas fa-search cl-search-icon" />
-          <input
-            type="text"
-            className="cl-search-input"
-            placeholder="Search carriers…"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-        </div>
 
-        <button className="cl-search-btn" onClick={fetchData}>
-          <i className="fas fa-search" /> Search
-        </button>
-
-        {searchValue && (
-          <button
-            className="cl-clear-btn"
-            onClick={() => setSearchValue("")}
-          >
-            Clear
-          </button>
-        )}
-      </div>
 
       {/* ✅ Only CommonTable */}
       <CommonTable
         config={tableConfig}
         data={shippingProvidersData}
-        isSearchable={false}
+        isSearchable={true}
+        searchFromApi={true}
+        searchAPi={`${API_BASE}api/shipping-providers?`}
+        searchParamKey={"search"}
       />
 
       {modalConfig.type && (

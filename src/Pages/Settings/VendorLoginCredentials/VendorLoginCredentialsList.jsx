@@ -183,38 +183,19 @@ const VendorLoginCredentialsList = () => {
         subtitle="Manage encrypted vendor portal logins"
         icon1="fas fa-key"
         actions={[
-          { icon: <Plus size={16} />, name: "Add Credential ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
+          { icon: <Plus size={16} />, name: "Add Credential ", onClick: () => setModalConfig({ type: "add", data: null }), variant: "primary", }
         ]}
       />
 
-      {/* Search */}
-      <div className="cl-search-wrap">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-
-        <button onClick={() => fetchData(searchValue)}>Search</button>
-
-        {searchValue && (
-          <button
-            onClick={() => {
-              setSearchValue("");
-              fetchData("");
-            }}
-          >
-            Clear
-          </button>
-        )}
-      </div>
 
       {/* ✅ Only CommonTable */}
       <CommonTable
         config={tableConfig}
         data={vendorsLoginCredentials}
-        isSearchable={false}
+        isSearchable={true}
+        searchFromApi={true}
+        searchAPi={`${API_BASE}api/vendor-portal-credentials?`}
+        searchParamKey={"search"}
       />
 
       {modalConfig.type && (

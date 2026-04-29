@@ -165,11 +165,11 @@ const MainLayout = ({ children }) => {
 
         {/* Header */}
         <div className="h-[60px] bg-white border-b flex items-center justify-between px-4 shadow-sm">
-          <IoIosArrowBack
+          {/* <IoIosArrowBack
             onClick={() => setCollapsed(!collapsed)}
             className={`cursor-pointer transition-transform duration-300 ${collapsed ? "rotate-180" : ""
               } hidden sm:block`}
-          />
+          /> */}
           <div className="flex items-center gap-3">
             {/* Search Filter */}
             {/* <div className="relative hidden md:block">
