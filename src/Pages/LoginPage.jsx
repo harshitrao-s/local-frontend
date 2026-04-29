@@ -21,6 +21,7 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false)
   const redirectTo = params.get("redirectTo") || "/dashboard";
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,28 +48,11 @@ const LoginPage = () => {
         throw new Error("Invalid credentials");
       }
     } catch (error) {
-      const msg = "Invalid credentials";
-
       setLoginError(true);
-      Swal.close();
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "error",
-        title: "Invalid email or password",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        background: "#f8d7da",   // light red
-        color: "#842029",        // dark red text
-        iconColor: "#842029",
-      });
     } finally {
       setLoading(false);
     }
   };
-
- 
 
   return (
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">
@@ -116,10 +100,18 @@ const LoginPage = () => {
                       if (loginError) setLoginError(false)
                     }}
                     placeholder="yogavvijaya@gmail.com"
-                    className={`w-full h-[48px] md:h-[52px] px-4 border rounded-[30px] focus:ring-2 focus:ring-blue-800 ${loginError ? "border-red-500" : "border-gray-300"
-                      }`}
+                    className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${
+                      loginError
+                        ? "!border !border-red-500 focus:!border-red-500 focus:!ring-red-500"
+                        : "focus:ring-2 focus:ring-blue-800"
+                    }`}
                   />
                 </div>
+                   {loginError && (
+                    <p className="text-sm text-red-500 mt-1">
+                      Invalid email 
+                    </p>
+                  )}
 
                 {/* Password */}
                 <div className="flex flex-col gap-1.5">
@@ -136,8 +128,11 @@ const LoginPage = () => {
                         if (loginError) setLoginError(false)
                       }}
                       placeholder="Input password"
-                      className={`w-full h-[48px] md:h-[52px] px-4 pr-10 border rounded-[30px] focus:ring-2 focus:ring-blue-800 ${loginError ? "border-red-500" : "border-gray-300"
-                        }`}
+                      className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${
+                        loginError
+                          ? "!border !border-red-500 focus:!border-red-500 focus:!ring-red-500"
+                          : "focus:ring-2 focus:ring-blue-800"
+                      }`}
                     />
 
                     <button
@@ -149,6 +144,11 @@ const LoginPage = () => {
                     </button>
                   </div>
                 </div>
+                {loginError && (
+                    <p className="text-sm text-red-500 mt-1">
+                      Invalid Password 
+                    </p>
+                  )}
 
                 {/* Remember */}
                 <div className="flex items-center justify-between text-sm">

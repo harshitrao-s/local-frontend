@@ -173,20 +173,20 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
               <>
                 <div
                   onClick={() => toggleMenu(item.key)}
-                  className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
+                  className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-[14px]
                     ${isSubmenuActive
                       ? "bg-[#d9edff] text-black rounded-full"
-                      : "text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full"
+                      : "text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full "
                     }`}
                 >
                   <div className="flex items-center gap-3">
                     {/* ICON SWITCH */}
                     {isSubmenuActive ? (
-                      <ActiveIcon className="text-lg" />
+                      <ActiveIcon className="text-[20px]" />
                     ) : (
                       <>
-                        <DefaultIcon className="text-lg group-hover:hidden" />
-                        <ActiveIcon className="text-lg hidden group-hover:block" />
+                        <DefaultIcon className="text-[20px] group-hover:hidden" />
+                        <ActiveIcon className="text-[20px] hidden group-hover:block" />
                       </>
                     )}
                     <span>{item.title}</span>
@@ -210,7 +210,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                         onClick={closeMobileMenu}
                         className={({ isActive }) =>
                           `block px-2 py-1 rounded-md transition-all duration-200
-   no-underline hover:no-underline focus:no-underline active:no-underline
+   no-underline hover:no-underline focus:no-underline active:no-underline text-[14px]
                            ${isActive
                             ? "bg-[#d9edff] text-black rounded-full"
                             : "text-gray-500 hover:bg-[#d9edff] hover:text-black rounded-full"
@@ -230,7 +230,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200
-   no-underline hover:no-underline focus:no-underline active:no-underline
+   no-underline hover:no-underline focus:no-underline active:no-underline text-[14px]
                    ${isActive
                     ? "bg-[#d9edff] text-black rounded-full"
                     : "text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full"
@@ -240,11 +240,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                 {({ isActive }) => (
                   <>
                     {isActive ? (
-                      <ActiveIcon className="text-lg" />
+                      <ActiveIcon className="text-[20px]" />
                     ) : (
                       <>
-                        <DefaultIcon className="text-lg group-hover:hidden" />
-                        <ActiveIcon className="text-lg hidden group-hover:block" />
+                        <DefaultIcon className="text-[20px] group-hover:hidden" />
+                        <ActiveIcon className="text-[20px] hidden group-hover:block" />
                       </>
                     )}
                     <span>{item.title}</span>
@@ -298,7 +298,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
       {/* Mobile Sidebar - Slides from Right */}
       <nav
-        className={`fixed top-0 right-0 h-[100%] w-[80%] bg-gray-50 border-l shadow-lg z-40 md:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${collapsed ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 h-[100%] w-[80%] bg-gray-50 border-l shadow-lg  md:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${collapsed ? "translate-x-0" : "translate-x-full"
           }`}
       >
         {/* Close Button & Logo */}
