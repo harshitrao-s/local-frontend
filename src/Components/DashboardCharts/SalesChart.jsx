@@ -290,7 +290,7 @@ const SalesChart = () => {
 
             <Line
               type="monotone"
-              dataKey="avgItem"
+              dataKey="AvgItem"
               stroke="#001f5c"
               strokeWidth={3}
               strokeDasharray="8 8"
@@ -299,7 +299,7 @@ const SalesChart = () => {
 
             <Line
               type="monotone"
-              dataKey="avgSale"
+              dataKey="AvgSale"
               stroke="#ff1a1a"
               strokeWidth={3}
               dot={false}
