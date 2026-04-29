@@ -267,7 +267,7 @@ const POImportHome = () => {
                 actionLink="/purchaseorder/listing"
                 actionVariant="ghost"
                 actions={[
-                    { icon: <Download size={16} />, name: "Export PO (CSV) ", onClick: handleExport , variant:"primary"},
+                    { icon: <Download size={16} />, name: "Export PO (CSV) ", onClick: handleExport, variant: "primary" },
                 ]}
             />
 
@@ -289,7 +289,7 @@ const POImportHome = () => {
                         <div className="animate__animated animate__fadeIn">
                             <Row className="mb-3">
                                 <Col md="6">
-                                    <div {...getRootProps()} className={`border rounded-3 p-5  text-center transition-all ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} style={{ cursor: 'pointer', border: '2px dashed #dee2e6' }}>
+                                    {/* <div {...getRootProps()} className={`border rounded-3 p-5  text-center transition-all ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} style={{ cursor: 'pointer', border: '2px dashed #dee2e6' }}>
                                         <input {...getInputProps()} />
                                         {!selectedFile ? (
                                             <>
@@ -311,6 +311,55 @@ const POImportHome = () => {
                                                 </div>
                                             </div>
                                         )}
+                                    </div> */}
+
+                                    <div
+                                        {...getRootProps()}
+                                        className={`rounded-3 p-5 text-center transition-all border-2 border-dashed border-blue-500 bg-blue-50 file:mr-4 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-blue-600 hover:bg-blue-100 cursor-pointer" ${isDragActive ? "bg-primary-subtle" : "bg-light"
+                                            }`}
+                                    >
+                                        <input {...getInputProps()} />
+
+                                        {!selectedFile ? (
+                                            <>
+                                                <FontAwesomeIcon
+                                                    icon={faUpload}
+                                                    size="3x"
+                                                    className="text-muted mb-3"
+                                                />
+                                                <h6 className="text-[16px] text-[#737373] fw-bold">
+                                                    Drop .csv or .xlsx file here
+                                                </h6>
+                                                <p className="text-[#737373] small mb-2">
+                                                    Drag and drop or click to browse
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <div className="d-flex flex-column align-items-center">
+                                                <div className="p-3 border rounded bg-white shadow-sm d-flex align-items-center w-50">
+                                                    <FontAwesomeIcon
+                                                        icon={faFileAlt}
+                                                        className="text-primary me-3 fs-4"
+                                                    />
+                                                    <div className="text-start flex-grow-1">
+                                                        <p className="mb-0 fw-bold">{selectedFile.name}</p>
+                                                        <p className="mb-0 small text-muted">
+                                                            {(selectedFile.size / 1024).toFixed(2)} KB
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        variant="link"
+                                                        className="text-danger p-0"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedFile(null);
+                                                        }}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </Col>
                                 <Col md="6">
@@ -321,35 +370,35 @@ const POImportHome = () => {
                                         </div>
 
                                         <div className="card-body pt-3 ps-3 pb-0 flex flex-col">
-                                                <div className="form-check icheck-primary d-inline">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="duplicate_action"
-                                                        id="skip_duplicates"
-                                                        value="skip"
-                                                        checked={duplicateAction === "skip"}
-                                                        onChange={(e) => setDuplicateAction(e.target.value)}
-                                                    />
-                                                    <label className="form-check-label text-[#737373] " htmlFor="skip_duplicates">
-                                                        Skip duplicate records
-                                                    </label>
-                                                </div>
+                                            <div className="form-check icheck-primary d-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="duplicate_action"
+                                                    id="skip_duplicates"
+                                                    value="skip"
+                                                    checked={duplicateAction === "skip"}
+                                                    onChange={(e) => setDuplicateAction(e.target.value)}
+                                                />
+                                                <label className="form-check-label text-[#737373] " htmlFor="skip_duplicates">
+                                                    Skip duplicate records
+                                                </label>
+                                            </div>
 
-                                                <div className="form-check icheck-primary d-inline">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="duplicate_action"
-                                                        id="update_duplicates"
-                                                        value="update"
-                                                        checked={duplicateAction === "update"}
-                                                        onChange={(e) => setDuplicateAction(e.target.value)}
-                                                    />
-                                                    <label className="form-check-label text-[#737373] `" htmlFor="update_duplicates">
-                                                        Update duplicate records
-                                                    </label>
-                                                </div>
+                                            <div className="form-check icheck-primary d-inline">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="duplicate_action"
+                                                    id="update_duplicates"
+                                                    value="update"
+                                                    checked={duplicateAction === "update"}
+                                                    onChange={(e) => setDuplicateAction(e.target.value)}
+                                                />
+                                                <label className="form-check-label text-[#737373] `" htmlFor="update_duplicates">
+                                                    Update duplicate records
+                                                </label>
+                                            </div>
 
                                         </div>
 
@@ -386,9 +435,9 @@ const POImportHome = () => {
                                     </Dropdown.Menu>
                                 </Dropdown>
 
-                                <Button variant="primary" className="px-4 shadow-sm" disabled={!selectedFile || processing} onClick={handleInitialUpload}>
+                                <button className="px-3 text-white text-[14px] font-semibold h-10 w-full  max-w-[160px] bg-[#1a71f6] rounded-[30px]" disabled={!selectedFile || processing} onClick={handleInitialUpload}>
                                     {processing ? <><Spinner size="sm" className="me-2" />Validating...</> : "Next: Preview Data"}
-                                </Button>
+                                </button>
                             </div>
                         </div>
                     ) : (
@@ -470,16 +519,16 @@ const POImportHome = () => {
                                 <Button variant="outline-secondary" size="md" onClick={handleReset}>
                                     <FontAwesomeIcon icon={faUndo} className="me-1" /> Cancel & Reset
                                 </Button>
-                                <Button
+                                <button
                                     variant="success"
                                     size="md"
-                                    className="px-4 shadow-sm"
+                                    className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[240px] bg-[#1a71f6] rounded-[30px]"
                                     disabled={importSummary.valid_count === 0 || isConfirming}
                                     onClick={handleFinalConfirm}
                                 >
                                     {isConfirming ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
                                     Confirm & Import {importSummary.valid_count} Records
-                                </Button>
+                                </button>
                             </div>
                         </div>
                     )}

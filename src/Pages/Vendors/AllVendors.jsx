@@ -8,9 +8,17 @@ import { FileSpreadsheet, Search } from "lucide-react";
 import CmnTable from "../../Components/Common/CmnTable";
 import { Link } from "react-router-dom";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
-import Input from "../../Components/Forms/Fields/input";
 import { Select } from "../../Components/Common/ui/select";
 const STORAGE_KEY = "purchase_order_columns";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../Components/Common/ui/select";
+import { Input } from "../../Components/Common/ui/input";
+import { Button } from "../../Components/Common/ui/button";
+
 
 
 /* ----------------------------------------
@@ -243,21 +251,20 @@ const AllVendors = () => {
   return (
     <>
       <CmnHeader
-        title="All Vendors" IconLucide={FileSpreadsheet} actionVariant="ghost" actionName="Add New" actionLink="/vendor/addnewvendor"
+        title="All Vendors" IconLucide={FileSpreadsheet} actionVariant="primary" actionName="Add New" actionLink="/vendor/addnewvendor"
       />
       {/* FILTERS */}
       <div className="card p-2">
         <div className="row p-2">
           {/* Vendor Search */}
-          <div className="col-md-3">
-            <label className="form-label">Search</label>
-            <div className="position-relative">
-              <input
+          <div className="col-md-3 flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Search</label>
+            <div className="">
+              <Input
                 id="filter_vendor"
                 name="vendor_search"
                 type="text"
                 autoComplete="off"
-                className="form-control cmn_searchbar_featured_design"
                 placeholder="Vendor Name or Vendor Code"
                 value={searchValue}
                 onChange={(e) => {
@@ -292,9 +299,9 @@ const AllVendors = () => {
           </div>
 
           {/* Vendor Status */}
-          <div className="col-md-3">
-            <label className="form-label">Vendor Status</label>
-            <select
+          <div className="col-md-3 flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Vendor Status</label>
+            {/* <select
               name="status"
               className="form-control form-select cmn_searchbar_featured_design"
               value={vendor_status}
@@ -314,42 +321,74 @@ const AllVendors = () => {
                   {pt.name}
                 </option>
               ))}
-            </select>
+            </select> */}
+
+            <Select
+              value={vendor_status === "" ? "all" : String(vendor_status)}
+              onValueChange={(value) => {
+                setVendorStatus(value === "all" ? "" : value);
+              }}
+            >
+              <SelectTrigger className="w-full rounded-[30px]">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[9999] bg-white w-full min-w-[370px] p-1" position="popper">
+                <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                {[
+                  { id: 0, name: "Pending" },
+                  { id: 1, name: "In Process" },
+                  { id: 2, name: "Active" },
+                  { id: 3, name: "Reject" },
+                  { id: 4, name: "On Hold" },
+                ].map((pt) => (
+                  <SelectItem className="hover:bg-gray-200" key={pt.id} value={String(pt.id)}>
+                    {pt.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Company Locality */}
-          <div className="col-md-3">
-            <label className="form-label">Company Locality</label>
-            <select
-              name="vendor_locality"
-              className="form-control form-select cmn_searchbar_featured_design"
-              value={vendor_locality}
-              onChange={(e) => {
-                setVendorLocality(e.target.value);
+          <div className="col-md-3 flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Company Locality</label>
+            <Select
+              value={vendor_locality === "" ? "all" : String(vendor_locality)}
+              onValueChange={(value) => {
+                setVendorLocality(value === "all" ? "" : value);
               }}
             >
-              <option value="">All</option>
-              {[
-                { id: 0, name: "Local" },
-                { id: 1, name: "International" },
-              ]?.map((pt) => (
-                <option key={pt.id} value={pt.id}>
-                  {pt.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full rounded-[30px]">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[9999] bg-white w-full min-w-[370px] p-1" position="popper">
+                <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                {[
+                  { id: 0, name: "Local" },
+                  { id: 1, name: "International" },
+                ].map((pt) => (
+                  <SelectItem className="hover:bg-gray-200" key={pt.id} value={String(pt.id)}>
+                    {pt.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           {/* FILTER ACTIONS */}
-          <div className="col-md-3 d-flex align-items-end justify-content-end gap-2">
+          <div className="col-md-3 d-flex align-items-end justify-center gap-2">
 
-            <button className="btn btn-primary mx-2 w-50" onClick={applyFilter}>
-              <i className="fas fa-search me-2"></i>
+            <Button className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] w-100 rounded-[30px]" onClick={applyFilter}>
+            <Search size={14}/>
               Filter
-            </button>
+            </Button>
 
-            <button className="btn btn-light w-50" onClick={clearFilter}>
+            <Button className="px-3 text-[#454545] bg-[] text-[14px] font-semibold h-10 w-full max-w-[100px] bg-gray-200 w-100 rounded-[30px]" onClick={clearFilter}>
               Clear
-            </button>
+            </Button>
           </div>
         </div>
       </div>

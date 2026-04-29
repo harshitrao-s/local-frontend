@@ -284,7 +284,7 @@ const VendorImportIndex = () => {
                         <div className="animate__animated animate__fadeIn">
                             <Row className=" align-items-stretch">
                                 <Col md="6" className="d-flex items-center">
-                                    <div {...getRootProps()} className={`border rounded-3 h-100 w-100  d-flex items-center flex-column justify-content-center p-5  text-center transition-all ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} style={{ cursor: 'pointer', border: '2px dashed #dee2e6' }}>
+                                    <div {...getRootProps()} className={`rounded-3 h-100 w-100  d-flex items-center flex-column justify-content-center p-5  text-center transition-all border-2 border-dashed border-blue-500 bg-blue-50 file:mr-4 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-blue-600 hover:bg-blue-100" ${isDragActive ? 'bg-primary-subtle border-primary' : 'bg-light border-dashed'}`} >
                                         <input {...getInputProps()} />
                                         {!selectedFile ? (
                                             <>
@@ -395,9 +395,9 @@ const VendorImportIndex = () => {
                                     </Dropdown.Menu>
                                 </Dropdown>
 
-                                <Button variant="primary" className="px-4 shadow-sm" disabled={!selectedFile || processing} onClick={handleInitialUpload}>
+                                <button className="px-3 text-white text-[14px] font-semibold h-10 w-full  max-w-[160px] bg-[#1a71f6] rounded-[30px]" disabled={!selectedFile || processing} onClick={handleInitialUpload}>
                                     {processing ? <><Spinner size="sm" className="me-2" />Validating...</> : "Next: Preview Data"}
-                                </Button>
+                                </button>
                             </div>
                         </div>
                     ) : (
@@ -493,16 +493,16 @@ const VendorImportIndex = () => {
                                 <Button variant="outline-secondary" size="md" onClick={handleReset}>
                                     <FontAwesomeIcon icon={faUndo} className="me-1" /> Cancel & Reset
                                 </Button>
-                                <Button
+                                <button
                                     variant="success"
                                     size="md"
-                                    className="px-4 shadow-sm"
+                                    className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[240px] bg-[#1a71f6] rounded-[30px]"
                                     disabled={importSummary.valid_count === 0 || isConfirming}
                                     onClick={handleFinalConfirm}
                                 >
                                     {isConfirming ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
                                     Confirm & Import {importSummary.valid_count} Records
-                                </Button>
+                                </button>
                             </div>
                         </div>
                     )}

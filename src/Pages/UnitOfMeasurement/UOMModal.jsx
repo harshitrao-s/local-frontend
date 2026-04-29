@@ -133,7 +133,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
               variant="secondary"
               onClick={onClose}
               disabled={loading}
-              className="bg-[#FF141F] rounded-[12px] text-white"
+              className="bg-[#FF141F] text-white"
             >
               Cancel
             </Button>
@@ -142,7 +142,7 @@ const UOMModal = ({ mode, initialData, onClose, onRefresh }) => {
               onClick={handleSave}
               disabled={loading}
               variant={mode === "add" ? "default" : "default"}
-              className="bg-[#1A71F6] rounded-[12px] text-white"
+              className="bg-[#1A71F6]  text-white"
             >
               {loading ? "Saving..." : "Save Unit"}
             </Button>

@@ -6,10 +6,13 @@ import Swal from "sweetalert2";
 import { formatAUD, formattedDate } from "../../Utils/utilFunctions";
 import { PO_STATUS } from "../../Constants/PO_Status";
 import { INVOICE_STATUS } from "../../Constants/InvoiceStatus";
-import { CreditCard, Plus, Truck } from 'lucide-react'
+import { CreditCard, Plus, Search, Truck } from 'lucide-react'
 import CmnHeader from "../../Components/Common/CmnHeader";
 import CmnTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import { Input } from "../../Components/Common/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
+import { Button } from "../../Components/Common/ui/button";
 /* ----------------------------------------
    CONSTANTS & HELPERS
 ---------------------------------------- */
@@ -262,8 +265,8 @@ const PurchaseOrderList = () => {
       {/* HEADER */}
 
       <CmnHeader
-        title="All Purchases" IconLucide={CreditCard}  actionName="Kanban View" actionLink="/purchaseorder/kanbanlisting" actionVariant="ghost" actions={[
-          {icon: <Truck  size={16} />,  name: "In-transit", link: "/purchaseorder/intransit/listing" , variant: "primary",},
+        title="All Purchases" IconLucide={CreditCard} actionName="Kanban View" actionLink="/purchaseorder/kanbanlisting" actionVariant="ghost" actions={[
+          { icon: <Truck size={16} />, name: "In-transit", link: "/purchaseorder/intransit/listing", variant: "primary", },
           { icon: <Plus size={16} />, name: "Add New ", onClick: handleAddNew, variant: "danger", }
         ]}
       />
@@ -275,10 +278,9 @@ const PurchaseOrderList = () => {
           <div className="row g-3 align-items-end">
 
             {/* Search */}
-            <div className="col-md-2">
-              <label className="form-label">Search</label>
-              <input
-                className="form-control cmn_searchbar_featured_design"
+            <div className="col-md-2 gap-2 flex flex-col">
+              <label className="">Search</label>
+              <Input
                 placeholder="Vendor Order# or PO#"
                 value={filters.order_no}
                 onChange={(e) =>
@@ -288,9 +290,9 @@ const PurchaseOrderList = () => {
             </div>
 
             {/* Purchase Status */}
-            <div className="col-md-2">
+            <div className="col-md-2 flex flex-col gap-2">
               <label className="form-label">Purchase Status</label>
-              <select
+              {/* <select
                 className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.status}
                 onChange={(e) =>
@@ -303,13 +305,37 @@ const PurchaseOrderList = () => {
                     {status.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+
+              <Select
+                value={filters.status === "" ? "all" : String(filters.status)}
+                onValueChange={(value) =>
+                  setFilters({
+                    ...filters,
+                    status: value === "all" ? "" : value,
+                  })
+                }
+              >
+                <SelectTrigger className="w-full rounded-[30px]">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+
+                <SelectContent className="z-[9999] bg-white w-full min-w-[250px] p-1" position="popper">
+                  <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                  {PO_STATUS.map((status) => (
+                    <SelectItem className="hover:bg-gray-200" key={status.id} value={String(status.id)}>
+                      {status.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Vendor */}
-            <div className="col-md-2">
+            <div className="col-md-2 flex flex-col gap-2">
               <label className="form-label">Vendor</label>
-              <select
+              {/* <select
                 className="form-control form-select cmn_searchbar_featured_design"
                 value={filters.vendor_id}
                 onChange={(e) =>
@@ -322,58 +348,101 @@ const PurchaseOrderList = () => {
                     {vendor.vendor_name}
                   </option>
                 ))}
-              </select>
-            </div>
+              </select> */}
 
-            {/* Warehouse */}
-            <div className="col-md-2">
-              <label className="form-label">Warehouse</label>
-              <select
-                className="form-control form-select cmn_searchbar_featured_design"
-                value={filters.warehouse}
-                onChange={(e) =>
-                  setFilters({ ...filters, warehouse: e.target.value })
-                }
-              >
-                <option value="">All</option>
-                {warehouses.map((wh) => (
-                  <option key={wh.id} value={wh.id}>
-                    {wh.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Invoice Status */}
-            <div className="col-md-2">
-              <label className="form-label">Vendor Invoice Status</label>
-              <select
-                className="form-control form-select cmn_searchbar_featured_design"
-                value={filters.vendor_payment_status}
-                onChange={(e) =>
+              <Select
+                value={filters.vendor_id === "" ? "all" : String(filters.vendor_id)}
+                onValueChange={(value) =>
                   setFilters({
                     ...filters,
-                    vendor_payment_status: e.target.value,
+                    vendor_id: value === "all" ? "" : value,
                   })
                 }
               >
-                <option value="">All</option>
-                {INVOICE_STATUS.map((status) => (
-                  <option key={status.id} value={status.id}>
-                    {status.value}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full rounded-[30px]">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+
+                <SelectContent className="z-[9999] bg-white w-full min-w-[250px] p-1" position="popper">
+                  <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                  {vendors.map((vendor) => (
+                    <SelectItem className="hover:bg-gray-200" key={vendor.id} value={String(vendor.id)}>
+                      {vendor.vendor_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Warehouse */}
+            <div className="col-md-2 flex flex-col gap-2">
+              <label className="form-label">Warehouse</label>
+              <Select
+                value={filters.warehouse === "" ? "all" : String(filters.warehouse)}
+                onValueChange={(value) =>
+                  setFilters({
+                    ...filters,
+                    warehouse: value === "all" ? "" : value,
+                  })
+                }
+              >
+                <SelectTrigger className="w-full rounded-[30px]">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+
+                <SelectContent className="z-[9999] bg-white w-full min-w-[250px] p-1" position="popper">
+                  <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                  {warehouses.map((wh) => (
+                    <SelectItem className="hover:bg-gray-200" key={wh.id} value={String(wh.id)}>
+                      {wh.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Invoice Status */}
+            <div className="col-md-2 flex flex-col gap-2">
+              <label className="form-label">Vendor Invoice Status</label>
+              <Select
+                value={
+                  filters.vendor_payment_status === ""
+                    ? "all"
+                    : String(filters.vendor_payment_status)
+                }
+                onValueChange={(value) =>
+                  setFilters({
+                    ...filters,
+                    vendor_payment_status: value === "all" ? "" : value,
+                  })
+                }
+              >
+                <SelectTrigger className="w-full rounded-[30px]">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+
+                <SelectContent className="z-[9999] bg-white w-full min-w-[250px] p-1" position="popper">
+                  <SelectItem value="all">All</SelectItem>
+
+                  {INVOICE_STATUS.map((status) => (
+                    <SelectItem key={status.id} value={String(status.id)}>
+                      {status.value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Buttons (same row) */}
             <div className="col-md-2 d-flex gap-2">
-              <button className="btn btn-primary w-100" onClick={applyFilter}>
-                Search
-              </button>
-              <button className="btn btn-light w-100" onClick={clearFilter}>
+              <Button className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] w-100 rounded-[30px]" onClick={applyFilter}>
+              <Search size={14}/> Search
+              </Button>
+              <Button className="px-3 text-[#454545] bg-[] text-[14px] font-semibold h-10 w-full max-w-[100px] bg-gray-200 w-100 rounded-[30px]" onClick={clearFilter}>
                 Clear
-              </button>
+              </Button>
             </div>
 
           </div>
@@ -395,7 +464,7 @@ const PurchaseOrderList = () => {
               <span className="text-uppercase text-muted mb-0">Purchase Orders Total</span>
             </p> -
             <div className="d-block h5 mt-1 fw-bold">{formatAUD(poTotalValue)}</div>
-            
+
           </div>
         </div>}
       />

@@ -215,7 +215,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
                     <Button
                         onClick={handleSave}
                         disabled={loading}
-                        className="bg-[#1A71F6] rounded-[12px] text-white"
+                        className="bg-[#1A71F6]  text-white"
                     >
                         {loading
                             ? "Processing..."
@@ -228,7 +228,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
                         variant="secondary"
                         onClick={onClose}
                         disabled={loading}
-                        className="bg-[#FF141F] rounded-[12px] text-white"
+                        className="bg-[#FF141F]  text-white"
                     >
                         Cancel
                     </Button>

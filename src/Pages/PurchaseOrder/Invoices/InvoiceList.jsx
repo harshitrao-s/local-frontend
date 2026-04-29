@@ -382,11 +382,11 @@ const InvoiceList = () => {
           <div className="flex flex-col gap-2">
             <label className="text-[14px] font-semibold text-[#323130]">Invoice Status</label>
             <Select
-               value={invoice_status === "" ? "all" : String(invoice_status)}
-               onValueChange={(value) => {
-                 setInvoiceStatus(value === "all" ? "" : Number(value));
-                 tabulatorRef.current?.setPage(1);
-               }}
+              value={invoice_status === "" ? "all" : String(invoice_status)}
+              onValueChange={(value) => {
+                setInvoiceStatus(value === "all" ? "" : Number(value));
+                tabulatorRef.current?.setPage(1);
+              }}
             >
               <SelectTrigger className="w-full rounded-[30px]">
                 <SelectValue placeholder="All" />
@@ -401,7 +401,7 @@ const InvoiceList = () => {
                   { id: 3, name: "Cancelled" },
                   { id: 4, name: "On Hold" },
                 ].map((pt) => (
-                  <SelectItem  className="hover:bg-gray-100" key={pt.id} value={String(pt.id)}>
+                  <SelectItem className="hover:bg-gray-100" key={pt.id} value={String(pt.id)}>
                     {pt.name}
                   </SelectItem>
                 ))}
@@ -425,21 +425,27 @@ const InvoiceList = () => {
           {/* Payment Term */}
           <div className="flex flex-col gap-2">
             <label className="text-[14px] font-semibold text-[#323130]">Payment Term</label>
-            <select
-              className="form-control form-select"
-              value={paymentTerm}
-              onChange={(e) => {
-                setPaymentTerm(e.target.value);
+            <Select
+              value={paymentTerm === "" ? "all" : String(paymentTerm)}
+              onValueChange={(value) => {
+                setPaymentTerm(value === "all" ? "" : value);
                 tabulatorRef.current?.setPage(1);
               }}
             >
-              <option value="">All</option>
-              {paymentTerms?.map((term) => (
-                <option key={term.id} value={term.id}>
-                  {term.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full rounded-[30px]">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[9999] bg-white w-full min-w-[300px]" position="popper">
+                <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                {paymentTerms?.map((term) => (
+                  <SelectItem className="hover:bg-gray-200" key={term.id} value={String(term.id)}>
+                    {term.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Buttons (Same Column) */}
