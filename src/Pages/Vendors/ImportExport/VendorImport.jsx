@@ -262,7 +262,7 @@ const VendorImportIndex = () => {
                 <div className="d-flex justify-content-center gap-2 py-3  bg-white">
                     <Button
                         variant={importType === 'vendor' ? 'primary' : 'outline-primary'}
-                        className="px-3 shadow-sm"
+                        className="px-3 shadow-sm !rounded-[30px]"
                         onClick={() => setImportType('vendor')}
                     >
                         Vendor Details
@@ -270,7 +270,7 @@ const VendorImportIndex = () => {
 
                     <Button
                         variant={importType === 'contact' ? 'primary' : 'outline-primary'}
-                        className="px-3 shadow-sm"
+                        className="px-3 shadow-sm !rounded-[30px]"
                         onClick={() => setImportType('contact')}
                     >
                         Vendor Contacts

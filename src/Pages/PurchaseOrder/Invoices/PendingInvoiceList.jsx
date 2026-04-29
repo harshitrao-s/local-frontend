@@ -165,7 +165,7 @@ const CSS = `
   .pager { display:flex;align-items:center;gap:4px; }
   .ppage { width:30px;height:30px;border:none;background:none;border-radius:7px;font-size:12px;cursor:pointer;color:#6b7280;transition:background .1s; }
   .ppage:hover { background:#f0f0f5;color:#111; }
-  .ppage.pp-on { background:#4f46e5;color:#fff;font-weight:700; }
+  .ppage.pp-on { background:#1a71f6;color:#fff;font-weight:700; }
   .ppage:disabled { opacity:.35;cursor:default; }
 
   .pil-empty { text-align:center;padding:48px 0;color:#9ca3af;font-size:13px; }
