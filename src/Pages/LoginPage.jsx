@@ -21,46 +21,7 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false)
   const redirectTo = params.get("redirectTo") || "/dashboard";
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setLoginError(false);
-
-    try {
-      const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
-        method: "POST",
-        body: {
-          username: email,
-          password: password,
-        },
-        skipAuthRefresh: true,
-      });
-
-      if (data?.status === "success") {
-        setShowSuccess(true)
-
-        setTimeout(() => {
-          login()
-          navigate(decodeURIComponent(redirectTo), { replace: true })
-        }, 1200)
-      } else {
-        throw new Error("Invalid credentials");
-      }
-    } catch (error) {
-
-      setLoginError(true);
-      setEmail("");
-      setPassword("")
-
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-
-
-  //   const handleLogin = async (e) => {
+  // const handleLogin = async (e) => {
   //   e.preventDefault();
   //   setLoading(true);
   //   setLoginError(false);
@@ -86,11 +47,50 @@ const LoginPage = () => {
   //       throw new Error("Invalid credentials");
   //     }
   //   } catch (error) {
+
   //     setLoginError(true);
+  //     setEmail("");
+  //     setPassword("")
+
   //   } finally {
   //     setLoading(false);
   //   }
   // };
+
+
+
+
+    const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setLoginError(false);
+
+    try {
+      const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
+        method: "POST",
+        body: {
+          username: email,
+          password: password,
+        },
+        skipAuthRefresh: true,
+      });
+
+      if (data?.status === "success") {
+        setShowSuccess(true)
+
+        setTimeout(() => {
+          login()
+          navigate(decodeURIComponent(redirectTo), { replace: true })
+        }, 1200)
+      } else {
+        throw new Error("Invalid credentials");
+      }
+    } catch (error) {
+      setLoginError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">

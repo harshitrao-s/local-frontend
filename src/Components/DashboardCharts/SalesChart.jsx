@@ -210,17 +210,17 @@ import {
 } from "recharts";
 
 const salesData = [
-  { month: "Jan", avgSale: 3200, avgItem: 2800 },
-  { month: "Feb", avgSale: 2800, avgItem: 3100 },
-  { month: "Mar", avgSale: 2900, avgItem: 3500 },
-  { month: "Apr", avgSale: 3800, avgItem: 3300 },
-  { month: "Jun", avgSale: 4000, avgItem: 3500 },
-  { month: "Jul", avgSale: 3200, avgItem: 3800 },
-  { month: "Aug", avgSale: 2800, avgItem: 3400 },
-  { month: "Sep", avgSale: 3900, avgItem: 3800 },
-  { month: "Oct", avgSale: 4200, avgItem: 3700 },
-  { month: "Nov", avgSale: 4500, avgItem: 4500 },
-  { month: "Des", avgSale: 5200, avgItem: 4300 },
+  { month: "Jan", AvgSale: 3200, AvgItem: 2800 },
+  { month: "Feb", AvgSale: 2800, AvgItem: 3100 },
+  { month: "Mar", AvgSale: 2900, AvgItem: 3500 },
+  { month: "Apr", AvgSale: 3800, AvgItem: 3300 },
+  { month: "Jun", AvgSale: 4000, AvgItem: 3500 },
+  { month: "Jul", AvgSale: 3200, AvgItem: 3800 },
+  { month: "Aug", AvgSale: 2800, AvgItem: 3400 },
+  { month: "Sep", AvgSale: 3900, AvgItem: 3800 },
+  { month: "Oct", AvgSale: 4200, AvgItem: 3700 },
+  { month: "Nov", AvgSale: 4500, AvgItem: 4500 },
+  { month: "Dec", AvgSale: 5200, AvgItem: 4300 },
 ];
 
 const SalesChart = () => {
