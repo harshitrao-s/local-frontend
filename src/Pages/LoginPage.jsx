@@ -21,57 +21,7 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false)
   const redirectTo = params.get("redirectTo") || "/dashboard";
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setLoginError(false);
-
-  //   try {
-  //     const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
-  //       method: "POST",
-  //       body: {
-  //         username: email,
-  //         password: password,
-  //       },
-  //       skipAuthRefresh: true,
-  //     });
-
-  //     if (data?.status === "success") {
-  //       setShowSuccess(true)
-
-  //       setTimeout(() => {
-  //         login()
-  //         navigate(decodeURIComponent(redirectTo), { replace: true })
-  //       }, 1200)
-  //     } else {
-  //       throw new Error("Invalid credentials");
-  //     }
-  //   } catch (error) {
-  //     const msg = "Invalid credentials";
-
-  //     setLoginError(true);
-  //     Swal.close();
-  //     Swal.fire({
-  //       toast: true,
-  //       position: "top-end",
-  //       icon: "error",
-  //       title: "Invalid email or password",
-  //       showConfirmButton: false,
-  //       timer: 3000,
-  //       timerProgressBar: true,
-  //       background: "#f8d7da",   // light red
-  //       color: "#842029",        // dark red text
-  //       iconColor: "#842029",
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
- 
-
-
-    const handleLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setLoginError(false);
@@ -97,11 +47,50 @@ const LoginPage = () => {
         throw new Error("Invalid credentials");
       }
     } catch (error) {
+
       setLoginError(true);
+      setEmail("");
+      setPassword("")
+
     } finally {
       setLoading(false);
     }
   };
+
+
+
+
+  //   const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setLoginError(false);
+
+  //   try {
+  //     const data = await apiFetch(API_ENDPOINTS.API_LOGIN, {
+  //       method: "POST",
+  //       body: {
+  //         username: email,
+  //         password: password,
+  //       },
+  //       skipAuthRefresh: true,
+  //     });
+
+  //     if (data?.status === "success") {
+  //       setShowSuccess(true)
+
+  //       setTimeout(() => {
+  //         login()
+  //         navigate(decodeURIComponent(redirectTo), { replace: true })
+  //       }, 1200)
+  //     } else {
+  //       throw new Error("Invalid credentials");
+  //     }
+  //   } catch (error) {
+  //     setLoginError(true);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="flex h-screen w-full flex-col justify-content-center lg:flex-row overflow-hidden ">
@@ -148,19 +137,14 @@ const LoginPage = () => {
                       setEmail(e.target.value)
                       if (loginError) setLoginError(false)
                     }}
-                    placeholder="yogavvijaya@gmail.com"
-                    className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${
-                      loginError
-                        ? "!border !border-red-500 focus:!border-red-500 focus:!ring-red-500"
-                        : "focus:ring-2 focus:ring-blue-800"
-                    }`}
+                    placeholder={loginError ? "Enter your correct email address" : "Enter your email address"}
+                    className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${loginError
+                      ? "danger-border-section"
+                      : "focus:ring-2 focus:ring-blue-800"
+                      }`}
+
                   />
                 </div>
-                   {loginError && (
-                    <p className="text-sm text-red-500 mt-1">
-                      Invalid email 
-                    </p>
-                  )}
 
                 {/* Password */}
                 <div className="flex flex-col gap-1.5">
@@ -176,12 +160,11 @@ const LoginPage = () => {
                         setPassword(e.target.value)
                         if (loginError) setLoginError(false)
                       }}
-                      placeholder="Input password"
-                      className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${
-                        loginError
-                          ? "!border !border-red-500 focus:!border-red-500 focus:!ring-red-500"
-                          : "focus:ring-2 focus:ring-blue-800"
-                      }`}
+                      placeholder={loginError ? "Enter your correct password" : "Enter your password"}
+                      className={`w-full h-[48px] md:h-[52px] px-4 rounded-[30px] ${loginError
+                        ? "danger-border-section"
+                        : "focus:ring-2 focus:ring-blue-800"
+                        }`}
                     />
 
                     <button
@@ -193,11 +176,7 @@ const LoginPage = () => {
                     </button>
                   </div>
                 </div>
-                {loginError && (
-                    <p className="text-sm text-red-500 mt-1">
-                      Invalid Password 
-                    </p>
-                  )}
+
 
                 {/* Remember */}
                 <div className="flex items-center justify-between text-sm">

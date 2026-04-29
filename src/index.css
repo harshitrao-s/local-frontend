@@ -150,7 +150,17 @@ body {
 
 }
 
+.danger-border-section {
+  border: 1px solid #FF141f !important ;
+}
 
+input.danger-border-section {
+  border: 1px solid #FF141F !important;
+}
+
+.danger-border-section {
+  border: 1px solid #FF141f !important ;
+}
 .cmn_searchbar_featured_design {
   border-radius: 12px !important;
   border: 1px solid #e5e7eb !important;
