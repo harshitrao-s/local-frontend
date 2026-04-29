@@ -144,7 +144,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+label {
+  font-size: 14px !important;
+  color: #323130 !important;
+  font-weight: 700 !important;
+  line-height: 150% !important;
+}
 .search-wrapper {
   height: 40px;
 

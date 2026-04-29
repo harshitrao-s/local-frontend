@@ -112,17 +112,19 @@ const SearchFilter = () => {
           className="w-full outline-none text-sm px-2"
         />
 
-        <div
+        {/* <div
           onClick={() => setOpenModal(!openModal)}
           className="cursor-pointer"
         >
           <SlidersHorizontal className="text-[#454545]" color="#454545" />
-        </div>
+        </div> */}
       </div>
+
+              
 
       {/* DROPDOWN */}
       {show && query && (
-        <div className="absolute top-full mt-2 w-full bg-white border rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+        <div className="absolute top-full mt-2 w-full bg-white border rounded-[16px] shadow-lg z-50 max-h-60 overflow-y-auto">
 
           {filtered.length > 0 ? (
             filtered.map((item, index) => {
@@ -132,7 +134,7 @@ const SearchFilter = () => {
                 <NavLink
                   to={item.path}
                   key={index}
-                  className="flex items-center gap-3 px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 transition no-underline"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 text-[14px] text-[#888888] hover:bg-[#d9edff] hover:text-black rounded-full hover:bg-[#d9edff] hover:text-black hover:rounded-full  no-underline"
                 //   onMouseDown={() => setShow(false)}
                 >
                   {Icon && <Icon size={16} className="text-gray-600" />}
