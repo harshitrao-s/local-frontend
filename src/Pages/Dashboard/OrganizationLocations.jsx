@@ -6,6 +6,8 @@ import { API_BASE } from "../../Config/api";
 import { apiFetch } from "../../Utils/apiFetch";
 import CmnTable from "../../Components/Common/CmnTable";
 import { SbAdminSvg } from "../../Components/Common/Svgs/ActionsSvg";
+import { Plus } from "lucide-react";
+import { Button } from "../../Components/Common/ui/button";
 
 
 const OrganizationLocations = ({ locations }) => {
@@ -98,17 +100,21 @@ const OrganizationLocations = ({ locations }) => {
   ];
 
   return (
-    <div className="card shadow-sm border-0 mt-1">
-      <div className="card-header border-bottom">
-        <h6 className="card-title font-weight-bold">Locations</h6>
-        <div className="card-tools">
-          <button className="bg-[#1A71F6] text-white rounded-[30px] no-underline py-2 px-3"  onClick={() => setModal({ show: true, mode: 'add', id: null })}>
-            <i className="fas fa-plus me-1"></i> Add New
-          </button></div>
+    <div className="">
+      <div className="flex items-center justify-between py-3">
 
+        <h6 className="mb-0 text-[24px] font-semibold text-[#323130]">
+          Locations
+        </h6>
+
+        <Button
+          className="rounded-[30px] bg-[#1A71F6] px-2 py-3 text-white gap-1"
+          onClick={() => setModal({ show: true, mode: "add", id: null })}
+        >
+          <Plus size={14} className="mr-1" />
+          Add New
+        </Button>
       </div>
-
-
 
       <CmnTable
         config={tableConfig}

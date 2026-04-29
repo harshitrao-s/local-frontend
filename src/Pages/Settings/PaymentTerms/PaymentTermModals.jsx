@@ -111,14 +111,10 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
         <div className="w-full max-w-[450px] rounded-[20px] bg-white shadow-xl border border-gray-200 overflow-visible">
 
           {/* Header */}
-          <div className="flex items-center justify-between  px-2 py-2">
+          <div className="flex items-center justify-between px-3 py-2">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100">
-                <i className={`fas ${isEdit ? "fa-pen" : "fa-plus"}`} />
-              </div>
-
               <div>
-                <p className="text-sm font-semibold">
+                <p className="text-[16px] font-semibold text-[#323130]">
                   {isEdit ? "Edit Payment Term" : "Add Payment Term"}
                 </p>
                 <p className="text-xs text-gray-500">
@@ -143,7 +139,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
             {/* Name */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold">
+              <label className="text-[14px] font-semibold text-[#323130]">
                 Name <span className="text-red-500">*</span>
               </label>
               <Input
@@ -159,7 +155,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
               {/* Type */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold">Type</label>
+                <label className="text-[14px] font-semibold text-[#323130]">Type</label>
                 <Select
                   value={formData.type || undefined}
                   onValueChange={(val) => set("type", val)}
@@ -176,7 +172,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
               {/* Term Option */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold">
+                <label className="text-[14px] font-semibold text-[#323130]">
                   Frequency (Days) <span className="text-red-500">*</span>
                 </label>
 
@@ -208,7 +204,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
             {/* Frequency Input */}
             {formData.termOption === "frequency" && (
               <div className="space-y-2">
-                <label className="text-sm font-semibold">
+                <label className="text-[14px] font-semibold text-[#323130]">
                   Days <span className="text-red-500">*</span>
                 </label>
 
@@ -235,7 +231,7 @@ const PaymentTermModals = ({ config, onClose, onRefresh }) => {
 
             {/* Status */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold">Status</label>
+              <label className="text-[14px] font-semibold text-[#323130]">Status</label>
 
               <Select
                 value={formData.status || undefined}

@@ -2,18 +2,20 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { API_BASE } from "../../../Config/api";
 import { apiFetch } from "../../../Utils/apiFetch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faListUl, faCircleExclamation, faChevronRight, faChevronDown,
-  faBuilding, faFileInvoiceDollar, faBoxOpen, faSearch, faTimes,
-  faCreditCard, faMoneyBillWave, faXmark, faCalendarAlt, faStickyNote,
+import { faChevronRight, faChevronDown,
+  faBuilding,
+  faCreditCard, faMoneyBillWave, faXmark, faStickyNote,
 } from "@fortawesome/free-solid-svg-icons";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import toast from "react-hot-toast";
 import CmnHeader from "../../../Components/Common/CmnHeader";
-import { FileSpreadsheet } from "lucide-react";
-import { Store , Banknote , DollarSign, RotateCcw } from "lucide-react";
+import { FileSpreadsheet, Search } from "lucide-react";
+import { Store, Banknote, DollarSign, RotateCcw } from "lucide-react";
+
+import { Input } from "../../../Components/Common/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../Components/Common/ui/select";
 
 /* ═══════════════════════════════════════════════════════════
    STYLES
@@ -257,10 +259,10 @@ const SortArrow = ({ field, sortBy, sortDir }) => {
 ═══════════════════════════════════════════════════════════ */
 const STAT_CFG = [
   // { key: "total_vendors", label: "Vendors Due Today", icon: "fas fa-store", bg: "#ede9fe", col: "#7c3aed", isCurrency: false, showSub: false },
-  { key: 'total_vendors',  label: "Vendors Due Today",   colorClass: 'text-white-500',  Lucid: <Store   size={22} strokeWidth={2} /> },
-  { key: 'total_due',  label: "Total Due Amount",   colorClass: 'text-red-500',  Lucid: <Banknote    size={22} strokeWidth={2} /> },
-  { key: 'total_invoices',  label: "Total Invoices",   colorClass: 'text-yellow-500',  Lucid: <DollarSign   size={22} strokeWidth={2} /> },
-  { key: 'overdue',  label: "Overdue",   colorClass: 'text-blue-500',  Lucid: <RotateCcw   size={22} strokeWidth={2} /> },
+  { key: 'total_vendors', label: "Vendors Due Today", colorClass: 'text-white-500', Lucid: <Store size={22} strokeWidth={2} /> },
+  { key: 'total_due', label: "Total Due Amount", colorClass: 'text-red-500', Lucid: <Banknote size={22} strokeWidth={2} /> },
+  { key: 'total_invoices', label: "Total Invoices", colorClass: 'text-yellow-500', Lucid: <DollarSign size={22} strokeWidth={2} /> },
+  { key: 'overdue', label: "Overdue", colorClass: 'text-blue-500', Lucid: <RotateCcw size={22} strokeWidth={2} /> },
 ];
 
 
@@ -280,7 +282,7 @@ const StatCard = ({
     >
       {/* TOP ROW */}
       <div className="flex justify-between items-center mb-2">
-      <p
+        <p
           className={`text-[12px] uppercase font-bold tracking-wider
           ${isFirst ? "text-white/70" : "text-[#454545]"}`}
         >
@@ -984,11 +986,11 @@ export default function PendingInvoiceList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 items-end">
 
           {/* Search */}
-          <div className="flex flex-col">
-            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Search
             </label>
-            <input
+            <Input
               type="text"
               placeholder="Vendor Name or Code"
               value={searchValue}
@@ -996,23 +998,29 @@ export default function PendingInvoiceList() {
                 handleVendorInput(e.target.value);
                 setPage(1);
               }}
-              className="h-9 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300"
+            // className="h-9 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300"
             />
           </div>
 
           {/* Invoice Status */}
-          <div className="flex flex-col">
-            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Invoice Status
             </label>
-            <select className="h-9 px-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none">
-              <option>All</option>
-            </select>
+            <Select defaultValue="all">
+              <SelectTrigger className="">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="bg-white border z-[9999]">
+                <SelectItem value="all">All</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Due Date */}
-          <div className="flex flex-col">
-            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Due Date
             </label>
             <DateRangeInput
@@ -1031,39 +1039,48 @@ export default function PendingInvoiceList() {
           </div>
 
           {/* Payment Term */}
-          <div className="flex flex-col">
-            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Payment Term
             </label>
-            <select
-              value={paymentTerm}
-              onChange={(e) => setPaymentTerm(e.target.value)}
-              className="h-9 px-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none"
+            <Select
+              value={paymentTerm === "" ? "all" : String(paymentTerm)}
+              onValueChange={(value) => {
+                setPaymentTerm(value === "all" ? "" : value);
+              }}
             >
-              <option value="">All</option>
-              {paymentTerms?.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="bg-white  z-[9999]">
+                <SelectItem className="hover:bg-gray-200" value="all">All</SelectItem>
+
+                {paymentTerms?.map((t) => (
+                  <SelectItem className="hover:bg-gray-200" key={t.id} value={String(t.id)}>
+                    {t.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-2">
+          <div className="flex justify-center gap-2">
             <button
               onClick={() => {
                 setPage(1);
                 fetchData();
               }}
-              className="flex-1 h-9 bg-gray-800 text-white text-sm font-semibold rounded-lg flex items-center justify-center"
+              className="flex px-3 text-white text-[14px] text-center items-center gap-2 font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] rounded-[30px]"
             >
+              <Search size={16} />
               Search
             </button>
 
             <button
               onClick={clearAll}
-              className="flex-1 h-9 bg-gray-100 text-gray-600 text-sm font-semibold rounded-lg"
+              className="px-3 text-[#454545] text-[14px] font-semibold h-10 w-full max-w-[100px] bg-gray-200 w-100 rounded-[30px]"
             >
               Clear
             </button>

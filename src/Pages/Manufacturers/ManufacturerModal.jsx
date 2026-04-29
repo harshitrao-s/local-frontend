@@ -63,8 +63,8 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
       <div className="w-full max-w-[450px] rounded-2xl bg-white  overflow-visible">
 
         {/* Header */}
-        <div className="flex items-center justify-between  px-2 py-1">
-          <h6 className="text-sm font-bold">
+        <div className="flex items-center justify-between  px-2 py-2">
+          <h6 className="text-[16px] font-semibold text-[#323130]">
             {mode === "edit" ? "Edit Manufacturer" : "New Manufacturer"}
           </h6>
 
@@ -80,7 +80,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
         {/* Body */}
         <div className="p-3 space-y-4">
           <div className="space-y-2">
-            <label className="text-[12px] text-[#737373] semibold">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Manufacturer Name
             </label>
 
@@ -94,7 +94,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[12px] text-[#737373] semibold">
+            <label className="text-[14px] font-semibold text-[#323130]">
               Status
             </label>
 
@@ -129,7 +129,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
             variant="secondary"
             onClick={onClose}
             disabled={loading}
-              className="bg-[#FF141F] rounded-[12px] text-white"
+              className="bg-[#FF141F]  text-white"
           >
             Cancel
           </Button>
@@ -137,7 +137,7 @@ const ManufacturerModal = ({ mode, initialData, onClose, onRefresh }) => {
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="bg-[#1A71F6] rounded-[12px] text-white"
+            className="bg-[#1A71F6]  text-white"
           >
             {loading
               ? "Processing..."

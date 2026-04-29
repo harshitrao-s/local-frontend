@@ -72,8 +72,8 @@ const AttributeModal = ({ mode, initialData, onClose, onRefresh }) => {
             <div className="w-full max-w-[450px] rounded-2xl bg-white shadow-xl border border-gray-200 overflow-visible">
 
                 {/* Header */}
-                <div className="flex items-center justify-between px-2 py-1">
-                    <h6 className="text-sm font-bold">
+                <div className="flex items-center justify-between px-2 py-2">
+                    <h6 className="text-[16px] font-semibold text-[#323130]">
                         {mode === "add" ? "Create Attribute" : "Edit Attribute"}
                     </h6>
 

@@ -282,7 +282,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
       {/* Vendor Select */}
       {type === "add" && (
         <div className="space-y-2">
-          <label className="text-[12px] text-[#737373] font-semibold">
+          <label className="text-[14px] font-semibold text-[#323130]">
             Vendor <span className="text-red-500">*</span>
           </label>
 
@@ -328,7 +328,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
 
       {/* Username */}
       <div className="space-y-2">
-        <label className="text-[12px] text-[#737373] font-semibold">
+        <label className="text-[14px] font-semibold text-[#323130]">
           Website user name <span className="text-red-500">*</span>
         </label>
 
@@ -349,7 +349,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
       {/* Email + Password */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-[12px] text-[#737373] font-semibold">
+          <label className="text-[14px] font-semibold text-[#323130]">
             User email <span className="text-red-500">*</span>
           </label>
 
@@ -368,7 +368,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
         </div>
 
         <div className="space-y-2">
-          <label className="text-[12px] text-[#737373] font-semibold">
+          <label className="text-[14px] font-semibold text-[#323130]">
             User password{" "}
             <span className="text-red-500">
               {type === "add" ? "*" : ""}
@@ -396,7 +396,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
 
       {/* Website Link */}
       <div className="space-y-2">
-        <label className="text-[12px] text-[#737373] font-semibold">
+        <label className="text-[14px] font-semibold text-[#323130]">
           Website link <span className="text-red-500">*</span>
         </label>
 
@@ -420,7 +420,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
       {/* OTP + Status */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-[12px] text-[#737373] font-semibold">
+          <label className="text-[14px] font-semibold text-[#323130]">
             OTP requirement
           </label>
 
@@ -449,7 +449,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
         </div>
 
         <div className="space-y-2">
-          <label className="text-[12px] text-[#737373] font-semibold">
+          <label className="text-[14px] font-semibold text-[#323130]">
             Status
           </label>
 
@@ -481,7 +481,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
         type="button"
         onClick={onClose}
         disabled={loading}
-        className="bg-[#FF141F] rounded-[12px] text-white hover:bg-[#e3121b]"
+        className="bg-[#FF141F]  text-white hover:bg-[#e3121b]"
       >
         Cancel
       </Button>
@@ -490,7 +490,7 @@ const VendorLoginCredentialModals = ({ config, onClose, onRefresh, credentialVen
         type="button"
         onClick={handleSave}
         disabled={loading}
-        className="bg-[#1A71F6] rounded-[12px] text-white hover:bg-[#155fd1]"
+        className="bg-[#1A71F6]  text-white hover:bg-[#155fd1]"
       >
         {loading ? "Processing..." : type === "add" ? "Create Credential" : "Save Changes"}
       </Button>

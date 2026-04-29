@@ -5,7 +5,7 @@ import {
 } from "react-day-picker"
 
 import { cn } from "../../../lib/utils"
-import { Button, buttonVariants } from "../button"
+import { Button, buttonVariants } from "./button"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -45,7 +45,7 @@ function Calendar({
         months: cn("flex flex-col gap-4 md:flex-row", defaultClassNames.months),
         month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
         nav: cn(
-          "absolute inset-x-0 top-0 flex w-full justify-between",
+          "absolute inset-x-0 top-0 flex w-full justify-between p-2",
           defaultClassNames.nav
         ),
         button_previous: cn(

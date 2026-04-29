@@ -5,13 +5,14 @@ import Swal from 'sweetalert2';
 import { Button } from "../../Components/Common/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/Common/ui/select";
 import { Input } from "../../Components/Common/ui/input";
+import { FileSpreadsheetIcon, RotateCcw } from "lucide-react";
 
 
 const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [statesList, setStatesList] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     name: "",
     parent_location_id: "",
@@ -86,7 +87,7 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
 
     if (name === "country_id") {
-      setFormData(prev => ({ ...prev, state_name: "" })); 
+      setFormData(prev => ({ ...prev, state_name: "" }));
       fetchStates(value);
     }
   };
@@ -99,10 +100,10 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
 
     setSaving(true);
     try {
-      const url = mode === 'edit' 
-        ? `${API_BASE}api/organizations/locations/update/${locationId}` 
+      const url = mode === 'edit'
+        ? `${API_BASE}api/organizations/locations/update/${locationId}`
         : `${API_BASE}api/organizations/locations/add/`;
-      
+
       const method = mode === 'edit' ? "PUT" : "POST";
 
       const res = await apiFetch(url, {
@@ -112,11 +113,11 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
 
       if (res.status) {
         Swal.fire({ icon: 'success', title: 'Success', text: res.message, timer: 2000, showConfirmButton: false });
-        if (onRefresh) onRefresh(); 
-        setTimeout(()=>{
-           window.location.reload()
-        },600 ) 
-        onClose(); 
+        if (onRefresh) onRefresh();
+        setTimeout(() => {
+          window.location.reload()
+        }, 600)
+        onClose();
       } else {
         Swal.fire("Error", res.message || "Operation failed", "error");
       }
@@ -237,211 +238,210 @@ const LocationModal = ({ mode, locationId, onClose, countries, onRefresh }) => {
     // </div>
 
     <div className="fixed inset-0 z-[1050] bg-black/50 flex items-center justify-center p-4">
-  <div className="w-full max-w-[500px] rounded-2xl bg-white overflow-visible">
+      <div className="w-full max-w-[500px] rounded-2xl bg-white overflow-visible">
 
-    {/* Header */}
-    <div className="flex items-center justify-between  px-3 py-3">
-      <h5 className="flex items-center gap-2 text-[16px] font-semibold text-[#454545]">
-        <i className={`fas ${mode === "edit" ? "fa-edit" : "fa-plus"}`} />
-        {mode === "edit" ? "Edit Location" : "Add New Location"}
-      </h5>
+        {/* Header */}
+        <div className="flex items-center justify-between  px-3 py-3">
+          <h5 className="flex items-center gap-2 text-[16px] font-semibold text-[#454545]">
+            {mode === "edit" ? "Edit Location" : "Add New Location"}
+          </h5>
 
-      <button
-        type="button"
-        onClick={onClose}
-        className="rounded-md p-1 "
-      >
-        ✕
-      </button>
-    </div>
-
-    {/* Body */}
-    <div className="p-3">
-      {loading ? (
-        <div className="flex justify-center py-10">
-          <i className="fas fa-spinner fa-spin text-2xl text-blue-500" />
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-1 "
+          >
+            ✕
+          </button>
         </div>
-      ) : (
-        <div className="grid grid-cols-12 gap-4">
 
-          <div className="col-span-12 md:col-span-6 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Location Name *
-            </label>
-            <Input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
+        {/* Body */}
+        <div className="p-3">
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <i className="fas fa-spinner fa-spin text-2xl text-blue-500" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-12 gap-4">
 
-          <div className="col-span-12 md:col-span-6 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Attention
-            </label>
-            <Input
-              name="attention"
-              value={formData.attention}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 md:col-span-6 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Location Name *
+                </label>
+                <Input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="col-span-12 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Address Line 1
-            </label>
-            <Input
-              name="address_line1"
-              value={formData.address_line1}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 md:col-span-6 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Attention
+                </label>
+                <Input
+                  name="attention"
+                  value={formData.attention}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="col-span-12 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Address Line 2
-            </label>
-            <Input
-              name="address_line2"
-              value={formData.address_line2}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Address Line 1
+                </label>
+                <Input
+                  name="address_line1"
+                  value={formData.address_line1}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              City
-            </label>
-            <Input
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Address Line 2
+                </label>
+                <Input
+                  name="address_line2"
+                  value={formData.address_line2}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Country
-            </label>
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  City
+                </label>
+                <Input
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
 
-            <Select
-              value={formData.country_id || undefined}
-              onValueChange={(value) =>
-                handleChange({
-                  target: { name: "country_id", value },
-                })
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Country" />
-              </SelectTrigger>
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Country
+                </label>
 
-              <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
-                {countries.map((c) => (
-                  <SelectItem key={c.id} value={String(c.id)}>
-                    {c.text || c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+                <Select
+                  value={formData.country_id || undefined}
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "country_id", value },
+                    })
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              State
-            </label>
+                  <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
+                    {countries.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)}>
+                        {c.text || c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <Select
-              value={formData.state_name || undefined}
-              onValueChange={(value) =>
-                handleChange({
-                  target: { name: "state_name", value },
-                })
-              }
-              disabled={!formData.country_id}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select State" />
-              </SelectTrigger>
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  State
+                </label>
 
-              <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
-                {statesList.map((s) => (
-                  <SelectItem key={s.id} value={s.name}>
-                    {s.text || s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+                <Select
+                  value={formData.state_name || undefined}
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "state_name", value },
+                    })
+                  }
+                  disabled={!formData.country_id}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select State" />
+                  </SelectTrigger>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              ZIP Code
-            </label>
-            <Input
-              name="zip_code"
-              value={formData.zip_code}
-              onChange={handleChange}
-            />
-          </div>
+                  <SelectContent className="z-[1100] bg-white max-h-[300px] overflow-y-auto">
+                    {statesList.map((s) => (
+                      <SelectItem key={s.id} value={s.name}>
+                        {s.text || s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Phone
-            </label>
-            <Input
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  ZIP Code
+                </label>
+                <Input
+                  name="zip_code"
+                  value={formData.zip_code}
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="col-span-12 md:col-span-4 space-y-2">
-            <label className="text-[12px] text-[#737373] font-semibold">
-              Website
-            </label>
-            <Input
-              name="website_url"
-              value={formData.website_url}
-              onChange={handleChange}
-            />
-          </div>
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Phone
+                </label>
+                <Input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="col-span-12 md:col-span-4 space-y-2">
+                <label className="text-[14px] font-semibold text-[#323130]">
+                  Website
+                </label>
+                <Input
+                  name="website_url"
+                  value={formData.website_url}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Footer */}
+        <div className="flex justify-end gap-2 px-3 py-3">
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={saving}
+            className="rounded-[30px] bg-[#FF141F] px-3 py-3 text-white"
+
+          >
+            Cancel
+          </Button>
+
+          <Button
+            onClick={handleSave}
+            disabled={loading || saving}
+            className="rounded-[30px] bg-[#1A71F6] px-3 py-3 text-white gap-1"
+          >
+            {saving ? (
+              <>
+                <RotateCcw size={14}/>
+                Saving...
+              </>
+            ) : (
+              <>
+                <FileSpreadsheetIcon size={14}/>
+                Save Changes
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
     </div>
-
-    {/* Footer */}
-    <div className="flex justify-end gap-2 px-3 py-3">
-      <Button
-        variant="secondary"
-        onClick={onClose}
-        disabled={saving}
-        className="bg-[#FF141F] rounded-[12px] text-white"
-
-      >
-        Cancel
-      </Button>
-
-      <Button
-        onClick={handleSave}
-        disabled={loading || saving}
-        className="bg-[#1A71F6] text-white rounded-[12px]"
-      >
-        {saving ? (
-          <>
-            <i className="fas fa-spinner fa-spin mr-1" />
-            Saving...
-          </>
-        ) : (
-          <>
-            <i className="fas fa-save mr-1" />
-            Save Changes
-          </>
-        )}
-      </Button>
-    </div>
-  </div>
-</div>
   );
 };
 

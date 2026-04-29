@@ -5,9 +5,11 @@ import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { useMasterData } from "../../../Context/MasterDataProvider";
 import CmnHeader from "../../../Components/Common/CmnHeader";
-import { CalendarX2, FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, Search } from "lucide-react";
 import CmnTable from "../../../Components/Common/CmnTable";
-import { File , CalendarX , DollarSign, BadgeAlert, Loader } from "lucide-react";
+import { File, CalendarX, DollarSign, BadgeAlert, Loader } from "lucide-react";
+import { Input } from "../../../Components/Common/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../Components/Common/ui/select";
 
 const StatCard = ({
   title,
@@ -63,11 +65,11 @@ const StatCard = ({
 
 const DashboardOverview = ({ summary }) => {
   const stats = [
-    { title: 'All Invoices', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-white-500',  "lucid": <File  size={22} strokeWidth={2} /> },
-    { title: 'Paid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-green-500',  "lucid": <DollarSign  size={22} strokeWidth={2} /> },
-    { title: 'Unpaid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-red-500',  "lucid": <BadgeAlert  size={22} strokeWidth={2} /> },
-    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-yellow-500',  "lucid": <Loader  size={22} strokeWidth={2} /> },
-    { title: 'Overdue', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-blue-500',  "lucid": <CalendarX  size={22} strokeWidth={2} /> },
+    { title: 'All Invoices', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-white-500', "lucid": <File size={22} strokeWidth={2} /> },
+    { title: 'Paid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-green-500', "lucid": <DollarSign size={22} strokeWidth={2} /> },
+    { title: 'Unpaid', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-red-500', "lucid": <BadgeAlert size={22} strokeWidth={2} /> },
+    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-yellow-500', "lucid": <Loader size={22} strokeWidth={2} /> },
+    { title: 'Overdue', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-blue-500', "lucid": <CalendarX size={22} strokeWidth={2} /> },
   ];
 
   return (
@@ -323,9 +325,9 @@ const InvoiceList = () => {
 
   return (
     <>
-        <CmnHeader
-          title="All Invoices" IconLucide={FileSpreadsheet}  actionName="Due Payments" actionLink="/purchaseorder/invoicedue" actionVariant="primary" 
-        />
+      <CmnHeader
+        title="All Invoices" IconLucide={FileSpreadsheet} actionName="Due Payments" actionLink="/purchaseorder/invoicedue" actionVariant="primary"
+      />
 
       <DashboardOverview summary={summary} />
       <div className="mt-3 mb-3 p-3 bg-white rounded-[20px]">
@@ -339,15 +341,14 @@ const InvoiceList = () => {
     "
         >
           {/* Search */}
-          <div>
-            <label className="form-label">Search</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Search</label>
             <div className="position-relative">
-              <input
+              <Input
                 id="filter_vendor"
                 name="vendor_search"
                 type="text"
                 autoComplete="off"
-                className="form-control"
                 placeholder="Vendor Name or Vendor Code"
                 value={searchValue}
                 onChange={(e) => {
@@ -378,28 +379,39 @@ const InvoiceList = () => {
           </div>
 
           {/* Invoice Status */}
-          <div>
-            <label className="form-label">Invoice Status</label>
-            <select
-              className="form-control form-select"
-              value={invoice_status}
-              onChange={(e) => {
-                setInvoiceStatus(e.target.value);
-                tabulatorRef.current?.setPage(1);
-              }}
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Invoice Status</label>
+            <Select
+               value={invoice_status === "" ? "all" : String(invoice_status)}
+               onValueChange={(value) => {
+                 setInvoiceStatus(value === "all" ? "" : Number(value));
+                 tabulatorRef.current?.setPage(1);
+               }}
             >
-              <option value="">All</option>
-              {[{ id: 1, name: "Paid" }, { id: 2, name: "Unpaid" }, { id: 3, name: "Cancelled" }, { id: 4, name: "On Hold" }].map((pt) => (
-                <option key={pt.id} value={pt.id}>
-                  {pt.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full rounded-[30px]">
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+
+              <SelectContent className="z-[9999] bg-white min-w-[250px] w-[300px] p-1" position="popper">
+                <SelectItem className="hover:bg-gray-100 " value="all">All</SelectItem>
+
+                {[
+                  { id: 1, name: "Paid" },
+                  { id: 2, name: "Unpaid" },
+                  { id: 3, name: "Cancelled" },
+                  { id: 4, name: "On Hold" },
+                ].map((pt) => (
+                  <SelectItem  className="hover:bg-gray-100" key={pt.id} value={String(pt.id)}>
+                    {pt.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Due Date */}
-          <div>
-            <label className="form-label">Due Date</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Due Date</label>
             <DateRangeInput
               isRange
               value={dateRangeDisplay}
@@ -411,8 +423,8 @@ const InvoiceList = () => {
           </div>
 
           {/* Payment Term */}
-          <div>
-            <label className="form-label">Payment Term</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-[14px] font-semibold text-[#323130]">Payment Term</label>
             <select
               className="form-control form-select"
               value={paymentTerm}
@@ -431,19 +443,19 @@ const InvoiceList = () => {
           </div>
 
           {/* Buttons (Same Column) */}
-          <div className="flex items-end gap-2">
+          <div className="flex justify-center gap-2">
             <button
               type="button"
-              className="btn btn-primary w-100"
+              className="flex px-3 text-white text-[14px] text-center items-center gap-2 font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] rounded-[30px]"
               onClick={applyFilter}
             >
-              <i className="fas fa-search me-1"></i>
+              <Search size={16} />
               Search
             </button>
 
             <button
               type="button"
-              className="btn btn-light w-100"
+              className="px-3 text-[#454545] text-[14px] font-semibold h-10 w-full max-w-[100px] bg-gray-200 w-100 rounded-[30px]"
               onClick={clearFilter}
             >
               Clear

@@ -104,7 +104,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
                 {/* Header */}
                 <div className="flex items-center justify-between px-3 py-3">
-                    <h5 className="flex items-center gap-2 text-base font-semibold">
+                    <h5 className="flex items-center gap-2 text-[16px] font-semibold text-[#323130]">
                         {type === "add" ? "Add New Shipping Carrier" : "Edit Shipping Carrier"}
                     </h5>
 
@@ -121,7 +121,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
                         {/* Carrier Name */}
                         <div className="grid grid-cols-12 items-center gap-4">
-                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                            <label className="col-span-4 text-[14px] font-semibold text-[#323130]">
                                 Carrier Name <span className="text-red-500">*</span>
                             </label>
 
@@ -142,7 +142,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
                         {/* Carrier Code */}
                         <div className="grid grid-cols-12 items-center gap-4">
-                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                            <label className="col-span-4 text-[14px] font-semibold text-[#323130]">
                                 Carrier Code
                             </label>
 
@@ -163,7 +163,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
                         {/* Class Code */}
                         <div className="grid grid-cols-12 items-center gap-4">
-                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold">
+                            <label className="col-span-4 text-[14px] font-semibold text-[#323130]">
                                 Class Code <span className="text-red-500">*</span>
                             </label>
 
@@ -195,7 +195,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
 
                         {/* Tracking URL */}
                         <div className="grid grid-cols-12 items-start gap-4">
-                            <label className="col-span-4 text-[12px] text-[#737373] font-semibold pt-2">
+                            <label className="col-span-4 text-[14px] font-semibold text-[#323130] flex">
                                 Tracking URL Format <span className="text-red-500">*</span>
                             </label>
 
@@ -226,7 +226,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
                         <Button
                             onClick={onClose}
                             disabled={loading}
-                            className="bg-[#FF141F] rounded-[12px] text-white hover:bg-[#e3121b]"
+                            className="bg-[#FF141F]  text-white hover:bg-[#e3121b]"
                         >
                             Cancel
                         </Button>
@@ -234,7 +234,7 @@ const ShippingProviderModals = ({ config, onClose, onRefresh }) => {
                         <Button
                             onClick={handleSave}
                             disabled={loading}
-                            className="bg-[#1A71F6] rounded-[12px] text-white hover:bg-[#155fd1]"
+                            className="bg-[#1A71F6]  text-white hover:bg-[#155fd1]"
                         >
                             {loading ? "Processing..." : type === "add" ? "Save" : "Update"}
                         </Button>

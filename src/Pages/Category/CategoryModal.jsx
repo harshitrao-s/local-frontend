@@ -115,7 +115,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                 <div className="p-3 space-y-4">
                     {/* Category Name */}
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] font-semibold">
+                        <label className="text-[14px] font-semibold text-[#323130]">
                             Category Name
                         </label>
 
@@ -142,7 +142,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
 
                             <label
                                 htmlFor="subCheck"
-                                className="text-[12px] text-[#737373] font-semibold"
+                                className="text-[14px] font-semibold text-[#323130]"
                             >
                                 Define as Subcategory
                             </label>
@@ -152,7 +152,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                     {/* Parent Category */}
                     {isSubcategory && (
                         <div className="space-y-2">
-                            <label className="text-[12px] text-[#737373] font-semibold">
+                            <label className="text-[14px] font-semibold text-[#323130]">
                                 Parent Category
                             </label>
 
@@ -179,7 +179,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
 
                     {/* Status */}
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] semibold">
+                        <label className="text-[14px] font-semibold text-[#323130]">
                             Status
                         </label>
 
@@ -206,7 +206,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                         variant="ghost"
                         onClick={onClose}
                         disabled={loading}
-                          className="bg-[#FF141F] rounded-[12px] text-white"
+                          className="bg-[#FF141F]  text-white"
                     >
                         Cancel
                     </Button>
@@ -214,7 +214,7 @@ const CategoryModal = ({ mode, initialData, main_categories, onClose, onRefresh 
                     <Button
                         onClick={handleSave}
                         disabled={loading}
-                        className="bg-[#1A71F6] rounded-[12px] text-white"
+                        className="bg-[#1A71F6]  text-white"
                     >
                         {loading ? "Processing..." : mode === "add" ? "Create Category" : "Save Changes"}
                     </Button>

@@ -4,10 +4,13 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import formatCurrency, { formattedDate } from "../../../Utils/utilFunctions";
 import DateRangeInput from "../../../Components/Common/DateRangeInput";
 import { SHIPPING_STATUS } from "../../../Constants/shippingStatus";
-import { ShoppingBag , Package, PackageCheck, CheckCircle, RotateCcw } from "lucide-react";
+import { ShoppingBag, Package, PackageCheck, CheckCircle, RotateCcw, Search } from "lucide-react";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import { Ship } from "lucide-react";
 import CmnTable from "../../../Components/Common/CmnTable";
+import { Input } from "../../../Components/Common/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../Components/Common/ui/select";
+import { Button } from "../../../Components/Common/ui/button";
 
 
 
@@ -68,10 +71,10 @@ const DashboardOverview = ({ summary }) => {
       count: summary?.total?.count,
       colorClass: 'text-white-500', lucid: < ShoppingBag size={22} strokeWidth={2} />
     },
-    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count,  colorClass: 'text-green-500',  "lucid": <Package size={22} strokeWidth={2} /> },
-    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, colorClass: 'text-red-600',  "lucid": <PackageCheck size={22} strokeWidth={2} /> },
-    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, colorClass: 'text-yellow-500',  "lucid": <CheckCircle size={22} strokeWidth={2} /> },
-    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count,  colorClass: 'text-blue-700',  "lucid": <RotateCcw size={22} strokeWidth={2} /> },
+    { title: 'Pending', amount: formatCurrency(summary?.pending?.amount), count: summary?.pending?.count, colorClass: 'text-green-500', "lucid": <Package size={22} strokeWidth={2} /> },
+    { title: 'Shipped', amount: formatCurrency(summary?.shipped?.amount), count: summary?.shipped?.count, colorClass: 'text-red-600', "lucid": <PackageCheck size={22} strokeWidth={2} /> },
+    { title: 'Delivered', amount: formatCurrency(summary?.delivered?.amount), count: summary?.delivered?.count, colorClass: 'text-yellow-500', "lucid": <CheckCircle size={22} strokeWidth={2} /> },
+    { title: 'Returned', amount: formatCurrency(summary?.returned?.amount), count: summary?.returned?.count, colorClass: 'text-blue-700', "lucid": <RotateCcw size={22} strokeWidth={2} /> },
   ];
 
   return (
@@ -118,6 +121,10 @@ const ShipmentsList = () => {
     shipping_date_to: ""
   });
   const [tableData, setTableData] = useState([]);
+  const [shippingRange, setShippingRange] = useState({
+    from: undefined,
+    to: undefined,
+  });
 
   const handleShippingDateChange = (start, end) => {
     const fromStr = start.format("YYYY-MM-DD");
@@ -153,6 +160,7 @@ const ShipmentsList = () => {
   //     tabulatorRef.current.setPage(1);
   //   }
   // };
+
   const handleDateChange = (start, end) => {
     // Format dates to ISO strings for the backend
     const fromStr = start.format('YYYY-MM-DD');
@@ -322,9 +330,9 @@ const ShipmentsList = () => {
       shipping_date_to: "",
     });
 
-    // optional: auto reload
     fetchShipments();
   };
+ 
 
   const clearFilter = () => {
     setSearchValue("");
@@ -351,11 +359,6 @@ const ShipmentsList = () => {
 
     setVendors([]);
     setShowDropdown(false);
-
-    // ❌ ye hata do
-    // tabulatorRef.current.setData();
-
-    // ✅ ye lagao
     fetchShipments();
   };
 
@@ -375,15 +378,14 @@ const ShipmentsList = () => {
       "
           >
             {/* Search */}
-            <div>
-              <label className="form-label">Search</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Search</label>
               <div className="position-relative">
-                <input
+                <Input
                   id="filter_vendor"
                   name="vendor_search"
                   type="text"
                   autoComplete="off"
-                  className="form-control"
                   placeholder="Vendor PO or Order# or Shipping Company"
                   value={searchValue}
                   onChange={(e) => {
@@ -415,42 +417,48 @@ const ShipmentsList = () => {
             </div>
 
             {/* Shipping Status */}
-            <div>
-              <label className="form-label">Shipping Status</label>
-              <select
-                name="status"
-                className="form-control form-select"
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Shipping Status</label>
+              <Select
                 value={invoice_status}
-                onChange={(e) => {
-                  setInvoiceStatus(e.target.value);
+                onValueChange={(value) => {
+                  setInvoiceStatus(value);
                   tabulatorRef.current?.setPage(1);
                 }}
               >
-                <option value="">All</option>
-                {SHIPPING_STATUS?.map((pt) => (
-                  <option key={pt.id} value={pt.id}>
-                    {pt.value}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+
+                <SelectContent className="z-[1100] w-full min-w-[300px] p-1 bg-white" position="popper">
+                  <SelectItem className="hover:bg-gray-100" value="1">All</SelectItem>
+
+                  {SHIPPING_STATUS?.map((pt) => (
+                    <SelectItem className="hover:bg-gray-100" key={pt.id} value={pt.id}>
+                      {pt.value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Shipping Date */}
-            <div>
-              <label className="form-label">Shipping Date</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Shipping Date</label>
               <DateRangeInput
                 isRange
                 value={shippingDateDisplay}
                 onChange={handleShippingDateChange}
                 onCancel={clearDateRange}
                 placeholder="Select date range"
-                className="bg-white"
+                className="bg-white rounded-[30px]"
               />
+
             </div>
 
             {/* Delivery Date */}
-            <div>
-              <label className="form-label text-muted">Delivery Date</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Delivery Date</label>
               <DateRangeInput
                 disabled
                 isRange
@@ -463,19 +471,19 @@ const ShipmentsList = () => {
             </div>
 
             {/* Buttons (same column) */}
-            <div className="flex items-end gap-2">
-              <button
+            <div className="flex justify-center gap-2">
+              <Button
                 type="button"
-                className="btn btn-primary w-100"
+                className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] w-100 rounded-[30px]"
                 onClick={applyFilter}
               >
-                <i className="fas fa-search me-2"></i>
+                <Search size={14}/>
                 Search
-              </button>
+              </Button>
 
               <button
                 type="button"
-                className="btn btn-light w-100"
+                 className="px-3 text-[#454545] text-[14px] font-semibold h-10 w-full max-w-[100px] bg-gray-200 w-100 rounded-[30px]"
                 onClick={clearFilter}
               >
                 Clear

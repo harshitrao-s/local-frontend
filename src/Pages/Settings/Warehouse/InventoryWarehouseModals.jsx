@@ -64,7 +64,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
 
                 {/* Header */}
                 <div className="flex items-center justify-between px-2 py-2">
-                    <h5 className="text-base font-semibold">
+                    <h5 className="text-[16px] text-[#323130] font-semibold">
                         {type === "add" ? "Add New Inventory" : "Edit Warehouse"}
                     </h5>
 
@@ -81,7 +81,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
 
                     {/* Warehouse Name */}
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] semibold">
+                        <label className="text-[14px] font-semibold text-[#323130]">
                             Warehouse Name
                         </label>
 
@@ -100,7 +100,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
 
                     {/* Location */}
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] semibold">
+                        <label className="text-[14px] font-semibold text-[#323130]">
                             Location
                         </label>
 
@@ -132,12 +132,12 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
 
                         {/* Active Status */}
                         <div className="space-y-2">
-                            <label className="text-[12px] text-[#737373] semibold">
+                            <label className="text-[14px] font-semibold text-[#323130]">
                                 Active Status
                             </label>
 
                             <div className="flex gap-4">
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-[12px] font-semibold text-[#323130]">
                                     <input
                                         type="radio"
                                         name="status"
@@ -152,7 +152,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
                                     Enabled
                                 </label>
 
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-[12px] font-semibold text-[#323130]">
                                     <input
                                         type="radio"
                                         name="status"
@@ -171,12 +171,12 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
 
                         {/* Is Primary */}
                         <div className="space-y-2">
-                            <label className="text-[12px] text-[#737373] semibold">
+                            <label className="text-[14px] font-semibold text-[#323130]">
                                 Is Primary
                             </label>
 
                             <div className="flex gap-4">
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-[12px] font-semibold text-[#323130]">
                                     <input
                                         type="radio"
                                         name="is_default"
@@ -191,7 +191,7 @@ const InventoryWarehouseModals = ({ config, onClose, warehouseLocations, onRefre
                                     Enabled
                                 </label>
 
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-[12px] font-semibold text-[#323130]">
                                     <input
                                         type="radio"
                                         name="is_default"

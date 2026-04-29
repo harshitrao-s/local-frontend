@@ -130,7 +130,7 @@ const InventoryWarehouseList = () => {
     <div>
 
       {/* Header */}
-      <CmnHeader title="Inventory Warehouse" subtitle="Manage warehouse locations & inventory slots" icon1={"fas fa-warehouse"}  actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Location" actionVariant="ghost" />
+      <CmnHeader title="Inventory Warehouse" subtitle="Manage warehouse locations & inventory slots" icon1={"fas fa-warehouse"}  actionBtn={() => setModalConfig({ type: "add", data: null })} actionName="Add Location" actionVariant="primary" />
 
       {/* ✅ Common Table */}
       <CommonTable config={tableConfig} data={filteredData} isSearchable={true} showSearchButton={true}

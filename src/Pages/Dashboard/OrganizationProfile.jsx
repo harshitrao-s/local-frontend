@@ -152,31 +152,28 @@ const OrganizationProfile = () => {
               <img src="/Logo.svg" className="h-6 object-contain" />
             </div>
             <div>
-              <Input type="file" id="logoUpload" className=" h-[60px]" />
+              <Input type="file" id="logoUpload" className="h-[60px] border-2 border-dashed border-blue-500 bg-blue-50 file:mr-4 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-blue-600 hover:bg-blue-100" />
             </div>
           </div>
 
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-          {/* LEFT */}
-
           {/* General */}
-          <div className="p-4 rounded-[20px] bg-white space-y-4">
+          <div className="p-4 rounded-[20px] bg-white space-y-4 ">
 
-            <div className="">
-              <label>Company Name *</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Company Name</label>
               <Input name="company_name" value={formData.company_name} onChange={handleChange} />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label>Email</label>
+            <div className="grid md:grid-cols-2 gap-4 pt-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-[14px] font-semibold text-[#323130]">Email</label>
                 <Input name="email" value={formData.email} onChange={handleChange} />
               </div>
-              <div>
-                <label>Website</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-[14px] font-semibold text-[#323130]">Website</label>
                 <Input name="website_url" value={formData.website_url} onChange={handleChange} />
               </div>
             </div>
@@ -186,8 +183,8 @@ const OrganizationProfile = () => {
           {/* Address */}
           <div className=" rounded-[20px] bg-white p-4 space-y-4">
 
-            <div>
-              <label>Country</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Country</label>
               <Select disabled value={formData.country_id} >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Country" />
@@ -200,8 +197,8 @@ const OrganizationProfile = () => {
               </Select>
             </div>
 
-            <div>
-              <label>Street</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[14px] font-semibold text-[#323130]">Street</label>
               <Textarea name="street_address" value={formData.street_address} onChange={handleChange} />
             </div>
 
@@ -223,16 +220,9 @@ const OrganizationProfile = () => {
             </div>
 
             <Input name="phone" value={formData.phone} onChange={handleChange} />
-
           </div>
 
-
-
-          {/* RIGHT */}
-
-
         </div>
-
         <OrganizationLocations locations={metaData.locations} />
       </div>
 

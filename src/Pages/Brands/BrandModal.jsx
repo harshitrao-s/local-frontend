@@ -90,7 +90,7 @@ const BrandModal = ({ mode, initialData, onClose, onRefresh }) => {
                 {/* Body */}
                 <div className="p-3 space-y-4">
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] font-semibold">Brand Name</label>
+                        <label className="text-[14px] font-semibold text-[#323130]">Brand Name</label>
                         <Input
                             type="text"
                             value={name}
@@ -101,7 +101,7 @@ const BrandModal = ({ mode, initialData, onClose, onRefresh }) => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[12px] text-[#737373] font-semibold">Status</label>
+                        <label className="text-[14px] font-semibold text-[#323130]">Status</label>
 
                         <Select
                             value={status || undefined}
