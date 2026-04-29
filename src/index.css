@@ -150,13 +150,33 @@ label {
   font-weight: 700 !important;
   line-height: 150% !important;
 }
+
 .search-wrapper {
   height: 40px;
 
 }
 
+.form-control-select {
+  border-radius: 32px !important;
+}
+
+.form-control-border-desing {
+  border-radius: 32px 0px 0px 32px !important;
+}
+.form-control-border-design {
+  border-radius: 0px 32px 32px 0px !important;
+}
+/* .form-control {
+  border-radius: 32px !important;
+}
+
+
+.form-select {
+  border-radius: 32px !important;
+} */
+
 .danger-border-section {
-  border: 1px solid #FF141f !important ;
+  border: 1px solid #FF141f !important;
 }
 
 input.danger-border-section {
@@ -164,8 +184,9 @@ input.danger-border-section {
 }
 
 .danger-border-section {
-  border: 1px solid #FF141f !important ;
+  border: 1px solid #FF141f !important;
 }
+
 .cmn_searchbar_featured_design {
   border-radius: 12px !important;
   border: 1px solid #e5e7eb !important;
@@ -267,9 +288,10 @@ input.danger-border-section {
 }
 
 
-.card-header { 
+.card-header {
   background-color: transparent !important;
 }
+
 .iwl-title {
   font-size: 24px;
   font-weight: 600;

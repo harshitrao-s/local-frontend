@@ -13,7 +13,7 @@ export default function SearchableSelect({
   displayKey = null,
   disabled = false,
   loadOptions = null,
-  clearable = false, 
+  clearable = false,
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -149,12 +149,12 @@ export default function SearchableSelect({
   };
 
   return (
-    <div className={`position-relative w-100 ${disabled ? "pe-none opacity-75" : ""}`} ref={ref}>
-      <div className="input-group">
+    <div className={`position-relative form-control-select w-100 ${disabled ? "pe-none opacity-75" : ""}`} ref={ref}>
+      <div className="input-group form-control-select">
         <input
           disabled={disabled}
           type="text"
-          className="form-control"
+          className="form-control form-control-border-desing"
           placeholder={placeholder}
           autoComplete="off"
           value={
@@ -167,23 +167,23 @@ export default function SearchableSelect({
           onKeyDown={handleKeyDown}
         />
         {clearable && selected && !disabled && (
-    <span
-        className="input-group-text bg-white text-danger"
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-            onChange({ target: { name, value: "" } });
-            setSearch("");
-            setAsyncOptions([]);
-            setOpen(false);
-        }}
-    >
-        <small>✕</small>
-    </span>
-)}
+          <span
+            className="input-group-text bg-white text-danger"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              onChange({ target: { name, value: "" } });
+              setSearch("");
+              setAsyncOptions([]);
+              setOpen(false);
+            }}
+          >
+            <small>✕</small>
+          </span>
+        )}
 
         <span
           style={{ cursor: disabled ? "not-allowed" : "pointer" }}
-          className="input-group-text bg-white"
+          className="input-group-text bg-white form-control-border-design"
           onClick={() => !disabled && setOpen(!open)}
         >
           <small>{open ? "▲" : "▼"}</small>

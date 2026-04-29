@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { API_ENDPOINTS } from "../Config/api";
 import apiFetch from "../Utils/apiFetch";
+import { Input } from "./Common/ui/input";
 
 const ProductAutoComplete = ({ value, onChange, onSelect }) => {
   const [results, setResults]   = useState([]);
@@ -80,10 +81,10 @@ const ProductAutoComplete = ({ value, onChange, onSelect }) => {
 
   return (
     <div className="position-relative" ref={containerRef}>
-      <input
+      <Input
         type="text"
         ref={inputRef}
-        className="form-control pe-5"
+        // className="form-control pe-5"
         placeholder="Search product..."
         value={value}
         onChange={(e) => onChange(e.target.value)}

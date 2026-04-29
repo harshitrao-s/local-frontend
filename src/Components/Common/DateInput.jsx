@@ -1,3 +1,4 @@
+import { Calendar } from "lucide-react";
 import React, { useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -49,7 +50,7 @@ const DateInput = ({
           style={{ cursor: disabled ? "not-allowed" : "pointer", zIndex: 0 }}
           onClick={() => !disabled && datePickerRef.current?.setOpen(true)}  // ← ADD check
         >
-          <i className="fa fa-calendar"></i>
+         <Calendar size={14} />
         </span>
       </div>
     </div>

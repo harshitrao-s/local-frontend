@@ -20,6 +20,8 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Swal from "sweetalert2";
 import InvoiceModel from "../../Components/PO/View/NewInvoiceModel";
 import AddShippingModal from "../../Components/PO/View/AddShippingModal";
+import { Button } from "../../Components/Common/ui/button";
+import { Input } from "../../Components/Common/ui/input";
 
 const CSS = `
   .po-form-card { background:#fff; border:0.5px solid #e5e7eb; border-radius:12px; margin-bottom:12px; overflow:visible; }
@@ -35,7 +37,6 @@ const CSS = `
   .po-summary-row.total span:last-child { color:#15803d; }
   .po-inline-edit { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#6b7280; padding:4px 0; }
 `;
-
 const recalculateLandedCost = (items, freight, surcharge) => {
   const totalSubtotal = items.reduce((sum, i) => sum + Number(i.sub_total || 0), 0);
   if (totalSubtotal === 0) return items;
@@ -509,12 +510,12 @@ const PurchaseOrderForm = () => {
       {!isPlaced && (
         <div className="po-form-card">
           <div className="po-form-card-header">
-            Add Product Item <span style={{ color: "#ef4444" }}>*</span>
+            Add Product Item<span style={{ color: "#ef4444" }}>*</span>
           </div>
           <div className="po-form-card-body">
             <div className="row g-2 align-items-end mb-3">
               <div className="col-md-3">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Product</label>
+                <label className="form-label" >Product</label>
                 <ProductAutoComplete value={productSearchText} onChange={setProductSearchText}
                   onSelect={(p) => {
                     setSelectedProduct(p); setLineItemProductId(p.id);
@@ -525,40 +526,38 @@ const PurchaseOrderForm = () => {
                 />
               </div>
               <div className="col-md-1">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Qty</label>
-                <input type="number" className="form-control" ref={qtyInputRef} value={lineItemQty} min="1"
+                <label className="form-label" >Qty</label>
+                <Input type="number"  ref={qtyInputRef} value={lineItemQty} min="1"
                   onChange={(e) => { let val = e.target.value; if (val.length > 1 && val.startsWith("0")) val = val.replace(/^0+/, ""); setLineItemQty(val === "" ? "" : Number(val)); }}
                   onFocus={(e) => e.target.select()}
                   onKeyDown={(e) => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()}
                 />
               </div>
               <div className="col-md-1">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Price</label>
-                <input type="number" className="form-control" value={lineItemPrice}
+                <label className="form-label" >Price</label>
+                <Input type="number"  value={lineItemPrice}
                   onChange={(e) => setLineItemPrice(e.target.value)} onFocus={(e) => e.target.select()} />
               </div>
               <div className="col-md-1">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Disc %</label>
-                <input type="number" className="form-control" value={lineItemDiscount}
+                <label className="form-label" >Disc %</label>
+                <Input type="number"  value={lineItemDiscount}
                   onChange={(e) => setLineItemDiscount(e.target.value)} onFocus={(e) => e.target.select()} />
               </div>
               <div className="col-md-2">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Sub Total</label>
-                <input type="text" className="form-control" style={{ background: "#f9fafb", fontWeight: 600 }} value={subtotal?.toFixed(2)} readOnly />
+                <label className="form-label" >Sub Total</label>
+                <Input type="text"  style={{ background: "#f9fafb", fontWeight: 600 }} value={subtotal?.toFixed(2)} readOnly />
               </div>
               <div className="col-md-3">
-                <label className="form-label" style={{ fontSize: "11px", fontWeight: 600, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.3px" }}>Comments</label>
-                <input type="text" className="form-control" value={lineItemComment} onChange={(e) => setLineItemComment(e.target.value)} />
+                <label className="form-label" >Comments</label>
+                <Input type="text"  value={lineItemComment} onChange={(e) => setLineItemComment(e.target.value)} />
               </div>
               <div className="col-md-1 text-end">
-                <button className="btn w-100"
-                  style={{ height: "38px", background: "#0f0f1a", color: "#fff", fontSize: "13px", fontWeight: 600, borderRadius: "8px", border: "none", transition: "background 0.15s" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#1e293b"}
-                  onMouseLeave={e => e.currentTarget.style.background = "#0f0f1a"}
-                  onClick={createLineItem}>Add</button>
+                <Button className="px-3 text-white text-[14px] font-semibold h-10 w-full max-w-[100px] bg-[#1a71f6] w-100 rounded-[30px]" onClick={createLineItem}>
+                  Add
+                </Button>
               </div>
             </div>
-            <div className="po-line-items-wrap">
+            <div className="">
               <LineItemsTable lineItems={lineItems} updateLineItem={updateLineItem}
                 deleteLineItem={i => setLineItems(prev => prev.filter((_, idx) => idx !== i))} />
             </div>
