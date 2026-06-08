@@ -26,14 +26,26 @@ const StatCard = ({ title, value, change, icon: Icon, titleColor, dark = false }
       </div>
 
       {/* Bottom Content */}
-      <div className="flex items-end justify-between w-full lg:flex-col lg:items-start lg:gap-2 xl:flex-row xl:items-end">
-        <h2 className="text-[20px] xl:text-[30px] font-bold leading-none">{value}</h2>
+      <div className="flex items-end justify-between w-full lg:flex-col lg:items-start lg:gap-2 2xl:flex-row 2xl:items-end">
+        <h2 className="text-[25px] xl:text-[30px] font-bold leading-none">
+          {value}
+        </h2>
+
         {change && (
-         <div className="flex flex-col items-end lg:items-start xl:items-end">
-            <div className="flex items-center gap-1 text-[#04910C] font-semibold leading-none text-[14px]">
-              <span>↗</span> {change}
+          <div className="flex flex-col items-end lg:w-full">
+            <div className="ml-auto flex flex-col items-end">
+              <div className="flex items-center gap-1 text-[#04910C] font-semibold leading-none text-[14px]">
+                <span>↗</span>
+                {change}
+              </div>
+
+              <p
+                className={`text-[11px] mt-1 ${dark ? "text-white/70" : "text-gray-400"
+                  }`}
+              >
+                This month
+              </p>
             </div>
-            <p className={`text-[11px] mt-1 ${dark ? "text-white/70" : "text-gray-400"}`}>This month</p>
           </div>
         )}
       </div>
@@ -73,11 +85,11 @@ const Dashboard = () => {
 
       {/* Header */}
       <CmnHeader
-      title="Dashboard" IconLucide={Presentation } 
-      actions={[
-        {icon: <Plus  size={16} />,  name: "Add Purchase Order", onClick:()=> handleAddNew, variant: "ghost", },
-        {name: "View",actionLink:"/purchaseorder/listing", variant: "primary", },
-      ]}
+        title="Dashboard" IconLucide={Presentation}
+        actions={[
+          { icon: <Plus size={16} />, name: "Add Purchase Order", onClick: () => handleAddNew, variant: "ghost", },
+          { name: "View", actionLink: "/purchaseorder/listing", variant: "primary", },
+        ]}
       />
 
       {/* Top Grid */}
@@ -98,7 +110,7 @@ const Dashboard = () => {
           {/* Recent Orders */}
           <div className="">
             <RecentPurchaseOrders />
-            
+
           </div>
         </div>
 
@@ -113,9 +125,9 @@ const Dashboard = () => {
             <StatCard title="Vendors" value="125" change="+10.6%" icon={Users} />
           </div>
 
-          
+
           <div className="flex flex-col gap-4">
-          <POStatusPieChart change="3.6%" />
+            <POStatusPieChart change="3.6%" />
           </div>
         </div>
       </div>

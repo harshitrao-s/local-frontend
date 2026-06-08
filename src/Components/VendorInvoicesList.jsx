@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,7 @@ import { apiFetch } from "../Utils/apiFetch"
 import DateRangeInput from "./Common/DateRangeInput";
 import { useMasterData } from "../Context/MasterDataProvider";
 import { Navigate, useNavigate } from "react-router-dom";
+import CmnTable from "./Common/CmnTable";
 
 const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
   const [invoice_status, setInvoiceStatus] = React.useState("");
@@ -30,6 +31,7 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
   });
 
   const [paymentTerm, setPaymentTerm] = React.useState("");
+  // const [tableData, setTableData] = useState([]);
 
   const handleInvoiceDateChange = (start, end) => {
     const fromStr = start.format("YYYY-MM-DD");
@@ -139,7 +141,7 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
     },
     {
       title: "Vendor PO",
-      field: "",
+      field: "vender_po",
       width: 140,
       fixed: true, headerSort: false
     },
@@ -215,6 +217,89 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
 
   ];
 
+//   const tableConfig = [
+//   {
+//     title: "SB PO",
+//     field: "sb_po_number",
+//     render: (val, row) => (
+//       <a
+//         target="_blank"
+//         rel="noopener noreferrer"
+//         href={`/purchaseorder/details/${row.po_id}`}
+//         className="link"
+//       >
+//         {val}
+//       </a>
+//     ),
+//   },
+
+//   {
+//     title: "Vendor PO",
+//     field: "vendor_po",
+//   },
+
+//   {
+//     title: "VENDOR NAME",
+//     field: "vendor_name",
+//   },
+
+//   {
+//     title: "INVOICE NO",
+//     field: "invoice_number",
+//     render: (val, row) => (
+//       <a
+//         target="_blank"
+//         rel="noopener noreferrer"
+//         href={`/po/purchaseorder/invoicedetails/${row.po_invoice_id}`}
+//         className="link"
+//       >
+//         {val}
+//       </a>
+//     ),
+//   },
+
+//   {
+//     title: "INVOICE DATE",
+//     field: "invoice_date",
+//     render: (val) => formattedDate(val),
+//   },
+
+//   {
+//     title: "INVOICE DUE DATE",
+//     field: "due_date",
+//     render: (val) => formattedDate(val),
+//   },
+
+//   {
+//     title: "INVOICE AMOUNT",
+//     field: "po_amount",
+//     render: (val) => formatCurrency(val),
+//   },
+
+//   {
+//     title: "STATUS",
+//     field: "status_display",
+//     render: (val) => {
+//       let color = "secondary";
+
+//       if (val === "Paid") color = "success";
+//       if (val === "Unpaid") color = "danger";
+//       if (val === "On Hold") color = "warning";
+
+//       return (
+//         <span className={`badge bg-${color}`}>
+//           {val}
+//         </span>
+//       );
+//     },
+//   },
+
+//   {
+//     title: "PAYMENT TERM",
+//     field: "payment_term_name",
+//   },
+// ];
+
   useEffect(() => {
 
     tabulatorRef.current = new Tabulator(tableRef.current, {
@@ -279,6 +364,45 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
     return () => tabulatorRef.current?.destroy();
   }, [searchValue, invoice_status, filters, invoiceDateFilters, paymentTerm]);
 
+//   const fetchData = async () => {
+//   try {
+//     const requestParams = {
+//       page: 1,
+//       size: 20,
+//       vendor_search: vendorCode || "",
+//       status: invoice_status || "",
+//       due_date_from: filters.due_date_from || "",
+//       due_date_to: filters.due_date_to || "",
+//       invoice_date_from: invoiceDateFilters.invoice_date_from || "",
+//       invoice_date_to: invoiceDateFilters.invoice_date_to || "",
+//       payment_term_id: paymentTerm || "",
+//     };
+
+//     const query = new URLSearchParams(requestParams).toString();
+
+//     const response = await apiFetch(
+//       `${API_BASE}api/purchaseorder/api/purchase-order/invoices/listing?${query}`
+//     );
+
+//     setTableData(response?.data || []);
+//     setSummary(response?.summary || []);
+//   } catch (err) {
+//     console.error("Invoice fetch error:", err);
+//   }
+// };
+
+//   useEffect(() => {
+//   fetchData();
+// }, [
+//   searchValue,
+//   invoice_status,
+//   paymentTerm,
+//   filters.due_date_from,
+//   filters.due_date_to,
+//   invoiceDateFilters.invoice_date_from,
+//   invoiceDateFilters.invoice_date_to,
+// ]);
+
   const applyFilter = () => {
     if (tabulatorRef.current) {
       tabulatorRef.current.replaceData();
@@ -305,6 +429,41 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
     }
   };
 
+//   const applyFilter = () => {
+//   fetchData();
+// };
+
+// const clearDateRange = () => {
+//   setDateRangeDisplay("");
+
+//   setFilters({
+//     due_date_from: "",
+//     due_date_to: "",
+//   });
+
+//   fetchData();
+// };
+
+// const clearFilter = () => {
+//   setSearchValue("");
+//   setInvoiceStatus("");
+//   setDateRangeDisplay("");
+//   setPaymentTerm("");
+
+//   setFilters({
+//     due_date_from: "",
+//     due_date_to: "",
+//   });
+
+//   setInvoiceDateDisplay("");
+
+//   setInvoiceDateFilters({
+//     invoice_date_from: "",
+//     invoice_date_to: "",
+//   });
+
+//   fetchData();
+// };
   return (
     <>
       <div className="card mb-4">
@@ -401,6 +560,12 @@ const VendorInvoices = ({ vendorCode, isTabMode = true }) => {
           <div ref={tableRef} />
         </div>
       </div>
+
+      {/* <CmnTable
+        config={tableConfig}
+        data={tableData}
+        isSearchable={false}
+      /> */}
     </>
   );
 };

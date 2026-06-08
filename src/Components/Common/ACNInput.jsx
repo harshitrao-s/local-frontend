@@ -31,7 +31,7 @@ const ACNInput = ({ value, onChange, name = "company_acn", className = "form-con
       type="text"
       name={name}
       className={className}
-      placeholder="123 456 789"
+      placeholder="9 digit number"
       value={value}
       onChange={handleInput}
       maxLength={11} // 9 digits + 2 spaces

@@ -29,6 +29,7 @@ import {
   MdBusiness,
   MdOutlineLogout,
   MdLogout,
+  MdManageSearch ,
 } from "react-icons/md";
 
 import { NavLink, useLocation } from "react-router-dom";
@@ -137,6 +138,12 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       icon: MdOutlineBusiness,
       activeIcon: MdBusiness,
       path: "/organizations/view",
+    },
+    {
+      title: "Audit Log",
+      icon: MdManageSearch,
+      activeIcon: MdManageSearch,
+      path: "/auditlog",  
     },
     {
       title: "Logout",
@@ -261,7 +268,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex w-[250px] h-screen bg-white border-r px-3 py-4 overflow-y-auto flex-col">
+      <nav className="hidden xl:flex w-[250px] h-screen bg-white border-r px-3 py-4 overflow-y-auto flex-col">
         {/* Logo */}
         <div className="flex items-center justify-between mb-6">
           {collapsed ? (
@@ -291,14 +298,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       {/* Mobile Overlay Backdrop */}
       {collapsed && (
         <div
-          className="fixed inset-0 bg-black/80 z-30 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/80 z-30 xl:hidden transition-opacity duration-300"
           onClick={() => setCollapsed(false)}
         />
       )}
 
       {/* Mobile Sidebar - Slides from Right */}
       <nav
-        className={`fixed top-0 right-0 h-[100%] w-[80%] bg-gray-50 border-l shadow-lg  md:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${collapsed ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 h-[100%] w-[70%] md:w-[50%]  bg-gray-50 border-l shadow-lg  xl:hidden overflow-y-auto transition-transform duration-300 z-[9999] ease-in-out ${collapsed ? "translate-x-0" : "translate-x-full"  
           }`}
       >
         {/* Close Button & Logo */}

@@ -5,6 +5,7 @@ import { apiFetch } from "../../../Utils/apiFetch";
 import CmnHeader from "../../../Components/Common/CmnHeader";
 import CommonTable from "../../../Components/Common/CmnTable";
 import { Plus } from "lucide-react";
+import ManageRoleBased from "../RoleBasedAccess/ManageRoleBased";
 
 const UserManagement = () => {
     const [modalConfig, setModalConfig] = useState({ type: null, data: null });
@@ -107,10 +108,10 @@ const UserManagement = () => {
                 icon1="fas fa-users-cog"   // ✅ Better icon
                 // actionBtn={() => setModalConfig({ type/: "add", data: null })}
                 // actionName="Add User"  
-                
+
                 actions={[
-                    { icon: <Plus size={16} />, name: "Add User ", onClick: ()=> setModalConfig({ type: "add", data: null }), variant: "primary", }
-                  ]}   // ✅ Fixed naming
+                    { icon: <Plus size={16} />, name: "Add User ", onClick: () => setModalConfig({ type: "add", data: null }), variant: "primary", }
+                ]}   // ✅ Fixed naming
             />
 
             <CommonTable
@@ -132,8 +133,12 @@ const UserManagement = () => {
                     onRefresh={fetchUsers}
                 />
             )}
+
+
+            <ManageRoleBased />
         </div>
     );
+
 };
 
 export default UserManagement;

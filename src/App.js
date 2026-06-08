@@ -33,6 +33,7 @@ import { ChevronDown, LogOut, SlidersHorizontal } from "lucide-react";
 import CommonModal from "./Components/Common/CommonModal";
 import SearchFilter from "./Components/Common/SearchFilter";
 import { Input } from "./Components/Common/ui/input";
+import AuditLog from "./Pages/AuditLog/AuditLog";
 const BlankPage = lazy(() => import("./Pages/BlankPage"));
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const PurchaseOrderList = lazy(() => import("./Pages/PurchaseOrder/PurchaseOrderList"));
@@ -154,7 +155,7 @@ const MainLayout = ({ children }) => {
 
       {/* Sidebar */}
       <div
-        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-[64px]" : "w-[250px] hidden sm:block"
+        className={`bg-white border-r transition-all duration-300 ${collapsed ? "w-[64px]" : "w-[250px] hidden xl:block"
           }`}
       >
         <SideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -250,7 +251,7 @@ const MainLayout = ({ children }) => {
               )}
             </div>
 
-            <div className="cursor-pointer visible sm:hidden" onClick={() => {
+            <div className="cursor-pointer visible xl:hidden" onClick={() => {
               setCollapsed(!collapsed)
             }}>{SbAdminSvg.HamburgerIconSvg}</div>
 
@@ -376,6 +377,7 @@ const routes = [
   { path: "/settings/countries/:countryId/edit", component: <CountryEditView />, title: "SB Admin | Edit Country", layout: true, protected: true },
 
   { path: "/organizations/view", component: <OrganizationProfile />, title: "SB Admin | Organization", layout: true, protected: true },
+  { path: "/auditlog", component: <AuditLog />, title: "SB Admin | Audit Log", layout: true, protected: true },
 ];
 
 // ---------------- App ----------------

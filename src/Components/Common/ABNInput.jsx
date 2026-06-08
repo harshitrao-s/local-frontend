@@ -32,7 +32,7 @@ const ABNInput = ({ value, onChange, name = "company_abn", className = "form-con
       type="text"
       name={name}
       className={className} // Works with "form-control" or your own CSS
-      placeholder="12 345 678 901"
+      placeholder="11 digit number"
       value={value}
       onChange={handleInput}
       maxLength={14}

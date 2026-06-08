@@ -15,6 +15,9 @@ label {
   margin-bottom: unset !important;
   margin-top: unset !important;
 }
+body {
+  overflow-x: clip;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -378,4 +381,9 @@ code {
 .mask-scroll {
   -webkit-mask-image: radial-gradient(white, black);
   mask-image: radial-gradient(white, black);
+}
+
+.new_badge-danger {
+    background: #ef4444;
+    color: white;
 }

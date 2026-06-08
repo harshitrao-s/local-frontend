@@ -7,7 +7,7 @@ const DateInput = ({
   label,
   value,
   onChange,
-  placeholder = "dd/mm/yyyy",
+  placeholder = "DD/MM/YYYY",
   required = false,
   showMonthDropdown = false,
   showYearDropdown = false,

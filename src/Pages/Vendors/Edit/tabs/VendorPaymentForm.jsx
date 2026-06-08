@@ -18,6 +18,8 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
         bank_account_number: "",
         bank_account_number_confirm: "",
         bank_country: "",
+        payment_methods:"",
+        payment_methods_how_we_pay:"",
     });
 
     // Sync local state whenever parent data changes (e.g., after edit API fetch).
@@ -29,6 +31,8 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
             bank_account_number: data.bank_account_number || "",
             bank_account_number_confirm: data.bank_account_number_confirm || "",
             bank_country: data.bank_country || "",
+            payment_methods: data.payment_methods || "",
+            payment_methods_how_we_pay: data.payment_methods_how_we_pay || "",
         });
     }, [
         data.bank_name,
@@ -37,6 +41,8 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
         data.bank_account_number,
         data.bank_account_number_confirm,
         data.bank_country,
+        data.payment_methods,
+        data.payment_methods_how_we_pay,
     ]);
 
     // Push local → parent only on blur (no lag while typing)
@@ -85,7 +91,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
     ];
 
     const toggleMode = (modeId) => {
-        let current = [...(data.mode_of_payment || [])]; 
+        let current = [...(data.mode_of_payment || [])];
         let updatedData = { ...data };
 
         if (current.includes(modeId)) {
@@ -104,7 +110,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
         } else {
             current.push(modeId);
         }
-        
+
         onChange({ ...updatedData, mode_of_payment: current });
     };
 
@@ -159,18 +165,17 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                 <h6 className="small fw-bold text-muted ps-2 text-uppercase mb-3">PAYMENT Methods</h6>
                 <div className="d-flex flex-column gap-1">
                     {paymentModes.map((mode) => (
-                        <div 
+                        <div
                             key={mode.id}
-                            className={`d-flex align-items-center px-2 py-1 rounded border transition-all ${
-                                activeView === mode.id ? 'bg-white border-primary shadow-sm' : 'bg-transparent border-light'
-                            }`}
+                            className={`d-flex align-items-center px-2 py-1 rounded border transition-all ${activeView === mode.id ? 'bg-white border-primary shadow-sm' : 'bg-transparent border-light'
+                                }`}
                             onClick={() => setActiveView(mode.id)}
                             style={{ cursor: 'pointer', fontSize: '13px' }}
-                        > 
+                        >
                             <div className="icheck-primary d-inline me-2" onClick={(e) => e.stopPropagation()}>
-                                <input 
-                                    type="checkbox" 
-                                    id={`check_${mode.id}`} 
+                                <input
+                                    type="checkbox"
+                                    id={`check_${mode.id}`}
                                     checked={isEnabled(mode.id)}
                                     onChange={() => toggleMode(mode.id)}
                                     style={{ transform: 'scale(0.8)' }}
@@ -224,9 +229,9 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                         />
                                     </FormGroup>
                                     <FormGroup className="mb-3">
-                                        <Form.Label className="small fw-bold">Bank Account Holder Name <span className="text-danger">*</span></Form.Label>
+                                        <Form.Label className="small fw-bold">Account Holder Name <span className="text-danger">*</span></Form.Label>
                                         <Form.Control
-                                            size="sm"
+                                            size="sm" placeholder="Legal name on account"
                                             value={bankLocal.bank_account_holder_name}
                                             onChange={(e) => {
                                                 const val = e.target.value;
@@ -236,29 +241,42 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                             onBlur={(e) => flushBankField('bank_account_holder_name', e.target.value)}
                                         />
                                     </FormGroup>
+
                                     <FormGroup className="mb-3">
-                                        <Form.Label className="small fw-bold">Bank Account Number <span className="text-danger">*</span></Form.Label>
+                                        <Form.Label className="small fw-bold">Accepted Payment Methods <span className="text-danger">*</span></Form.Label>
+                                        <Form.Select name="payment_methods" value={bankLocal.payment_methods} required onChange={""}>
+                                            <option value="" disabled hidden >What Vendor Accepts</option>
+                                            {[{ id: "Bank Transfer", name: "Bank Transfer" }, { id: "Credit Card", name: "Credit Card" }, { id: "PayPal", name: "PayPal" }, { id: "BPAY", name: "BPAY" }, { id: "Afterpay", name: "Afterpay" }, { id: "Zip Pay", name: "Zip Pay" }, { id: "Cheque", name: "Cheque" }, { id: "Cash", name: "Cash" }].map(pt => (
+                                                <option key={pt.id} value={pt.id}>{pt.name}</option>
+                                            ))}
+                                        </Form.Select>
+                                    </FormGroup>
+
+                                    <FormGroup className="mb-3">
+                                        <Form.Label className="small fw-bold"> Account Number <span className="text-danger">*</span></Form.Label>
                                         <Form.Control
                                             size="sm"
-                                            maxLength={23}
+                                            maxLength={20}
+                                            placeholder="Enter account number"
                                             value={bankLocal.bank_account_number}
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                if (/^[a-zA-Z0-9]*$/.test(val)) {
+                                                if (/^[0-9]*$/.test(val)) {
                                                     setBankLocal(p => ({ ...p, bank_account_number: val }));
                                                     flushBankField('bank_account_number', val);
                                                 }
                                             }}
                                             onBlur={(e) => flushBankField('bank_account_number', e.target.value)}
                                         />
-                                        <Form.Text className="text-muted">Max 23 characters. Letters and numbers only.</Form.Text>
+                                        <Form.Text className="text-muted">Max 20 characters. Letters and numbers only.</Form.Text>
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
                                     <FormGroup className="mb-3">
-                                        <Form.Label className="small fw-bold">BSB / IFSC / SWIFT Code <span className="text-danger">*</span></Form.Label>
+                                        <Form.Label className="small fw-bold">SWIFT/BIC <span className="text-danger">*</span></Form.Label>
                                         <Form.Control
                                             size="sm"
+                                            placeholder="For international transfers"
                                             value={bankLocal.bank_ifsc}
                                             onChange={(e) => {
                                                 const val = e.target.value;
@@ -270,7 +288,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                     </FormGroup>
                                     <FormGroup className="mb-3">
                                         <Form.Label className="small fw-bold">Bank Country</Form.Label>
-                                          <SearchableSelect
+                                        <SearchableSelect
                                             name="bank_country"
                                             options={countryOptions.map((c) => ({ country: c }))}
                                             value={bankLocal.bank_country}
@@ -292,14 +310,14 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                         />
                                     </FormGroup>
                                     <FormGroup className="mb-3">
-                                        <Form.Label className="small fw-bold">Re-enter Account Number <span className="text-danger">*</span></Form.Label>
+                                        <Form.Label className="small fw-bold">Confirm Account Number <span className="text-danger">*</span></Form.Label>
                                         <Form.Control
                                             size="sm"
                                             maxLength={23}
                                             value={bankLocal.bank_account_number_confirm}
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                if (/^[a-zA-Z0-9]*$/.test(val)) {
+                                                if (/^[0-9]*$/.test(val)) {
                                                     setBankLocal(p => ({ ...p, bank_account_number_confirm: val }));
                                                     flushBankField('bank_account_number_confirm', val);
                                                 }
@@ -309,14 +327,25 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                         />
                                         <Form.Control.Feedback type="invalid">Account numbers do not match.</Form.Control.Feedback>
                                     </FormGroup>
+
+                                     <FormGroup className="mb-3">
+                                        <Form.Label className="small fw-bold">Payment Mode (How WE Pay) <span className="text-danger">*</span></Form.Label>
+                                        <Form.Select name="payment_methods_how_we_pay" value={bankLocal.payment_methods_how_we_pay} required onChange={""}>
+                                            <option value="" disabled hidden >Our payment method to vendor</option>
+                                            {[{ id: "Bank Transfer", name: "Bank Transfer" }, { id: "Credit Card", name: "Credit Card" }, { id: "PayPal", name: "PayPal" }, { id: "BPAY", name: "BPAY" }, { id: "Cheque", name: "Cheque" }, { id: "Wise", name: "Wise" },{ id: "Stripe", name: "Stripe" }].map(pt => (
+                                                <option key={pt.id} value={pt.id}>{pt.name}</option>
+                                            ))}
+                                        </Form.Select>
+                                    </FormGroup>        
+
                                     <FormGroup className="mb-3 d-none">
                                         <Form.Label className="small fw-bold">Verification Doc</Form.Label>
                                         <div className="d-flex flex-column gap-2">
-                                            <Form.Control 
+                                            <Form.Control
                                                 key={data.bank_verification_doc ? 'has-data' : 'empty'}
-                                                size="sm" 
-                                                type="file" 
-                                                onChange={(e) => updateField('bank_verification_doc', e.target.files[0])} 
+                                                size="sm"
+                                                type="file"
+                                                onChange={(e) => updateField('bank_verification_doc', e.target.files[0])}
                                             />
                                             {data.bank_verification_doc && (
                                                 <div className="d-flex align-items-center bg-light border rounded px-2 py-1" style={{ width: 'fit-content' }}>
@@ -330,7 +359,7 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                                                             {data.bank_verification_doc.name.substring(0, 15)}...
                                                         </span>
                                                     )}
-                                                    <span 
+                                                    <span
                                                         onClick={() => updateField('bank_verification_doc', "")}
                                                         className="text-danger fw-bold"
                                                         style={{ cursor: 'pointer', fontSize: '1.1rem', lineHeight: '1' }}
@@ -349,21 +378,21 @@ const VendorPaymentForm = ({ data, onChange, paymentTerms, countries = [] }) => 
                         {/* 2. PAYPAL */}
                         {activeView === 'paypal' && (
                             <Row>
-                                <DiaryInput value={data.paypal_notes} onChange={(value) => updateField('paypal_notes', value)}/>
+                                <DiaryInput value={data.paypal_notes} onChange={(value) => updateField('paypal_notes', value)} />
                             </Row>
                         )}
 
                         {/* 3. CREDIT CARD */}
                         {activeView === 'credit_card' && (
                             <Row>
-                                <DiaryInput value={data.credit_card_notes} onChange={(value) => updateField('credit_card_notes', value)}/>
+                                <DiaryInput value={data.credit_card_notes} onChange={(value) => updateField('credit_card_notes', value)} />
                             </Row>
                         )}
 
                         {/* 4. WALLET */}
                         {activeView === 'wallet' && (
                             <Row>
-                                <DiaryInput value={data.wallet_notes} onChange={(value) => updateField('wallet_notes', value)}/>
+                                <DiaryInput value={data.wallet_notes} onChange={(value) => updateField('wallet_notes', value)} />
                             </Row>
                         )}
                     </motion.div>
